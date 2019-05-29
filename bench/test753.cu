@@ -16,6 +16,7 @@ template< typename fixnum >
 struct convert_and_mul {
   typedef modnum_monty_redc<fixnum> modnum;
   __device__ void operator()(fixnum &r, fixnum a, fixnum b) {
+      // use the mnt753 curve modulus
       fixnum mod_p(17);
       modnum mod = modnum(mod_p);
 
@@ -77,9 +78,13 @@ void bench(int nelts) {
 
     fixnum_array::template map<Func>(res, in, in0);
 
+    // TODO: input and output in montgomery form
+    //   see 'modnum_monty_cios' vs 'modnum_monty_redc', idk the difference
     print_fixnum_array<fn_bytes, fixnum_array>(in, nelts);
     print_fixnum_array<fn_bytes, fixnum_array>(in0, nelts);
     print_fixnum_array<fn_bytes, fixnum_array>(res, nelts);
+
+    //TODO to do stage 1 field arithmetic, instead of a map, do a reduce
 
     delete in;
     delete in0;
