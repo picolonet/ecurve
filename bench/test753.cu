@@ -10,12 +10,17 @@
 #include "modnum/modnum_monty_redc.cu"
 #include "modnum/modnum_monty_cios.cu"
 
+const unsigned int bytes_per_elem = 128;
+const unsigned int io_bytes_per_elem = 96;
+
+
 using namespace std;
 using namespace cuFIXNUM;
 
 template< typename fixnum >
-struct convert_and_mul {
-  typedef modnum_monty_redc<fixnum> modnum;
+struct mul_and_convert {
+  // redc may be worth trying over cios
+  typedef modnum_monty_cios<fixnum> modnum;
   __device__ void operator()(fixnum &r, fixnum a, fixnum b, fixnum my_mod) {
       modnum mod = modnum(my_mod);
 
@@ -67,7 +72,7 @@ vector<uint8_t*> get_fixnum_array(fixnum_array* res, int nelts) {
 
 
 template< int fn_bytes, typename word_fixnum, template <typename> class Func >
-std::vector<uint8_t*> bench(std::vector<uint8_t*> a, std::vector<uint8_t*> b, uint8_t* input_m_base) {
+std::vector<uint8_t*> compute_product(std::vector<uint8_t*> a, std::vector<uint8_t*> b, uint8_t* input_m_base) {
     typedef warp_fixnum<fn_bytes, word_fixnum> fixnum;
     typedef fixnum_array<fixnum> fixnum_array;
 
@@ -97,9 +102,6 @@ std::vector<uint8_t*> bench(std::vector<uint8_t*> a, std::vector<uint8_t*> b, ui
 
     fixnum_array::template map<Func>(res, in_a, in_b, inM);
 
-    //   see 'modnum_monty_cios' vs 'modnum_monty_redc', idk the difference
-    // print_fixnum_array<fn_bytes, fixnum_array>(res, nelts);
-
     vector<uint8_t*> v_res = get_fixnum_array<fn_bytes, fixnum_array>(res, nelts);
 
     //TODO to do stage 1 field arithmetic, instead of a map, do a reduce
@@ -110,27 +112,32 @@ std::vector<uint8_t*> bench(std::vector<uint8_t*> a, std::vector<uint8_t*> b, ui
     delete res;
     delete[] input_a;
     delete[] input_b;
+    delete[] input_m;
     return v_res;
 }
 
 uint8_t* read_mnt_fq(FILE* inputs) {
-  const int bytes = 96;
-  uint8_t* buf = (uint8_t*)calloc(bytes + 32, sizeof(uint8_t));
-  fread((void*)(buf+32), 96*sizeof(uint8_t), 1, inputs);
+  uint8_t* buf = (uint8_t*)calloc(bytes_per_elem, sizeof(uint8_t));
+  // the input is montgomery representation x * 2^768 whereas cuda-fixnum expects x * 2^1024 so we shift over by (1024-768)/8 bytes
+  fread((void*)( buf + (bytes_per_elem - io_bytes_per_elem)), io_bytes_per_elem*sizeof(uint8_t), 1, inputs);
   return buf;
 }
 
 void write_mnt_fq(uint8_t* fq, FILE* outputs) {
-  fwrite((void *) fq, 96 * sizeof(uint8_t), 1, outputs);
+  fwrite((void *) fq, io_bytes_per_elem * sizeof(uint8_t), 1, outputs);
 }
 
 int main(int argc, char* argv[]) {
   setbuf(stdout, NULL);
 
+  // mnt4_q
+  uint8_t mnt4_modulus[bytes_per_elem] = {1,128,94,36,222,99,144,94,159,17,221,44,82,84,157,227,240,37,196,154,113,16,136,99,164,84,114,118,233,204,90,104,56,126,83,203,165,13,15,184,157,5,24,242,118,231,23,177,157,247,90,161,217,36,209,153,141,237,160,232,37,185,253,7,115,216,151,108,249,232,183,94,237,175,143,91,80,151,249,183,173,205,226,238,34,144,34,16,17,196,146,45,198,196,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+  // mnt6_q
+  uint8_t mnt6_modulus[bytes_per_elem] = {1,0,0,64,226,118,7,217,79,58,161,15,23,153,160,78,151,87,0,63,188,129,195,214,164,58,153,52,118,249,223,185,54,38,33,41,148,202,235,62,155,169,89,200,40,92,108,178,157,247,90,161,217,36,209,153,141,237,160,232,37,185,253,7,115,216,151,108,249,232,183,94,237,175,143,91,80,151,249,183,173,205,226,238,34,144,34,16,17,196,146,45,198,196,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
   auto inputs = fopen(argv[2], "r");
   auto outputs = fopen(argv[3], "w");
-
-  int fn_bytes = 128;
 
   size_t n;
 
@@ -139,48 +146,46 @@ int main(int argc, char* argv[]) {
     if (elts_read == 0) { break; }
 
     std::vector<uint8_t*> x0;
-    std::vector<uint8_t*> x1;
     for (size_t i = 0; i < n/2; ++i) {
       x0.emplace_back(read_mnt_fq(inputs));
     }
 
+    std::vector<uint8_t*> x1;
     for (size_t i = 0; i < n/2; ++i) {
       x1.emplace_back(read_mnt_fq(inputs));
     }
 
-
-    uint8_t input_mnt4[128] = {1,128,94,36,222,99,144,94,159,17,221,44,82,84,157,227,240,37,196,154,113,16,136,99,164,84,114,118,233,204,90,104,56,126,83,203,165,13,15,184,157,5,24,242,118,231,23,177,157,247,90,161,217,36,209,153,141,237,160,232,37,185,253,7,115,216,151,108,249,232,183,94,237,175,143,91,80,151,249,183,173,205,226,238,34,144,34,16,17,196,146,45,198,196,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-
-    std::vector<uint8_t*> res_x = bench<128, u64_fixnum, convert_and_mul>(x0, x1, input_mnt4);
+    std::vector<uint8_t*> res_x = compute_product<bytes_per_elem, u64_fixnum, mul_and_convert>(x0, x1, mnt4_modulus);
 
     for (size_t i = 0; i < n/2; ++i) {
-      //if (i == 0) {
-      //  for (int j = 0; j < 128; j++) {
-      //    printf("%i ", res_x[i][j]);
-      //  }
-      //  printf("\n");
-      //}
       write_mnt_fq(res_x[i], outputs);
     }
 
     std::vector<uint8_t*> y0;
-    std::vector<uint8_t*> y1;
     for (size_t i = 0; i < n/2; ++i) {
       y0.emplace_back(read_mnt_fq(inputs));
     }
 
+    std::vector<uint8_t*> y1;
     for (size_t i = 0; i < n/2; ++i) {
       y1.emplace_back(read_mnt_fq(inputs));
     }
 
-    uint8_t input_mnt6[128] = {1,0,0,64,226,118,7,217,79,58,161,15,23,153,160,78,151,87,0,63,188,129,195,214,164,58,153,52,118,249,223,185,54,38,33,41,148,202,235,62,155,169,89,200,40,92,108,178,157,247,90,161,217,36,209,153,141,237,160,232,37,185,253,7,115,216,151,108,249,232,183,94,237,175,143,91,80,151,249,183,173,205,226,238,34,144,34,16,17,196,146,45,198,196,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-
-    std::vector<uint8_t*> res_y = bench<128, u64_fixnum, convert_and_mul>(y0, y1, input_mnt6);
-
+    std::vector<uint8_t*> res_y = compute_product<bytes_per_elem, u64_fixnum, mul_and_convert>(y0, y1, mnt6_modulus);
 
     for (size_t i = 0; i < n/2; ++i) {
       write_mnt_fq(res_y[i], outputs);
     }
+
+    for (size_t i = 0; i < n/2; ++i) {
+      free(x0[i]);
+      free(x1[i]);
+      free(y0[i]);
+      free(y1[i]);
+      free(res_x[i]);
+      free(res_y[i]);
+    }
+
   }
 
   return 0;
