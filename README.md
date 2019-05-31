@@ -1,8 +1,9 @@
 # cuda-fixnum for snark challenge
 
-1. make test753
-2. ./test753
+For each of mnt4 and mnt6, this takes the pairwise product of two arrays
+
+1. `./build.sh`
+2. `./main compute inputs outputs`
+3. `shasum outputs` should be `b0f4a59a4be1c878dd9698fae7f1be86d8261025`
 
 you will need to edit /Makefile:GENCODES to match your GPU [see here](https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/)
-
-see /bench/test753.cu for todos getting to a complete stage 1

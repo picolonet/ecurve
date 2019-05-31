@@ -23,7 +23,7 @@ bench/bench: bench/bench.cu
 
 bench: bench/bench
 
-test753: test753.cu
+main: main.cu
 	nvcc $(NVCC_OPT_FLAGS) $(NVCC_FLAGS) $(GENCODES:%=--gpu-architecture=compute_%) $(GENCODES:%=--gpu-code=sm_%) $(INCLUDE_DIRS) $(NVCC_LIBS) -o $@ $<
 
 .PHONY: clean
