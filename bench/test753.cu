@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cassert>
+#include <vector>
 
 #include "fixnum/warp_fixnum.cu"
 #include "array/fixnum_array.h"
@@ -19,13 +20,7 @@ struct convert_and_mul {
       modnum mod = modnum(my_mod);
 
       fixnum sm;
-      fixnum am;
-      fixnum bm;
-
-      mod.to_modnum(am, a);
-      mod.to_modnum(bm, b);
-
-      mod.mul(sm, am, bm);
+      mod.mul(sm, a, b);
 
       fixnum s;
       mod.from_modnum(s, sm);
@@ -36,7 +31,6 @@ struct convert_and_mul {
 
 template< int fn_bytes, typename fixnum_array >
 void print_fixnum_array(fixnum_array* res, int nelts) {
-
     int lrl = fn_bytes*nelts;
     uint8_t local_results[lrl];
     int ret_nelts;
@@ -51,55 +45,144 @@ void print_fixnum_array(fixnum_array* res, int nelts) {
     printf("\n");
 }
 
+template< int fn_bytes, typename fixnum_array >
+vector<uint8_t*> get_fixnum_array(fixnum_array* res, int nelts) {
+    int lrl = fn_bytes*nelts;
+    uint8_t local_results[lrl];
+    int ret_nelts;
+    for (int i = 0; i < lrl; i++) {
+      local_results[i] = 0;
+    }
+    res->retrieve_all(local_results, fn_bytes*nelts, &ret_nelts);
+    vector<uint8_t*> res_v;
+    for (int n = 0; n < nelts; n++) {
+      uint8_t* a = (uint8_t*)malloc(fn_bytes*sizeof(uint8_t));
+      for (int i = 0; i < fn_bytes; i++) {
+        a[i] = local_results[n*fn_bytes + i];
+      }
+      res_v.emplace_back(a);
+    }
+    return res_v;
+}
+
 
 template< int fn_bytes, typename word_fixnum, template <typename> class Func >
-void bench(int nelts) {
+std::vector<uint8_t*> bench(std::vector<uint8_t*> a, std::vector<uint8_t*> b, uint8_t* input_m_base) {
     typedef warp_fixnum<fn_bytes, word_fixnum> fixnum;
     typedef fixnum_array<fixnum> fixnum_array;
 
-    uint8_t input_m[128] = {1,128,94,36,222,99,144,94,159,17,221,44,82,84,157,227,240,37,196,154,113,16,136,99,164,84,114,118,233,204,90,104,56,126,83,203,165,13,15,184,157,5,24,242,118,231,23,177,157,247,90,161,217,36,209,153,141,237,160,232,37,185,253,7,115,216,151,108,249,232,183,94,237,175,143,91,80,151,249,183,173,205,226,238,34,144,34,16,17,196,146,45,198,196,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    int nelts = a.size();
 
-    uint8_t *input = new uint8_t[fn_bytes * nelts];
+    uint8_t *input_a = new uint8_t[fn_bytes * nelts];
     for (int i = 0; i < fn_bytes * nelts; ++i) {
-        input[i] = input_m[i];
+      input_a[i] = a[i/fn_bytes][i%fn_bytes];
     }
 
-    uint8_t *input0 = new uint8_t[fn_bytes * nelts];
+    uint8_t *input_b = new uint8_t[fn_bytes * nelts];
     for (int i = 0; i < fn_bytes * nelts; ++i) {
-        input0[i] = input_m[i];
+      input_b[i] = b[i/fn_bytes][i%fn_bytes];
     }
 
-    input[0] = 0;
-    input0[0] = 0;
+    uint8_t *input_m = new uint8_t[fn_bytes * nelts];
+    for (int i = 0; i < fn_bytes * nelts; ++i) {
+      input_m[i] = input_m_base[i%fn_bytes];
+    }
 
     // TODO reuse modulus as a constant instead of passing in nelts times
-    fixnum_array *res, *in, *in0, *inM;
-    in = fixnum_array::create(input, fn_bytes * nelts, fn_bytes);
-    in0 = fixnum_array::create(input0, fn_bytes * nelts, fn_bytes);
+    fixnum_array *res, *in_a, *in_b, *inM;
+    in_a = fixnum_array::create(input_a, fn_bytes * nelts, fn_bytes);
+    in_b = fixnum_array::create(input_b, fn_bytes * nelts, fn_bytes);
     inM = fixnum_array::create(input_m, fn_bytes * nelts, fn_bytes);
     res = fixnum_array::create(nelts);
 
-    fixnum_array::template map<Func>(res, in, in0, inM);
+    fixnum_array::template map<Func>(res, in_a, in_b, inM);
 
-    // TODO: input and output in montgomery form
     //   see 'modnum_monty_cios' vs 'modnum_monty_redc', idk the difference
-    print_fixnum_array<fn_bytes, fixnum_array>(in, nelts);
-    print_fixnum_array<fn_bytes, fixnum_array>(in0, nelts);
-    print_fixnum_array<fn_bytes, fixnum_array>(res, nelts);
+    // print_fixnum_array<fn_bytes, fixnum_array>(res, nelts);
+
+    vector<uint8_t*> v_res = get_fixnum_array<fn_bytes, fixnum_array>(res, nelts);
 
     //TODO to do stage 1 field arithmetic, instead of a map, do a reduce
 
-    delete in;
-    delete in0;
+    delete in_a;
+    delete in_b;
     delete inM;
     delete res;
-    delete[] input;
+    delete[] input_a;
+    delete[] input_b;
+    return v_res;
 }
 
-int main() {
-    bench<128, u64_fixnum, convert_and_mul>(1);
-    puts("");
+uint8_t* read_mnt_fq(FILE* inputs) {
+  const int bytes = 96;
+  uint8_t* buf = (uint8_t*)calloc(bytes + 32, sizeof(uint8_t));
+  fread((void*)(buf+32), 96*sizeof(uint8_t), 1, inputs);
+  return buf;
+}
 
-    return 0;
+void write_mnt_fq(uint8_t* fq, FILE* outputs) {
+  fwrite((void *) fq, 96 * sizeof(uint8_t), 1, outputs);
+}
+
+int main(int argc, char* argv[]) {
+  setbuf(stdout, NULL);
+
+  auto inputs = fopen(argv[2], "r");
+  auto outputs = fopen(argv[3], "w");
+
+  int fn_bytes = 128;
+
+  size_t n;
+
+   while (true) {
+    size_t elts_read = fread((void *) &n, sizeof(size_t), 1, inputs);
+    if (elts_read == 0) { break; }
+
+    std::vector<uint8_t*> x0;
+    std::vector<uint8_t*> x1;
+    for (size_t i = 0; i < n/2; ++i) {
+      x0.emplace_back(read_mnt_fq(inputs));
+    }
+
+    for (size_t i = 0; i < n/2; ++i) {
+      x1.emplace_back(read_mnt_fq(inputs));
+    }
+
+
+    uint8_t input_mnt4[128] = {1,128,94,36,222,99,144,94,159,17,221,44,82,84,157,227,240,37,196,154,113,16,136,99,164,84,114,118,233,204,90,104,56,126,83,203,165,13,15,184,157,5,24,242,118,231,23,177,157,247,90,161,217,36,209,153,141,237,160,232,37,185,253,7,115,216,151,108,249,232,183,94,237,175,143,91,80,151,249,183,173,205,226,238,34,144,34,16,17,196,146,45,198,196,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+    std::vector<uint8_t*> res_x = bench<128, u64_fixnum, convert_and_mul>(x0, x1, input_mnt4);
+
+    for (size_t i = 0; i < n/2; ++i) {
+      //if (i == 0) {
+      //  for (int j = 0; j < 128; j++) {
+      //    printf("%i ", res_x[i][j]);
+      //  }
+      //  printf("\n");
+      //}
+      write_mnt_fq(res_x[i], outputs);
+    }
+
+    std::vector<uint8_t*> y0;
+    std::vector<uint8_t*> y1;
+    for (size_t i = 0; i < n/2; ++i) {
+      y0.emplace_back(read_mnt_fq(inputs));
+    }
+
+    for (size_t i = 0; i < n/2; ++i) {
+      y1.emplace_back(read_mnt_fq(inputs));
+    }
+
+    uint8_t input_mnt6[128] = {1,0,0,64,226,118,7,217,79,58,161,15,23,153,160,78,151,87,0,63,188,129,195,214,164,58,153,52,118,249,223,185,54,38,33,41,148,202,235,62,155,169,89,200,40,92,108,178,157,247,90,161,217,36,209,153,141,237,160,232,37,185,253,7,115,216,151,108,249,232,183,94,237,175,143,91,80,151,249,183,173,205,226,238,34,144,34,16,17,196,146,45,198,196,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+    std::vector<uint8_t*> res_y = bench<128, u64_fixnum, convert_and_mul>(y0, y1, input_mnt6);
+
+
+    for (size_t i = 0; i < n/2; ++i) {
+      write_mnt_fq(res_y[i], outputs);
+    }
+  }
+
+  return 0;
 }
 
