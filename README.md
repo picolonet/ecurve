@@ -18,7 +18,7 @@ And here is our best guess on how to effectively make a submission for the [full
 
 The SNARK prover is composed of several FFTs and multiexponentiations. In the C++ reference implementation, the [FFTs are here](https://github.com/CodaProtocol/snark-challenge-prover-reference/blob/master/libsnark/main.cpp#L90) and the [multiexponentiations are here](https://github.com/CodaProtocol/snark-challenge-prover-reference/blob/master/libsnark/main.cpp#L201).
 
-1. Once you've finished the tutorial, try improving the multi-exponentiations with on-gpu versions using the curve operations from the tutorial. Each multi-exponentiation can be seen as a [map-reduce, as explained here](https://youtu.be/81uR9W5PZ5M). The reduce part may be complicated to implement for GPU, so it may be a good idea to start by implementing the "map" part on GPU and the "reduce" part on CPU.
+1. Once you've finished the tutorial, try improving the multi-exponentiations with on-gpu versions using the curve operations from the tutorial. Each multi-exponentiation can be seen as a [map-reduce, as explained here](https://youtu.be/81uR9W5PZ5M?t=772). The reduce part may be complicated to implement for GPU, so it may be a good idea to start by implementing the "map" part on GPU and the "reduce" part on CPU.
 2. Do the multi-exponentiations entirely on-gpu using an on-gpu [reduce](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction)
 3. use an on-gpu FFT (see for example [cuFFT](https://developer.nvidia.com/cufft)), adapted to curve operations.
 
