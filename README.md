@@ -16,8 +16,10 @@ For each of these, the cuda kernel code will need to be changed (see `main.cu:21
 
 And here is our best guess on how to effectively make a submission for the [full prover](https://coinlist.co/build/coda/pages/problem-07-groth16-prover-challenges) (up to $70,000, and $7,000 immediately for the first submission to 2x the speed)
 
-1. Once you've finished the tutorial, try swapping out the multi-exponentiation part of the prover (prover is 1/2 FFT, 1/2 multi-exponentiation) for the above, on-gpu versions. This may already lead to a big speed improvement. 
-2. Do the full multi-exponentiation on-gpu, using an on-gpu [reduce](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction)
+The snark prover is composed of several FFTs and multiexponentiations.
+
+1. Once you've finished the tutorial, try swapping out the multi-exponentiations in the prover for on-gpu versions using the curve operations from the tutorial. This may already lead to a big speed improvement. 
+2. Do the multi-exponentiation component entirely on-gpu, using an on-gpu [reduce](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction)
 3. use an on-gpu FFT (see for example [cuFFT](https://developer.nvidia.com/cufft)), adapted to curve operations.
 
 ## To build and run
