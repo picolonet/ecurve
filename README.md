@@ -1,8 +1,26 @@
 # cuda-fixnum for snark challenge
 
-For each of mnt4 and mnt6, this takes the pairwise product of two arrays. That is, it maps over two arrays.
+Use this code to get started on the snark challenge. It implements the logic needed to do field arithmetic. In particular, for the fields used by mnt4-753 and mnt6-753, this takes the pairwise product of two arrays of field elements. That is, it maps over two arrays.
 
 See `main.cu` for the implementation
+
+## Suggested steps to make a submission for the snark challenge
+
+Here are some suggested steps to solve the tutorial stage and work towards a faster, GPU powered snark prover:
+
+1. [Add Quadratic extension arithmetic (Tutorial, $150)](https://coinlist.co/build/coda/pages/problem-02-quadratic-extension-arithmetic)
+2. [Add Cubic extension arithmetic (Tutorial, $150)](https://coinlist.co/build/coda/pages/problem-03-cubic-extension-arithmetic)
+3. [Add Curve operations (Tutorial, $200)](https://coinlist.co/build/coda/pages/problem-04-curve-operations)
+
+For each of these, the cuda kernel code will need to be changed (see `main.cu:21-35`)
+
+And here is our best guess on how to effectively make a submission for the [full prover](https://coinlist.co/build/coda/pages/problem-07-groth16-prover-challenges) (up to $70,000, and $7,000 immediately for the first submission to 2x the speed)
+
+1. Once you've finished the tutorial, try swapping out the multi-exponentiation part of the prover (prover is 1/2 FFT, 1/2 multi-exponentiation) for the above, on-gpu versions. This may already lead to a big speed improvement. 
+2. Do the full multi-exponentiation on-gpu, using an on-gpu [reduce](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction)
+3. use an on-gpu FFT (see for example [cuFFT](https://developer.nvidia.com/cufft)), adapted to curve operations.
+
+## To build and run
 
 To build and run:
 
@@ -11,5 +29,3 @@ To build and run:
 3. `shasum outputs` should be `b0f4a59a4be1c878dd9698fae7f1be86d8261025`
 
 you will need to edit /Makefile:GENCODES to match your GPU [see here](https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/)
-
-To complete the [first part of stage 1](https://coinlist.co/build/coda/pages/problem-01-field-arithmetic), change this map to a reduce, and match the [reference](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-01-field-arithmetic). See [this example of a reduce using cuda](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction) to get started.
