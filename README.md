@@ -20,7 +20,8 @@ The SNARK prover is composed of several FFTs and multiexponentiations. In the C+
 
 1. Once you've finished the tutorial, try improving the multi-exponentiations with on-GPU versions using the curve operations from the tutorial. Each multi-exponentiation can be seen as a [map-reduce, as explained here](https://youtu.be/81uR9W5PZ5M?t=772). The reduce part may be complicated to implement for GPU, so it may be a good idea to start by implementing the "map" part on GPU and the "reduce" part on CPU.
 2. Do the multi-exponentiations entirely on-GPU using an on-GPU [reduce](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction)
-3. use an on-GPU FFT (see for example [cuFFT](https://developer.nvidia.com/cufft)), adapted to curve operations.
+3. Use an on-GPU FFT (see for example [cuFFT](https://developer.nvidia.com/cufft)), adapted to finite fields.
+   You can find a C++ implementation of a finite-field FFT [here](https://github.com/CodaProtocol/snark-challenge-prover-reference/blob/master/depends/libfqfft/libfqfft/evaluation_domain/domains/basic_radix2_domain_aux.tcc#L46).
 
 ## To build and run
 
