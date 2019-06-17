@@ -75,6 +75,7 @@ const char *cgbn_error_string(cgbn_error_report_t *report);
      #endif
   #endif
   #include "cgbn_cuda.h"
+  #warning "CGBN CUDA included !"
 #elif defined(__GMP_H__)
   #include "cgbn_mpz.h"
   #warning "CGBN MPZ included !"

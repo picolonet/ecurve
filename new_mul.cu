@@ -39,8 +39,8 @@ __global__ void add_kernel(instance_t *problem_instances, uint32_t instance_coun
   
   // cgbn_add(bn1024_env, r, a, b);
   np0 = -cgbn_binary_inverse_ui32(bn1024_env, cgbn_get_ui32(bn1024_env, m));
-  np0=cgbn_bn2mont(bn1024_env, a, a, m);
-  cgbn_bn2mont(bn1024_env, b, b, m);
+  // np0=cgbn_bn2mont(bn1024_env, a, a, m);
+  // cgbn_bn2mont(bn1024_env, b, b, m);
   cgbn_mont_mul(bn1024_env, r, a, b, m, np0);
   //cgbn_mont2bn(bn1024_env, r, r, m, np0);
   // int use_r2 = cgbn_sub(bn1024_env, r2, r, m);
