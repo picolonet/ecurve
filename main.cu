@@ -10,6 +10,8 @@
 #include "modnum/modnum_monty_redc.cu"
 #include "modnum/modnum_monty_cios.cu"
 
+#include "new_mul.cu"
+
 const unsigned int bytes_per_elem = 128;
 const unsigned int io_bytes_per_elem = 96;
 
@@ -177,6 +179,9 @@ int main(int argc, char* argv[]) {
     std::vector<uint8_t*> res_x = compute_product<bytes_per_elem, u64_fixnum, mul_and_convert>(x0, x1, mnt4_modulus);
     printf("\n SPECIAL SUM \n");
     print_uint8_array(res_x.front(), bytes_per_elem);
+    uint8_t* new_res = call_mycuda(x0.front(), x1.front(), mnt4_modulus, bytes_per_elem);
+    printf("\n NEW CUDA SUM \n");
+    print_uint8_array(new_res, bytes_per_elem);
 
     for (size_t i = 0; i < n; ++i) {
       write_mnt_fq(res_x[i], outputs);
