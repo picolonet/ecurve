@@ -57,7 +57,7 @@ void play(Fq<mnt4753_pp> x, Fq<mnt4753_pp> y) {
   y.mont_repr.print_hex();
 
   // Fq<mnt4753_pp> one(1);
-  Fq<mnt4753_pp> sum = x + y;
+  Fq<mnt4753_pp> sum = x * y;
   printf("\n X + Y:");
   print_fq(sum);
   printf("\n x+y.mont_repr:");

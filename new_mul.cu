@@ -27,6 +27,7 @@ __global__ void add_kernel(instance_t *problem_instances, uint32_t instance_coun
   context_t         bn_context;                                 // create a CGBN context
   env1024_t         bn1024_env(bn_context);                     // construct a bn environment for 1024 bit math
   env1024_t::cgbn_t a, b, r, r2, m;                             // three 1024-bit values (spread across a warp)
+  uint32_t np0;
   
   int32_t my_instance=(blockIdx.x*blockDim.x + threadIdx.x)/TPI;  // determine my instance number
   
@@ -36,8 +37,14 @@ __global__ void add_kernel(instance_t *problem_instances, uint32_t instance_coun
   cgbn_load(bn1024_env, b, &(problem_instances[my_instance]).y);
   cgbn_load(bn1024_env, m, &(problem_instances[my_instance]).m);
   
-  cgbn_add(bn1024_env, r, a, b);
-  int use_r2 = cgbn_sub(bn1024_env, r2, r, m);
+  // cgbn_add(bn1024_env, r, a, b);
+  np0 = -cgbn_binary_inverse_ui32(bn1024_env, cgbn_get_ui32(bn1024_env, m));
+  np0=cgbn_bn2mont(bn1024_env, a, a, m);
+  cgbn_bn2mont(bn1024_env, b, b, m);
+  cgbn_mont_mul(bn1024_env, r, a, b, m, np0);
+  //cgbn_mont2bn(bn1024_env, r, r, m, np0);
+  // int use_r2 = cgbn_sub(bn1024_env, r2, r, m);
+  int use_r2 = -1;
   
   if (use_r2 == 0) {
    cgbn_store(bn1024_env, &(problem_instances[my_instance].result), r2);
