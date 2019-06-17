@@ -25,12 +25,12 @@ struct mul_and_convert {
       modnum mod = modnum(my_mod);
 
       fixnum sm;
-      mod.mul(sm, a, b);
+      mod.sqr(sm, a);
 
       fixnum s;
       mod.from_modnum(s, sm);
 
-      r = s;
+      r = sm;
   }
 };
 
@@ -123,8 +123,22 @@ uint8_t* read_mnt_fq(FILE* inputs) {
   return buf;
 }
 
+uint8_t* read_mnt_fq_2(FILE* inputs) {
+  uint8_t* buf = (uint8_t*)calloc(bytes_per_elem, sizeof(uint8_t));
+  // the input is montgomery representation x * 2^768 whereas cuda-fixnum expects x * 2^1024 so we shift over by (1024-768)/8 bytes
+  fread((void*)buf, io_bytes_per_elem*sizeof(uint8_t), 1, inputs);
+  return buf;
+}
+
 void write_mnt_fq(uint8_t* fq, FILE* outputs) {
   fwrite((void *) fq, io_bytes_per_elem * sizeof(uint8_t), 1, outputs);
+}
+
+void print_uint8_array(uint8_t* array, int size) {
+    for (int i = 0; i < size; i ++) {
+        printf("%02x", array[i]);
+    }
+    printf("\n");
 }
 
 int main(int argc, char* argv[]) {
@@ -146,38 +160,45 @@ int main(int argc, char* argv[]) {
     if (elts_read == 0) { break; }
 
     std::vector<uint8_t*> x0;
-    for (size_t i = 0; i < n/2; ++i) {
-      x0.emplace_back(read_mnt_fq(inputs));
+    for (size_t i = 0; i < n; ++i) {
+      x0.emplace_back(read_mnt_fq_2(inputs));
     }
 
     std::vector<uint8_t*> x1;
-    for (size_t i = 0; i < n/2; ++i) {
-      x1.emplace_back(read_mnt_fq(inputs));
+    for (size_t i = 0; i < n; ++i) {
+      x1.emplace_back(read_mnt_fq_2(inputs));
     }
+   
+    printf("\n Input 0:\n");
+    print_uint8_array(x0.front(), io_bytes_per_elem);
+    printf("\n Input 1:\n");
+    print_uint8_array(x1.front(), io_bytes_per_elem);
 
     std::vector<uint8_t*> res_x = compute_product<bytes_per_elem, u64_fixnum, mul_and_convert>(x0, x1, mnt4_modulus);
+    printf("\n SPECIAL SUM \n");
+    print_uint8_array(res_x.front(), bytes_per_elem);
 
-    for (size_t i = 0; i < n/2; ++i) {
+    for (size_t i = 0; i < n; ++i) {
       write_mnt_fq(res_x[i], outputs);
     }
 
     std::vector<uint8_t*> y0;
-    for (size_t i = 0; i < n/2; ++i) {
+    for (size_t i = 0; i < n; ++i) {
       y0.emplace_back(read_mnt_fq(inputs));
     }
 
     std::vector<uint8_t*> y1;
-    for (size_t i = 0; i < n/2; ++i) {
+    for (size_t i = 0; i < n; ++i) {
       y1.emplace_back(read_mnt_fq(inputs));
     }
 
     std::vector<uint8_t*> res_y = compute_product<bytes_per_elem, u64_fixnum, mul_and_convert>(y0, y1, mnt6_modulus);
 
-    for (size_t i = 0; i < n/2; ++i) {
+    for (size_t i = 0; i < n; ++i) {
       write_mnt_fq(res_y[i], outputs);
     }
 
-    for (size_t i = 0; i < n/2; ++i) {
+    for (size_t i = 0; i < n; ++i) {
       free(x0[i]);
       free(x1[i]);
       free(y0[i]);
@@ -185,7 +206,7 @@ int main(int argc, char* argv[]) {
       free(res_x[i]);
       free(res_y[i]);
     }
-
+    break;
   }
 
   return 0;

@@ -1,0 +1,2 @@
+libff notes:
+    fp.hpp contains code for the single q arithmetic (bigint).
