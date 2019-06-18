@@ -1,2 +1,8 @@
 libff notes:
     fp.hpp contains code for the single q arithmetic (bigint).
+    libff/algebra/fields/fp.tcc
+    ./libff/algebra/curves/mnt753/mnt4753/mnt4753_init.cpp
+
+cuda CGBN notes:
+   cgbn/core/core_mont_xmad.cu 
+   cgbn/core/core.cu

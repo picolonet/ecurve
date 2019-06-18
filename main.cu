@@ -27,7 +27,7 @@ struct mul_and_convert {
       modnum mod = modnum(my_mod);
 
       fixnum sm;
-      mod.sqr(sm, a);
+      mod.mul(sm, a, b);
 
       fixnum s;
       mod.from_modnum(s, sm);
@@ -136,12 +136,6 @@ void write_mnt_fq(uint8_t* fq, FILE* outputs) {
   fwrite((void *) fq, io_bytes_per_elem * sizeof(uint8_t), 1, outputs);
 }
 
-void print_uint8_array(uint8_t* array, int size) {
-    for (int i = 0; i < size; i ++) {
-        printf("%02x", array[i]);
-    }
-    printf("\n");
-}
 
 int main(int argc, char* argv[]) {
   setbuf(stdout, NULL);
@@ -179,9 +173,9 @@ int main(int argc, char* argv[]) {
     std::vector<uint8_t*> res_x = compute_product<bytes_per_elem, u64_fixnum, mul_and_convert>(x0, x1, mnt4_modulus);
     printf("\n SPECIAL SUM \n");
     print_uint8_array(res_x.front(), bytes_per_elem);
-    uint8_t* new_res = call_mycuda(x0.front(), x1.front(), mnt4_modulus, bytes_per_elem);
+    uint8_t* new_res = call_mycuda(x0.front(), x1.front(), mnt4_modulus, io_bytes_per_elem);
     printf("\n NEW CUDA SUM \n");
-    print_uint8_array(new_res, bytes_per_elem);
+    print_uint8_array(new_res, io_bytes_per_elem);
 
     for (size_t i = 0; i < n; ++i) {
       write_mnt_fq(res_x[i], outputs);

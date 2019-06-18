@@ -247,7 +247,7 @@ class dispatch_resolver_t {
   __device__ __forceinline__ static int32_t resolve_sub(const int32_t carry, uint32_t x[LIMBS]) {
     uint32_t sync=core::sync_mask(), group_thread=threadIdx.x & tpi-1, group_base=group_thread*LIMBS;
     uint32_t warp_thread=threadIdx.x & warpSize-1, lane=1<<warp_thread;
-    uint32_t g, p, land;
+    uint32_t lor, g, p, land;
     int32_t  c;
     int32_t  result;
     
@@ -262,7 +262,8 @@ class dispatch_resolver_t {
     for(int32_t index=1;index<LIMBS;index++) 
       x[index]=addc_cc(x[index], c);
     c=addc(0, c);
-  
+ 
+    const uint32_t limbs = LIMBS; 
     lor=mplor<limbs>(x);
     g=__ballot_sync(sync, c==0xFFFFFFFF);
     p=__ballot_sync(sync, lor==0);

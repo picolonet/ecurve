@@ -65,6 +65,7 @@ const char *cgbn_error_string(cgbn_error_report_t *report);
 #include "cgbn.cu"
 
 #if defined(__CUDA_ARCH__)
+//#if defined(USE_GPU)
   #if !defined(XMP_IMAD) && !defined(XMP_XMAD) && !defined(XMP_WMAD)
      #if __CUDA_ARCH__<500
        #define XMP_IMAD
@@ -74,8 +75,8 @@ const char *cgbn_error_string(cgbn_error_report_t *report);
        #define XMP_WMAD
      #endif
   #endif
-  #include "cgbn_cuda.h"
-  #warning "CGBN CUDA included !"
+  #include "cgbn_cuda.h" 
+  #warning "CGBN CUDA included !"__CUDA_ARCH__
 #elif defined(__GMP_H__)
   #include "cgbn_mpz.h"
   #warning "CGBN MPZ included !"
