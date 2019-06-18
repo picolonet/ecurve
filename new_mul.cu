@@ -23,14 +23,51 @@ typedef struct {
   cgbn_mem_t<BITS> mul_hi;
 } instance_t;
 
-
 typedef cgbn_context_t<TPI>         context_t;
 typedef cgbn_env_t<context_t, 768> env1024_t;
 
+
+void reduce_wide() {
+        mp_limb_t res[2*n];
+        mpn_mul_n(res, this->mont_repr.data, other.data, n);
+
+        /*
+          The Montgomery reduction here is based on Algorithm 14.32 in
+          Handbook of Applied Cryptography
+          <http://cacr.uwaterloo.ca/hac/about/chap14.pdf>.
+         */
+        for (size_t i = 0; i < n; ++i)
+        {
+            mp_limb_t k = inv * res[i];
+            /* calculate res = res + k * mod * b^i */
+            mp_limb_t carryout = mpn_addmul_1(res+i, modulus.data, n, k);
+            carryout = mpn_add_1(res+n+i, res+n+i, n-i, carryout);
+            assert(carryout == 0);
+        }
+
+        if (mpn_cmp(res+n, modulus.data, n) >= 0)
+        {
+            const mp_limb_t borrow = mpn_sub(res+n, res+n, n, modulus.data, n);
+            assert(borrow == 0);
+        }
+
+        mpn_copyi(this->mont_repr.data, res+n, n);
+}
+
+__device__
+ void store_np0(env1024_t::cgbn_t& l, uint32_t np0) {
+  #if defined(__CUDA_ARCH__)
+  #warning "including limbs code"
+   l._limbs[10] = np0;
+   l._limbs[11] = 0xe45e7fffu;
+   printf("one %x, np-0 = %x\n", l._limbs[10], l._limbs[11]);
+  #endif
+}
 __global__ void add_kernel(instance_t *problem_instances, uint32_t instance_count, int add_pow_count) {
   context_t         bn_context;                                 // create a CGBN context
   env1024_t         bn1024_env(bn_context);                     // construct a bn environment for 1024 bit math
   env1024_t::cgbn_t a, b, mul_r, add_r, add_r1, add_r2, acc_r, acc_r1, acc_r2, m, l;                      // three 1024-bit values (spread across a warp)
+  env1024_t::cgbn_t mul_r2;
   env1024_t::cgbn_wide_t mul_wide;
   uint32_t np0;
   
@@ -45,6 +82,10 @@ __global__ void add_kernel(instance_t *problem_instances, uint32_t instance_coun
   
   // cgbn_add(bn1024_env, r, a, b);
   np0 = -cgbn_binary_inverse_ui32(bn1024_env, cgbn_get_ui32(bn1024_env, m));
+
+  #if defined(__CUDA_ARCH__)
+  l._limbs[12] = np0;
+  #endif
   np0=cgbn_bn2mont(bn1024_env, l, l, m);
   // cgbn_bn2mont(bn1024_env, b, b, m);
   cgbn_mont_mul(bn1024_env, mul_r, a, b, m, np0);
@@ -53,7 +94,7 @@ __global__ void add_kernel(instance_t *problem_instances, uint32_t instance_coun
        cgbn_sub(bn1024_env, add_r, mul_r, m);
        cgbn_set(bn1024_env, mul_r, add_r); 
   }
-
+  
   cgbn_set(bn1024_env, add_r, a); 
   cgbn_set(bn1024_env, acc_r, a); 
   for (int i = 0; i < add_pow_count; i ++) {
@@ -75,7 +116,6 @@ __global__ void add_kernel(instance_t *problem_instances, uint32_t instance_coun
   }
   cgbn_store(bn1024_env, &(problem_instances[my_instance].result), acc_r);
 
-
   //cgbn_mont2bn(bn1024_env, r, r, m, np0);
   // int use_r2 = cgbn_sub(bn1024_env, add_r2, add_r1, m);
   
@@ -83,8 +123,8 @@ __global__ void add_kernel(instance_t *problem_instances, uint32_t instance_coun
   // } else {
   //  cgbn_store(bn1024_env, &(problem_instances[my_instance].result), add_r1);
   // }
-  cgbn_mont_reduce_wide(bn1024_env, mul_r, mul_wide, m, np0);
-  cgbn_store(bn1024_env, &(problem_instances[my_instance].result2), mul_r);
+  cgbn_mont_reduce_wide(bn1024_env, mul_r2, mul_wide, m, 0xe45e7fffu);
+  cgbn_store(bn1024_env, &(problem_instances[my_instance].result2), mul_r2);
   cgbn_store(bn1024_env, &(problem_instances[my_instance].mul_lo), mul_wide._low);
   cgbn_store(bn1024_env, &(problem_instances[my_instance].mul_hi), mul_wide._high);
 }

@@ -3,6 +3,14 @@ libff notes:
     libff/algebra/fields/fp.tcc
     ./libff/algebra/curves/mnt753/mnt4753/mnt4753_init.cpp
 
+./libff/algebra/curves/mnt753/mnt4753/mnt4753_init.cpp:    typedef bigint<mnt4753_q_limbs> bigint_q;
+
+
 cuda CGBN notes:
    cgbn/core/core_mont_xmad.cu 
    cgbn/core/core.cu
+
+core mont:
+    /home/arunesh/github/cuda-play/cgbn/impl_cuda.cu:1039
+   ../cgbn/core/core_singleton.cu
+   /home/arunesh/github/cuda-play/cgbn/core/core_mont.cu:94
