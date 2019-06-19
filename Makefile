@@ -33,7 +33,7 @@ bench/bench: bench/bench.cu
 
 bench: bench/bench
 
-main: main.cu new_mul.cu
+main: main.cu quad_mul.cu
 	nvcc $(NVCC_OPT_FLAGS) $(NVCC_FLAGS) $(GENCODES:%=--gpu-architecture=compute_%) $(GENCODES:%=--gpu-code=sm_%) $(INCLUDE_DIRS) $(NVCC_LIBS) -o $@ $<
 
 main2: main.cu new_mul.cu
