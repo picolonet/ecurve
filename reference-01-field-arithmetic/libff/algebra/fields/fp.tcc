@@ -160,17 +160,18 @@ void Fp_model<n,modulus>::mul_reduce(const bigint<n> &other)
 #endif
     {
         mp_limb_t res[2*n];
-        printf("\n Input one:");
-        this->mont_repr.print_hex();
-        printf("\n Input two:");
-        other.print_hex();
+        // printf("\n Input one:");
+        // this->mont_repr.print_hex();
+        // printf("\n Input two:");
+        // other.print_hex();
         mpn_mul_n(res, this->mont_repr.data, other.data, n);
-        bigint<2*n> res_bigint;
-        for (int i = 0; i < 2*n; i++) {
-            res_bigint.data[i] = res[i];
-        }
-        printf("\n Mul WIDE:");
-        res_bigint.print_hex();
+
+        // bigint<2*n> res_bigint;
+        // for (int i = 0; i < 2*n; i++) {
+        //     res_bigint.data[i] = res[i];
+        // }
+        // printf("\n Mul WIDE:");
+        // res_bigint.print_hex();
 
         /*
           The Montgomery reduction here is based on Algorithm 14.32 in

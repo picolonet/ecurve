@@ -136,6 +136,12 @@ void write_mnt_fq(uint8_t* fq, FILE* outputs) {
   fwrite((void *) fq, io_bytes_per_elem * sizeof(uint8_t), 1, outputs);
 }
 
+void fprint_uint8_array(FILE* stream, uint8_t* array, int size) {
+    for (int i = 0; i < size; i ++) {
+        fprintf(stream, "%02x", array[i]);
+    }
+    fprintf(stream, "\n");
+}
 
 int main(int argc, char* argv[]) {
   setbuf(stdout, NULL);
@@ -148,6 +154,7 @@ int main(int argc, char* argv[]) {
 
   auto inputs = fopen(argv[2], "r");
   auto outputs = fopen(argv[3], "w");
+  auto debug_file = fopen(argv[4], "w");
 
   size_t n;
 
@@ -155,46 +162,79 @@ int main(int argc, char* argv[]) {
     size_t elts_read = fread((void *) &n, sizeof(size_t), 1, inputs);
     if (elts_read == 0) { break; }
 
+    printf("\n\n NEW ROUND N = %d", n);
+    fprintf(debug_file, "\n\n NEW ROUND N = %d", n);
     std::vector<uint8_t*> x0;
     for (size_t i = 0; i < n; ++i) {
       x0.emplace_back(read_mnt_fq_2(inputs));
+      if (i < 5) {
+        fprintf(debug_file, "\n Input X0[%d]:", i );
+        fprint_uint8_array(debug_file, x0.back(), io_bytes_per_elem);
+      }
     }
 
     std::vector<uint8_t*> x1;
     for (size_t i = 0; i < n; ++i) {
       x1.emplace_back(read_mnt_fq_2(inputs));
+      if (i < 5) {
+        fprintf(debug_file, "\n Input X1[%d]:", i );
+        fprint_uint8_array(debug_file, x1.back(), io_bytes_per_elem);
+      }
     }
    
-    printf("\n Input 0:\n");
-    print_uint8_array(x0.front(), io_bytes_per_elem);
-    printf("\n Input 1:\n");
-    print_uint8_array(x1.front(), io_bytes_per_elem);
+    //printf("\n Input 0:\n");
+    //print_uint8_array(x0.front(), io_bytes_per_elem);
+    //printf("\n Input 1:\n");
+    //print_uint8_array(x1.front(), io_bytes_per_elem);
 
-    std::vector<uint8_t*> res_x = compute_product<bytes_per_elem, u64_fixnum, mul_and_convert>(x0, x1, mnt4_modulus);
-    printf("\n SPECIAL SUM \n");
-    print_uint8_array(res_x.front(), bytes_per_elem);
-    uint8_t* new_res = call_mycuda(x0.front(), x1.front(), mnt4_modulus, io_bytes_per_elem);
-    printf("\n NEW CUDA SUM \n");
-    print_uint8_array(new_res, io_bytes_per_elem);
+    //std::vector<uint8_t*> res_x = compute_product<bytes_per_elem, u64_fixnum, mul_and_convert>(x0, x1, mnt4_modulus);
+    std::vector<uint8_t*>* res_x = compute_newcuda(x0, x1, mnt4_modulus, io_bytes_per_elem, MNT4_INV);
 
+    //printf("\n SPECIAL SUM \n");
+    //print_uint8_array(res_x.front(), bytes_per_elem);
+    //uint8_t* new_res = call_mycuda(x0.front(), x1.front(), mnt4_modulus, io_bytes_per_elem);
+    //printf("\n NEW CUDA SUM \n");
+    //print_uint8_array(new_res, io_bytes_per_elem);
+
+    fprintf(debug_file, "\n res_x.size() = %d, n = %d", res_x->size(), n);
+    fflush(stdout);
     for (size_t i = 0; i < n; ++i) {
-      write_mnt_fq(res_x[i], outputs);
+      write_mnt_fq((*res_x)[i], outputs);
+      if (i < 5) {
+        fprintf(debug_file, "\n Output[%d]:", i );
+        fprint_uint8_array(debug_file, (*res_x)[i], io_bytes_per_elem);
+      }
     }
+
+    fprintf(debug_file, "\n\nY MNT6 array\n");
 
     std::vector<uint8_t*> y0;
     for (size_t i = 0; i < n; ++i) {
-      y0.emplace_back(read_mnt_fq(inputs));
+      y0.emplace_back(read_mnt_fq_2(inputs));
+      if (i < 5) {
+        fprintf(debug_file, "\n Input Y0[%d]:", i );
+        fprint_uint8_array(debug_file, y0.back(), io_bytes_per_elem);
+      }
     }
 
     std::vector<uint8_t*> y1;
     for (size_t i = 0; i < n; ++i) {
-      y1.emplace_back(read_mnt_fq(inputs));
+      y1.emplace_back(read_mnt_fq_2(inputs));
+      if (i < 5) {
+        fprintf(debug_file, "\n Input Y1[%d]:", i );
+        fprint_uint8_array(debug_file, y1.back(), io_bytes_per_elem);
+      }
     }
 
-    std::vector<uint8_t*> res_y = compute_product<bytes_per_elem, u64_fixnum, mul_and_convert>(y0, y1, mnt6_modulus);
+    // std::vector<uint8_t*> res_y = compute_product<bytes_per_elem, u64_fixnum, mul_and_convert>(y0, y1, mnt6_modulus);
+    std::vector<uint8_t*>* res_y = compute_newcuda(y0, y1, mnt6_modulus, io_bytes_per_elem, MNT6_INV);
 
     for (size_t i = 0; i < n; ++i) {
-      write_mnt_fq(res_y[i], outputs);
+      write_mnt_fq((*res_y)[i], outputs);
+      if (i < 5) {
+        fprintf(debug_file, "\n Output[%d]:", i );
+        fprint_uint8_array(debug_file, (*res_y)[i], io_bytes_per_elem);
+      }
     }
 
     for (size_t i = 0; i < n; ++i) {
@@ -202,10 +242,10 @@ int main(int argc, char* argv[]) {
       free(x1[i]);
       free(y0[i]);
       free(y1[i]);
-      free(res_x[i]);
-      free(res_y[i]);
+      free((*res_x)[i]);
+      free((*res_y)[i]);
     }
-    break;
+    free(res_y); free(res_x);
   }
 
   return 0;
