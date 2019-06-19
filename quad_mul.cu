@@ -75,6 +75,34 @@ __device__
   #endif
 }
 
+__global__ void mul_by13_kernel(add_instance_t *problem_instances, uint32_t instance_count) {
+  context_t         bn_context;                                 // create a CGBN context
+  env1024_t         bn1024_env(bn_context);                     // construct a bn environment for 1024 bit math
+  env1024_t::cgbn_t a, acc_r, acc_r1, acc_r2, m;                // three 1024-bit values (spread across a warp)
+  env1024_t::cgbn_t res, res1;
+  // uint32_t np0;
+  
+  int32_t my_instance=(blockIdx.x*blockDim.x + threadIdx.x)/TPI;  // determine my instance number
+  
+  if(my_instance>=instance_count) return;                         // return if my_instance is not valid
+  
+  cgbn_load(bn1024_env, a, &(problem_instances[my_instance]).x);
+  cgbn_load(bn1024_env, m, &(problem_instances[my_instance]).m);
+
+  cgbn_set(bn1024_env, acc_r, a); 
+  for (int i = 0; i < 12; i ++) {
+    cgbn_add(bn1024_env, acc_r1, acc_r, a);
+    if (cgbn_compare(bn1024_env, acc_r1, m) >= 0) {
+       cgbn_sub(bn1024_env, acc_r2, acc_r1, m);
+       cgbn_set(bn1024_env, acc_r, acc_r2); 
+    } else {
+       cgbn_set(bn1024_env, acc_r, acc_r1); 
+    }
+  }
+
+  cgbn_store(bn1024_env, &(problem_instances[my_instance].result), acc_r);
+}
+
 __global__ void add_kernel(add_instance_t *problem_instances, uint32_t instance_count) {
   context_t         bn_context;                                 // create a CGBN context
   env1024_t         bn1024_env(bn_context);                     // construct a bn environment for 1024 bit math
