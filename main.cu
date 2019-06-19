@@ -10,7 +10,7 @@
 #include "modnum/modnum_monty_redc.cu"
 #include "modnum/modnum_monty_cios.cu"
 
-#include "new_mul.cu"
+#include "quad_mul.cu"
 
 const unsigned int bytes_per_elem = 128;
 const unsigned int io_bytes_per_elem = 96;
@@ -164,21 +164,29 @@ int main(int argc, char* argv[]) {
 
     printf("\n\n NEW ROUND N = %d", n);
     fprintf(debug_file, "\n\n NEW ROUND N = %d", n);
-    std::vector<uint8_t*> x0;
+    std::vector<uint8_t*> x0_a0;
+    std::vector<uint8_t*> x0_a1;
     for (size_t i = 0; i < n; ++i) {
-      x0.emplace_back(read_mnt_fq_2(inputs));
+      x0_a0.emplace_back(read_mnt_fq_2(inputs));
+      x0_a1.emplace_back(read_mnt_fq_2(inputs));
       if (i < 5) {
-        fprintf(debug_file, "\n Input X0[%d]:", i );
-        fprint_uint8_array(debug_file, x0.back(), io_bytes_per_elem);
+        fprintf(debug_file, "\n Input X0_A0[%d]:", i );
+        fprint_uint8_array(debug_file, x0_a0.back(), io_bytes_per_elem);
+        fprintf(debug_file, "\n Input X0_A1[%d]:", i );
+        fprint_uint8_array(debug_file, x0_a1.back(), io_bytes_per_elem);
       }
     }
 
-    std::vector<uint8_t*> x1;
+    std::vector<uint8_t*> y0_a0;
+    std::vector<uint8_t*> y0_a1;
     for (size_t i = 0; i < n; ++i) {
-      x1.emplace_back(read_mnt_fq_2(inputs));
+      y0_a0.emplace_back(read_mnt_fq_2(inputs));
+      y0_a1.emplace_back(read_mnt_fq_2(inputs));
       if (i < 5) {
-        fprintf(debug_file, "\n Input X1[%d]:", i );
-        fprint_uint8_array(debug_file, x1.back(), io_bytes_per_elem);
+        fprintf(debug_file, "\n Input Y1_A0[%d]:", i );
+        fprint_uint8_array(debug_file, y0_a0.back(), io_bytes_per_elem);
+        fprintf(debug_file, "\n Input Y1_A1[%d]:", i );
+        fprint_uint8_array(debug_file, y0_a1.back(), io_bytes_per_elem);
       }
     }
    
@@ -188,7 +196,8 @@ int main(int argc, char* argv[]) {
     //print_uint8_array(x1.front(), io_bytes_per_elem);
 
     //std::vector<uint8_t*> res_x = compute_product<bytes_per_elem, u64_fixnum, mul_and_convert>(x0, x1, mnt4_modulus);
-    std::vector<uint8_t*>* res_x = compute_newcuda(x0, x1, mnt4_modulus, io_bytes_per_elem, MNT4_INV);
+    std::pair<std::vector<uint8_t*>, std::vector<uint8_t*> > res
+              = compute_quadex_cuda(x0_a0, x1_a1, y0_a0, y0_a1, mnt4_modulus, io_bytes_per_elem, MNT4_INV);
 
     //printf("\n SPECIAL SUM \n");
     //print_uint8_array(res_x.front(), bytes_per_elem);
@@ -196,56 +205,27 @@ int main(int argc, char* argv[]) {
     //printf("\n NEW CUDA SUM \n");
     //print_uint8_array(new_res, io_bytes_per_elem);
 
-    fprintf(debug_file, "\n res_x.size() = %d, n = %d", res_x->size(), n);
+    fprintf(debug_file, "\n res.first.size() = %d, second.size() = %d, n = %d", res.first->size(), res.second->size(), n);
     fflush(stdout);
     for (size_t i = 0; i < n; ++i) {
-      write_mnt_fq((*res_x)[i], outputs);
+      write_mnt_fq((*res.first)[i], outputs);
+      write_mnt_fq((*res.second)[i], outputs);
       if (i < 5) {
-        fprintf(debug_file, "\n Output[%d]:", i );
-        fprint_uint8_array(debug_file, (*res_x)[i], io_bytes_per_elem);
-      }
-    }
-
-    fprintf(debug_file, "\n\nY MNT6 array\n");
-
-    std::vector<uint8_t*> y0;
-    for (size_t i = 0; i < n; ++i) {
-      y0.emplace_back(read_mnt_fq_2(inputs));
-      if (i < 5) {
-        fprintf(debug_file, "\n Input Y0[%d]:", i );
-        fprint_uint8_array(debug_file, y0.back(), io_bytes_per_elem);
-      }
-    }
-
-    std::vector<uint8_t*> y1;
-    for (size_t i = 0; i < n; ++i) {
-      y1.emplace_back(read_mnt_fq_2(inputs));
-      if (i < 5) {
-        fprintf(debug_file, "\n Input Y1[%d]:", i );
-        fprint_uint8_array(debug_file, y1.back(), io_bytes_per_elem);
-      }
-    }
-
-    // std::vector<uint8_t*> res_y = compute_product<bytes_per_elem, u64_fixnum, mul_and_convert>(y0, y1, mnt6_modulus);
-    std::vector<uint8_t*>* res_y = compute_newcuda(y0, y1, mnt6_modulus, io_bytes_per_elem, MNT6_INV);
-
-    for (size_t i = 0; i < n; ++i) {
-      write_mnt_fq((*res_y)[i], outputs);
-      if (i < 5) {
-        fprintf(debug_file, "\n Output[%d]:", i );
-        fprint_uint8_array(debug_file, (*res_y)[i], io_bytes_per_elem);
+        fprintf(debug_file, "\n Output[%d]_A0:", i );
+        fprint_uint8_array(debug_file, (*res.first)[i], io_bytes_per_elem);
+        fprintf(debug_file, "\n Output[%d]_A1:", i );
+        fprint_uint8_array(debug_file, (*res.second)[i], io_bytes_per_elem);
       }
     }
 
     for (size_t i = 0; i < n; ++i) {
-      free(x0[i]);
-      free(x1[i]);
-      free(y0[i]);
-      free(y1[i]);
-      free((*res_x)[i]);
-      free((*res_y)[i]);
+      free(x0_a0[i]);
+      free(x0_a1[i]);
+      free(y0_a0[i]);
+      free(y0_a1[i]);
+      free((*res.first)[i]);
+      free((*res.second)[i]);
     }
-    free(res_y); free(res_x);
   }
 
   return 0;
