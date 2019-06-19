@@ -27,9 +27,9 @@ typedef cgbn_context_t<TPI>         context_t;
 typedef cgbn_env_t<context_t, 768> env1024_t;
 
 
-void reduce_wide() {
+void reduce_wide(uint32_t limbs[], uint64_t inv, int size) {
         mp_limb_t res[2*n];
-        mpn_mul_n(res, this->mont_repr.data, other.data, n);
+        // mpn_mul_n(res, this->mont_repr.data, other.data, n);
 
         /*
           The Montgomery reduction here is based on Algorithm 14.32 in
