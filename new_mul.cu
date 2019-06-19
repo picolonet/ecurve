@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <cuda.h>
 #include <gmp.h>
+#include <cassert>
 #include "cgbn/cgbn.h"
 #include "utility/support.h"
 
@@ -27,8 +28,11 @@ typedef cgbn_context_t<TPI>         context_t;
 typedef cgbn_env_t<context_t, 768> env1024_t;
 
 
-void reduce_wide(uint32_t limbs[], uint64_t inv, int size) {
-        mp_limb_t res[2*n];
+// num is of size 2*n. modulus is of size n
+// result is of size n.
+void reduce_wide(mp_limb_t* result, mp_limb_t* num, mp_limb_t* modulus, uint64_t inv, int n) {
+        mp_limb_t *res = num;
+        // mp_limb_t res[2*n];
         // mpn_mul_n(res, this->mont_repr.data, other.data, n);
 
         /*
@@ -40,18 +44,18 @@ void reduce_wide(uint32_t limbs[], uint64_t inv, int size) {
         {
             mp_limb_t k = inv * res[i];
             /* calculate res = res + k * mod * b^i */
-            mp_limb_t carryout = mpn_addmul_1(res+i, modulus.data, n, k);
+            mp_limb_t carryout = mpn_addmul_1(res+i, modulus, n, k);
             carryout = mpn_add_1(res+n+i, res+n+i, n-i, carryout);
             assert(carryout == 0);
         }
 
-        if (mpn_cmp(res+n, modulus.data, n) >= 0)
+        if (mpn_cmp(res+n, modulus, n) >= 0)
         {
-            const mp_limb_t borrow = mpn_sub(res+n, res+n, n, modulus.data, n);
+            const mp_limb_t borrow = mpn_sub(res+n, res+n, n, modulus, n);
             assert(borrow == 0);
         }
 
-        mpn_copyi(this->mont_repr.data, res+n, n);
+        mpn_copyi(result, res+n, n);
 }
 
 __device__
@@ -207,5 +211,26 @@ uint8_t* call_mycuda(uint8_t* x, uint8_t* y, uint8_t *m, int num_bytes) {
   printf("Printing mont-mul LOW result:");
   print_uint8_array((uint8_t*) instance_array->mul_lo._limbs, num_bytes);
   printf("Done. returning ...\n");
+
+  int num_limbs = num_bytes / 8;
+  printf("\n Setting num 64 limbs = %d", num_limbs);
+  mp_limb_t* num = (mp_limb_t*)malloc(sizeof(mp_limb_t) * num_limbs * 2);
+  std::memcpy((void*)num, (const void*)instance_array->mul_lo._limbs, num_bytes);
+  std::memcpy((void*) (num + num_limbs), (const void*)instance_array->mul_lo._limbs, num_bytes);
+ 
+  printf("\n Dumping 64 byte limb wide num:");
+  gmp_printf("%Nx\n", num, num_limbs * 2); 
+
+  mp_limb_t* modulus = (mp_limb_t*)malloc(sizeof(mp_limb_t) * num_limbs);
+  std::memcpy((void*) modulus, (const void*) instance_array->m._limbs, num_bytes);
+
+  mp_limb_t* fresult = (mp_limb_t*)malloc(sizeof(mp_limb_t) * num_limbs);
+
+  free(num);
+  free(modulus);
+  //free(fresult);
+
+  printf("\n Dumping 64 byte modulus:");
+  gmp_printf("%Nx\n", m, num_limbs); 
   return result;
 }
