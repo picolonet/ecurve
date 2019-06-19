@@ -216,7 +216,7 @@ uint8_t* call_mycuda(uint8_t* x, uint8_t* y, uint8_t *m, int num_bytes) {
   printf("\n Setting num 64 limbs = %d", num_limbs);
   mp_limb_t* num = (mp_limb_t*)malloc(sizeof(mp_limb_t) * num_limbs * 2);
   std::memcpy((void*)num, (const void*)instance_array->mul_lo._limbs, num_bytes);
-  std::memcpy((void*) (num + num_limbs), (const void*)instance_array->mul_lo._limbs, num_bytes);
+  std::memcpy((void*) (num + num_limbs), (const void*)instance_array->mul_hi._limbs, num_bytes);
  
   printf("\n Dumping 64 byte limb wide num:");
   gmp_printf("%Nx\n", num, num_limbs * 2); 
@@ -226,11 +226,17 @@ uint8_t* call_mycuda(uint8_t* x, uint8_t* y, uint8_t *m, int num_bytes) {
 
   mp_limb_t* fresult = (mp_limb_t*)malloc(sizeof(mp_limb_t) * num_limbs);
 
-  free(num);
-  free(modulus);
-  //free(fresult);
-
+  
   printf("\n Dumping 64 byte modulus:");
   gmp_printf("%Nx\n", m, num_limbs); 
+
+  reduce_wide(fresult, num, modulus, 0xf2044cfbe45e7fff, num_limbs);
+  printf("\n Dumping 64 byte result:");
+  gmp_printf("%Nx\n", fresult, num_limbs); 
+
+  free(num);
+  free(modulus);
+  free(fresult);
+
   return result;
 }
