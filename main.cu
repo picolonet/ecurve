@@ -207,7 +207,7 @@ int main(int argc, char* argv[]) {
     //std::pair<std::vector<uint8_t*>, std::vector<uint8_t*> > res
     //          = compute_quadex_cuda(x0_a0, x0_a1, y0_a0, y0_a1, mnt4_modulus, io_bytes_per_elem, MNT6_INV);
     struct codex_result res
-              = compute_cubex_cuda(x0_a0, x0_a1, x0_a2, y0_a0, y0_a1, y0_a2, mnt4_modulus, io_bytes_per_elem, MNT6_INV);
+              = compute_cubex_cuda(x0_a0, x0_a1, x0_a2, y0_a0, y0_a1, y0_a2, mnt6_modulus, io_bytes_per_elem, MNT6_INV);
 
     //printf("\n SPECIAL SUM \n");
     //print_uint8_array(res_x.front(), bytes_per_elem);
