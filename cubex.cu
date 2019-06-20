@@ -13,11 +13,11 @@
 
 #define TPB 128    // the number of threads per block to launch (must be divisible by 32
 
-struct cubex_result {
+typedef struct cubex_result {
   std::vector<uint8_t*>* coeff0;
   std::vector<uint8_t*>* coeff1;
   std::vector<uint8_t*>* coeff2;
-}
+};
 
 typedef struct {
   cgbn_mem_t<BITS> x;
@@ -40,6 +40,11 @@ typedef cgbn_env_t<context_t, 768> env1024_t;
 const uint64_t MNT4_INV = 0xf2044cfbe45e7fff;
 const uint64_t MNT6_INV = 0xc90776e23fffffff;
 
+void freeMem(std::vector<uint8_t*>* bigint_vector) {
+  for (int i = 0; i < bigint_vector->size(); i ++) {
+     free(bigint_vector->at(i));
+  }
+}
 
 // num is of size 2*n. modulus is of size n
 // result is of size n.
@@ -155,9 +160,9 @@ __global__ void add_kernel(add_instance_t *problem_instances, uint32_t instance_
   cgbn_add(bn1024_env, res1, a, b);
   if (cgbn_compare(bn1024_env, res1, m) >= 0) {
        cgbn_sub(bn1024_env, res, res1, m);
-    } else {
+  } else {
        cgbn_set(bn1024_env, res, res1); 
-    }
+  }
 
   cgbn_store(bn1024_env, &(problem_instances[my_instance].result), res);
 }
@@ -426,6 +431,8 @@ std::vector<uint8_t*>* compute_newcuda(std::vector<uint8_t*> a, std::vector<uint
   return res_vector;
 }
 
+
+
 std::pair<std::vector<uint8_t*>, std::vector<uint8_t*> > 
 compute_quadex_cuda(std::vector<uint8_t*> x0_a0,
                     std::vector<uint8_t*> x0_a1,
@@ -461,7 +468,7 @@ compute_quadex_cuda(std::vector<uint8_t*> x0_a0,
   return res;
 }
 
-struct codex_result
+struct cubex_result
 compute_cubex_cuda(std::vector<uint8_t*> x0_a0,
                     std::vector<uint8_t*> x0_a1,
                     std::vector<uint8_t*> x0_a2,
@@ -517,6 +524,8 @@ compute_cubex_cuda(std::vector<uint8_t*> x0_a0,
   std::vector<uint8_t*>* res_a0_tmp1;
   std::vector<uint8_t*>* res_a0_tmp2;
 
+  struct cubex_result res;
+
   res_a0_tmp1 = compute_addcuda(*x1_y2, *x2_y1, input_m_base, num_bytes);
   res_a0_tmp2 = compute_mul_by11_cuda(*res_a0_tmp1, input_m_base, num_bytes);
   res.coeff0 = compute_addcuda(*x0_y0, *res_a0_tmp2, input_m_base, num_bytes);
@@ -529,7 +538,42 @@ compute_cubex_cuda(std::vector<uint8_t*> x0_a0,
 
   std::vector<uint8_t*>* res_a2_tmp1;
   res_a2_tmp1 = compute_addcuda(*x1_y1, *x2_y0, input_m_base, num_bytes);
-  res.coeff3 = compute_addcuda(*x0_y2, *res_a2_tmp1, input_m_base, num_bytes);
+  res.coeff2 = compute_addcuda(*x0_y2, *res_a2_tmp1, input_m_base, num_bytes);
+
+  freeMem(x0_y0);
+  free(x0_y0);
+  freeMem(x0_y1);
+  free(x0_y1);
+  freeMem(x0_y2);
+  free(x0_y2);
+
+  freeMem(x1_y0);
+  free(x1_y0);
+  freeMem(x1_y1);
+  free(x1_y1);
+  freeMem(x1_y2);
+  free(x1_y2);
+  freeMem(x1_y2);
+
+  freeMem(x2_y0);
+  free(x2_y0);
+  freeMem(x2_y1);
+  free(x2_y1);
+  freeMem(x2_y2);
+  free(x2_y2);
+
+  freeMem(res_a0_tmp1);
+  free(res_a0_tmp1);
+  freeMem(res_a0_tmp2);
+  free(res_a0_tmp2);
+
+  freeMem(res_a1_tmp1);
+  free(res_a1_tmp1);
+  freeMem(res_a1_tmp2);
+  free(res_a1_tmp2);
+
+  freeMem(res_a2_tmp1);
+  free(res_a2_tmp1);
 
   return res;
 }

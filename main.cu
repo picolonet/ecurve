@@ -10,7 +10,7 @@
 #include "modnum/modnum_monty_redc.cu"
 #include "modnum/modnum_monty_cios.cu"
 
-#include "quad_mul.cu"
+#include "cubex.cu"
 
 const unsigned int bytes_per_elem = 128;
 const unsigned int io_bytes_per_elem = 96;
@@ -206,7 +206,7 @@ int main(int argc, char* argv[]) {
     //std::vector<uint8_t*> res_x = compute_product<bytes_per_elem, u64_fixnum, mul_and_convert>(x0, x1, mnt4_modulus);
     //std::pair<std::vector<uint8_t*>, std::vector<uint8_t*> > res
     //          = compute_quadex_cuda(x0_a0, x0_a1, y0_a0, y0_a1, mnt4_modulus, io_bytes_per_elem, MNT6_INV);
-    struct codex_result res
+    struct cubex_result res
               = compute_cubex_cuda(x0_a0, x0_a1, x0_a2, y0_a0, y0_a1, y0_a2, mnt6_modulus, io_bytes_per_elem, MNT6_INV);
 
     //printf("\n SPECIAL SUM \n");
@@ -216,21 +216,21 @@ int main(int argc, char* argv[]) {
     //print_uint8_array(new_res, io_bytes_per_elem);
 
     fprintf(debug_file, "\n RESULT: first.size = %d, second.size = %d, third.side = %d n = %d",
-          res.coeff0.size(),
-          res.coeff1.size(),
-          res.coeff2.size(),  n);
+          res.coeff0->size(),
+          res.coeff1->size(),
+          res.coeff2->size(),  n);
     fflush(stdout);
     for (size_t i = 0; i < n; ++i) {
-      write_mnt_fq(res.coeff0[i], outputs);
-      write_mnt_fq(res.coeff1[i], outputs);
-      write_mnt_fq(res.coeff2[i], outputs);
+      write_mnt_fq((*res.coeff0)[i], outputs);
+      write_mnt_fq((*res.coeff1)[i], outputs);
+      write_mnt_fq((*res.coeff2)[i], outputs);
       if (i < 5) {
         fprintf(debug_file, "\n Output[%d]_A0:", i );
-        fprint_uint8_array(debug_file, res.coeff0[i], io_bytes_per_elem);
+        fprint_uint8_array(debug_file, (*res.coeff0)[i], io_bytes_per_elem);
         fprintf(debug_file, "\n Output[%d]_A1:", i );
-        fprint_uint8_array(debug_file, res.coeff1[i], io_bytes_per_elem);
+        fprint_uint8_array(debug_file, (*res.coeff1)[i], io_bytes_per_elem);
         fprintf(debug_file, "\n Output[%d]_A2:", i );
-        fprint_uint8_array(debug_file, res.coeff2[i], io_bytes_per_elem);
+        fprint_uint8_array(debug_file, (*res.coeff2)[i], io_bytes_per_elem);
       }
     }
 
@@ -239,10 +239,13 @@ int main(int argc, char* argv[]) {
       free(x0_a1[i]);
       free(y0_a0[i]);
       free(y0_a1[i]);
-      free(res.coeff0[i]);
-      free(res.coeff1[i]);
-      free(res.coeff2[i]);
+      free((*res.coeff0)[i]);
+      free((*res.coeff1)[i]);
+      free((*res.coeff2)[i]);
     }
+    free(res.coeff0);
+    free(res.coeff1);
+    free(res.coeff2);
   }
 
   return 0;
