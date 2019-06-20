@@ -175,6 +175,55 @@ void print_uint8_array(uint8_t* array, int size) {
     printf("\n");
 }
 
+std::vector<uint8_t*>* compute_mul_by13_cuda(std::vector<uint8_t*> a, uint8_t* input_m_base, int num_bytes) {
+  int num_elements = a.size();
+
+  add_instance_t *gpuInstances;
+  add_instance_t* instance_array = (add_instance_t*) malloc(sizeof(add_instance_t) * num_elements);
+  cgbn_error_report_t *report;
+
+  // create a cgbn_error_report for CGBN to report back errors
+  NEW_CUDA_CHECK(cgbn_error_report_alloc(&report));
+  for (int i = 0; i < num_elements; i ++) {
+    std::memcpy((void*)instance_array[i].x._limbs, (const void*) a[i], num_bytes);
+    std::memcpy((void*)instance_array[i].m._limbs, (const void*) input_m_base, num_bytes);
+  }
+
+  // printf("Copying instances to the GPU ...\n");
+  NEW_CUDA_CHECK(cudaSetDevice(0));
+  NEW_CUDA_CHECK(cudaMalloc((void **)&gpuInstances, sizeof(add_instance_t)*num_elements));
+  NEW_CUDA_CHECK(cudaMemcpy(gpuInstances, instance_array, sizeof(add_instance_t)*num_elements, cudaMemcpyHostToDevice));
+  
+  int tpb = TPB;
+  // printf("\n Threads per block =%d", tpb);
+  int IPB = TPB/TPI;
+  int tpi = TPI;
+  // printf("\n Threads per instance = %d", tpi);
+  // printf("\n Instances per block = %d", IPB);
+
+  uint32_t num_blocks = (num_elements+IPB-1)/IPB;
+  // printf("\n Number of blocks = %d", num_blocks);
+
+  mul_by13_kernel<<<num_blocks, TPB>>>(gpuInstances, num_elements);
+  NEW_CUDA_CHECK(cudaDeviceSynchronize());
+  CGBN_CHECK(report);
+
+  // copy the instances back from gpuMemory
+  // printf("Copying results back to CPU ...\n");
+  NEW_CUDA_CHECK(cudaMemcpy(instance_array, gpuInstances, sizeof(add_instance_t)*num_elements, cudaMemcpyDeviceToHost));
+
+  std::vector<uint8_t*>* res_vector = new std::vector<uint8_t*>();
+  for (int i = 0; i < num_elements; i ++) {
+     uint8_t* result = (uint8_t*) malloc(num_bytes * sizeof(uint8_t));
+     std::memcpy((void*)result, (const void*)instance_array[i].result._limbs, num_bytes);
+     res_vector->emplace_back(result);
+  }
+
+  free(instance_array);
+  cudaFree(gpuInstances);
+  return res_vector;
+}
+
 std::vector<uint8_t*>* compute_addcuda(std::vector<uint8_t*> a, std::vector<uint8_t*> b, uint8_t* input_m_base, int num_bytes) {
   int num_elements = a.size();
 
@@ -190,27 +239,25 @@ std::vector<uint8_t*>* compute_addcuda(std::vector<uint8_t*> a, std::vector<uint
     std::memcpy((void*)instance_array[i].m._limbs, (const void*) input_m_base, num_bytes);
   }
 
-  printf("Copying instances to the GPU ...\n");
   NEW_CUDA_CHECK(cudaSetDevice(0));
   NEW_CUDA_CHECK(cudaMalloc((void **)&gpuInstances, sizeof(add_instance_t)*num_elements));
   NEW_CUDA_CHECK(cudaMemcpy(gpuInstances, instance_array, sizeof(add_instance_t)*num_elements, cudaMemcpyHostToDevice));
   
   int tpb = TPB;
-  printf("\n Threads per block =%d", tpb);
+  // printf("\n Threads per block =%d", tpb);
   int IPB = TPB/TPI;
   int tpi = TPI;
-  printf("\n Threads per instance = %d", tpi);
-  printf("\n Instances per block = %d", IPB);
+  // printf("\n Threads per instance = %d", tpi);
+  // printf("\n Instances per block = %d", IPB);
 
   uint32_t num_blocks = (num_elements+IPB-1)/IPB;
-  printf("\n Number of blocks = %d", num_blocks);
+  // printf("\n Number of blocks = %d", num_blocks);
 
   add_kernel<<<num_blocks, TPB>>>(gpuInstances, num_elements);
   NEW_CUDA_CHECK(cudaDeviceSynchronize());
   CGBN_CHECK(report);
 
   // copy the instances back from gpuMemory
-  printf("Copying results back to CPU ...\n");
   NEW_CUDA_CHECK(cudaMemcpy(instance_array, gpuInstances, sizeof(add_instance_t)*num_elements, cudaMemcpyDeviceToHost));
 
   std::vector<uint8_t*>* res_vector = new std::vector<uint8_t*>();
@@ -260,7 +307,7 @@ std::vector<uint8_t*>* compute_newcuda(std::vector<uint8_t*> a, std::vector<uint
   CGBN_CHECK(report);
 
   // copy the instances back from gpuMemory
-  printf("Copying results back to CPU ...\n");
+  //printf("Copying results back to CPU ...\n");
   NEW_CUDA_CHECK(cudaMemcpy(instance_array, gpuInstances, sizeof(my_instance_t)*num_elements, cudaMemcpyDeviceToHost));
 
 
@@ -270,8 +317,8 @@ std::vector<uint8_t*>* compute_newcuda(std::vector<uint8_t*> a, std::vector<uint
   mp_limb_t* modulus = (mp_limb_t*)malloc(sizeof(mp_limb_t) * num_limbs);
   std::memcpy((void*) modulus, (const void*) instance_array->m._limbs, num_bytes);
 
-  printf("\n Dumping modulus:");
-  gmp_printf("%Nx\n", modulus, num_limbs); 
+  //printf("\n Dumping modulus:");
+  //gmp_printf("%Nx\n", modulus, num_limbs); 
 
   std::vector<uint8_t*>* res_vector = new std::vector<uint8_t*>();
   for (int i = 0; i < num_elements; i ++) {
@@ -306,6 +353,8 @@ compute_quadex_cuda(std::vector<uint8_t*> x0_a0,
   std::vector<uint8_t*>* x0_y1;
   std::vector<uint8_t*>* x1_y0;
   std::vector<uint8_t*>* x1_y1;
+  std::vector<uint8_t*>* res_a0;
+  std::vector<uint8_t*>* res_a1;
 // Logic: 
 //  var x0_y0 = fq_mul(x.a0, y.a0);
 //  var x1_y1 = fq_mul(x.a1, y.a1);
@@ -316,6 +365,14 @@ compute_quadex_cuda(std::vector<uint8_t*> x0_a0,
 //    a1: fq_add(a1_b0, a0_b1)
 //  };
 //
-  std::pair<std::vector<uint8_t*>, std::vector<uint8_t*> > res;
+
+  x0_y0 = compute_newcuda(x0_a0, y0_a0, input_m_base, num_bytes, inv);
+  x0_y1 = compute_newcuda(x0_a0, y0_a1, input_m_base, num_bytes, inv);
+  x1_y0 = compute_newcuda(x0_a1, y0_a0, input_m_base, num_bytes, inv);
+  x1_y1 = compute_newcuda(x0_a1, y0_a1, input_m_base, num_bytes, inv);
+  res_a1 = compute_addcuda(*x1_y0, *x0_y1, input_m_base, num_bytes);
+  res_a0 = compute_mul_by13_cuda(*x1_y1, input_m_base, num_bytes);
+  res_a0 = compute_addcuda(*x0_y0, *res_a0, input_m_base, num_bytes);
+  std::pair<std::vector<uint8_t*>, std::vector<uint8_t*> > res = std::make_pair(*res_a0, *res_a1);
   return res;
 }
