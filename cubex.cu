@@ -376,7 +376,7 @@ std::vector<uint8_t*>* compute_newcuda(std::vector<uint8_t*> a, std::vector<uint
     std::memcpy((void*)instance_array[i].m._limbs, (const void*) input_m_base, num_bytes);
   }
 
-  printf("Copying instances to the GPU ...\n");
+   printf("\nCopying instances to the GPU ...\n");
   NEW_CUDA_CHECK(cudaSetDevice(0));
   NEW_CUDA_CHECK(cudaMalloc((void **)&gpuInstances, sizeof(my_instance_t)*num_elements));
   NEW_CUDA_CHECK(cudaMemcpy(gpuInstances, instance_array, sizeof(my_instance_t)*num_elements, cudaMemcpyHostToDevice));
@@ -396,7 +396,7 @@ std::vector<uint8_t*>* compute_newcuda(std::vector<uint8_t*> a, std::vector<uint
   CGBN_CHECK(report);
 
   // copy the instances back from gpuMemory
-  //printf("Copying results back to CPU ...\n");
+  printf("\nCopying results back to CPU ...\n");
   NEW_CUDA_CHECK(cudaMemcpy(instance_array, gpuInstances, sizeof(my_instance_t)*num_elements, cudaMemcpyDeviceToHost));
 
 
@@ -430,8 +430,6 @@ std::vector<uint8_t*>* compute_newcuda(std::vector<uint8_t*> a, std::vector<uint
   cudaFree(gpuInstances);
   return res_vector;
 }
-
-
 
 std::pair<std::vector<uint8_t*>, std::vector<uint8_t*> > 
 compute_quadex_cuda(std::vector<uint8_t*> x0_a0,
@@ -553,7 +551,6 @@ compute_cubex_cuda(std::vector<uint8_t*> x0_a0,
   free(x1_y1);
   freeMem(x1_y2);
   free(x1_y2);
-  freeMem(x1_y2);
 
   freeMem(x2_y0);
   free(x2_y0);
