@@ -10,7 +10,7 @@
 #include "modnum/modnum_monty_redc.cu"
 #include "modnum/modnum_monty_cios.cu"
 
-#include "cubex.cu"
+#include "g1array.cu"
 
 const unsigned int bytes_per_elem = 128;
 const unsigned int io_bytes_per_elem = 96;
