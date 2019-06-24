@@ -1,3 +1,31 @@
+Elliptic curve crypto notes:
+
+G1Array :
+   class that holds an array of (x,y) points. These are points on the curve. Read as input.
+
+   Exposes a routine for "sum". Possibly other helper routines.
+   Same class can use MNT4 or MNT6.
+
+   Routine to convert between affine and jacobian.
+
+G24Array :
+   Class that holds an array of (x,y) points. Each of x and y are elements of the Fq2 field with coeffients x_a0 and
+   x_a1, y_a0 and y_a1.
+
+   Exposes a routine for "sum". Possibly other helper routines.
+   We will use this only for MNT4.
+
+   Routine to convert between affine and jacobian.
+
+G26Array :
+   Class that holds an array of (x,y) points. Each of x and y are elements of the Fq3 field with coeffients x_a0,
+   x_a1, x_a2 and y_a0, y_a1, y_a2. Only for MNT6
+
+   Exposes a routine for "sum". Possibly other helper routines.
+
+   Routine to convert between affine and jacobian.
+
+
 libff notes:
     fp.hpp contains code for the single q arithmetic (bigint).
     libff/algebra/fields/fp.tcc
