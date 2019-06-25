@@ -1,5 +1,15 @@
 Elliptic curve crypto notes:
 
+Coding Plan:
+
+1. List of constants needed. Routine in MNT4 class to create these constants. Create a class MNT4 consisting of
+   static routines and constants for the MNT4 curve.
+   Similar class and constants for the MNT6 curve.
+
+2. G1Array class routine to create any necessary constants. 
+
+3. Implement G1Array::Sum routine and debug against reference implementation.
+
 G1Array :
    class that holds an array of (x,y) points. These are points on the curve. Read as input.
 
