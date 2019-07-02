@@ -11,12 +11,12 @@ ifndef GMP_HOME
   GMP_LIB :=
 endif
 
-INCLUDE_DIRS = -I./src -I./ff $(GMP_INC) $(GMP_LIB)
+INCLUDE_DIRS = -I./src -I./ff -L./ff/build/libff/ $(GMP_INC) $(GMP_LIB)
 NVCC_FLAGS = -ccbin $(CXX) -std=c++11 -Xcompiler -Wall,-Wextra -g -G -DUSE_GPU=1
 NVCC_OPT_FLAGS = -DNDEBUG  
 NVCC_TEST_FLAGS = -lineinfo
 NVCC_DBG_FLAGS = -g -G
-NVCC_LIBS = -lstdc++ -lgmp
+NVCC_LIBS = -lstdc++ -lgmp -lff -lgomp -lprocps
 NVCC_TEST_LIBS = -lgtest
 
 all:
