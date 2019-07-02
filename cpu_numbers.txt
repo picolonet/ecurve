@@ -1,0 +1,46 @@
+
+Main program. argc = 1 
+
+ Opening file /home/arunesh/github/snark-challenge/reference-01-field-arithmetic/inputs for reading.
+
+ Array size = 1024
+
+ Round N, time = 0.1030 ms.
+
+ Array size = 2048
+
+ Round N, time = 0.2050 ms.
+
+ Array size = 4096
+
+ Round N, time = 0.4300 ms.
+
+ Array size = 8192
+
+ Round N, time = 0.4510 ms.
+
+ Array size = 16384
+
+ Round N, time = 0.9030 ms.
+
+ Array size = 32768
+
+ Round N, time = 1.7710 ms.
+
+ Array size = 65536
+
+ Round N, time = 3.4990 ms.
+
+ Array size = 131072
+
+ Round N, time = 6.9570 ms.
+
+ Array size = 262144
+
+ Round N, time = 13.8100 ms.
+
+ Array size = 524288
+
+ Round N, time = 27.5380 ms.
+
+ Total time = 55.6670 ms.

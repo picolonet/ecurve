@@ -11,7 +11,7 @@ ifndef GMP_HOME
   GMP_LIB :=
 endif
 
-INCLUDE_DIRS = -I./src $(GMP_INC) $(GMP_LIB)
+INCLUDE_DIRS = -I./src -I./ff $(GMP_INC) $(GMP_LIB)
 NVCC_FLAGS = -ccbin $(CXX) -std=c++11 -Xcompiler -Wall,-Wextra -g -G -DUSE_GPU=1
 NVCC_OPT_FLAGS = -DNDEBUG  
 NVCC_TEST_FLAGS = -lineinfo
@@ -34,6 +34,9 @@ bench/bench: bench/bench.cu
 bench: bench/bench
 
 main: main.cu quad_mul.cu
+	nvcc $(NVCC_OPT_FLAGS) $(NVCC_FLAGS) $(GENCODES:%=--gpu-architecture=compute_%) $(GENCODES:%=--gpu-code=sm_%) $(INCLUDE_DIRS) $(NVCC_LIBS) -o $@ $<
+
+play: play.cu 
 	nvcc $(NVCC_OPT_FLAGS) $(NVCC_FLAGS) $(GENCODES:%=--gpu-architecture=compute_%) $(GENCODES:%=--gpu-code=sm_%) $(INCLUDE_DIRS) $(NVCC_LIBS) -o $@ $<
 
 main2: main.cu new_mul.cu

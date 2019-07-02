@@ -17,6 +17,12 @@ struct delete_ptr {
     }
 };
 
+typedef struct G1Point{
+  uint8_t* x;
+  uint8_t* y;
+  int size_bytes;
+};
+
 // This class represents two array of big integers.
 // X and Y are points on an elliptic curve.
 // We require x->size() == y->size().
@@ -35,6 +41,8 @@ public:
   void write(FILE* outputs);
 
   void setDebug(bool debug, FILE* debug_log);
+ 
+  G1Point compute_cuda_sum();
 
   ~G1Array();
 
@@ -74,3 +82,10 @@ void G1Array::setDebug(bool debug, FILE* debug_log) {
   enable_debug_ = debug;
   debug_log_ = debug_log;
 }
+  
+G1Point G1Array::compute_cuda_sum() {
+}
+
+//
+//G1Point* compute_cuda_sum(G1Point* a, G1Point* b) {
+//}
