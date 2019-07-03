@@ -16,8 +16,8 @@ typedef struct {
   cgbn_mem_t<BITS> x;
   cgbn_mem_t<BITS> y;
   cgbn_mem_t<BITS> m;
-  //cgbn_mem_t<BITS> mul_lo;
-  //cgbn_mem_t<BITS> mul_hi;
+  cgbn_mem_t<BITS> mul_lo;
+  cgbn_mem_t<BITS> mul_hi;
   cgbn_mem_t<BITS> r;
 } my_instance_t;
 
@@ -27,6 +27,38 @@ typedef cgbn_env_t<context_t, BITS> env1024_t;
 
 const uint64_t MNT4_INV = 0xf2044cfbe45e7fff;
 const uint64_t MNT6_INV = 0xc90776e23fffffff;
+
+__device__ 
+void my_redc(uint32_t inv, uint32_t* lo, uint32_t* high, int num_limbs) {
+  __shared__ uint32_t result[24];
+
+  if (threadIdx.x > num_limbs) return;  // no use for those threads.
+  int threadId = threadIdx.x % num_limbs;
+}
+
+__global__ void my_mont_mul_kernel(my_instance_t *problem_instances, uint32_t instance_count) {
+  context_t         bn_context;                                 // create a CGBN context
+  env1024_t         bn1024_env(bn_context);                     // construct a bn environment for 1024 bit math
+  env1024_t::cgbn_t a, b, m;                      // three 1024-bit values (spread across a warp)
+  env1024_t::cgbn_wide_t mul_wide;
+  // uint32_t np0;
+  
+  int32_t my_instance=(blockIdx.x*blockDim.x + threadIdx.x)/TPI;  // determine my instance number
+  
+  if(my_instance>=instance_count) return;                         // return if my_instance is not valid
+  
+  cgbn_load(bn1024_env, a, &(problem_instances[my_instance]).x);
+  cgbn_load(bn1024_env, b, &(problem_instances[my_instance]).y);
+  cgbn_load(bn1024_env, m, &(problem_instances[my_instance]).m);
+
+  // np0 = -cgbn_binary_inverse_ui32(bn1024_env, cgbn_get_ui32(bn1024_env, m));
+
+  cgbn_mul_wide(bn1024_env, mul_wide, a, b);
+
+  cgbn_store(bn1024_env, &(problem_instances[my_instance].mul_lo), mul_wide._low);
+  cgbn_store(bn1024_env, &(problem_instances[my_instance].mul_hi), mul_wide._high);
+
+}
 
 __global__ void mont_mul_kernel(my_instance_t *problem_instances, uint32_t instance_count) {
   context_t         bn_context, bn_context1;                                 // create a CGBN context

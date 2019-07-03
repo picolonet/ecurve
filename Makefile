@@ -39,6 +39,9 @@ main: main.cu quad_mul.cu
 play: play.cu 
 	nvcc $(NVCC_OPT_FLAGS) $(NVCC_FLAGS) $(GENCODES:%=--gpu-architecture=compute_%) $(GENCODES:%=--gpu-code=sm_%) $(INCLUDE_DIRS) $(NVCC_LIBS) -o $@ $<
 
+add_exp: add_exp.cu 
+	nvcc $(NVCC_OPT_FLAGS) $(NVCC_FLAGS) $(GENCODES:%=--gpu-architecture=compute_%) $(GENCODES:%=--gpu-code=sm_%) $(INCLUDE_DIRS) $(NVCC_LIBS) -o $@ $<
+
 main2: main.cu new_mul.cu
 	nvcc $(NVCC_OPT_FLAGS) $(NVCC_FLAGS) $(INCLUDE_DIRS) $(NVCC_LIBS) -o $@ $<
 
