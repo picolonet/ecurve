@@ -30,6 +30,8 @@ typedef cgbn_env_t<context_t, BITS> env1024_t;
 const uint64_t MNT4_INV = 0xf2044cfbe45e7fff;
 const uint64_t MNT6_INV = 0xc90776e23fffffff;
 
+
+
 __global__ void cg_mul_const_kernel(my_instance_t *problem_instances, uint32_t instance_count, uint32_t f) {
   context_t         bn_context;                                 // create a CGBN context
   env1024_t         bn1024_env(bn_context);                     // construct a bn environment for 1024 bit math
@@ -141,6 +143,30 @@ __device__ __forceinline__ uint32_t addc(uint32_t a, uint32_t b) {
     c=carry+(sum>>32);
     return __shfl_sync(sync, c, 31);
   }
+
+__device__
+void mont_redc_wide(uint32_t& a[], uint32_t &m[], uint32_t inv, int n) {
+
+  uint32_t lane = threadIdx.x % TPI;
+  uint32_t ui;
+
+  for (int i = 0; i < n; i ++) {
+     ui = madlo_cc(inv, a[lane], 0);
+     // mul by ui
+     prd = madlo_cc(a._limbs[lane], f, carry);
+     carry=madhic(a._limbs[lane], f, 0);
+     carry=resolve_add(carry, prd);
+     r._limbs[lane] = prd;
+
+     // add to A, handle carry.
+     sum = add_cc(a._limbs[lane], b._limbs[lane]);
+     carry = addc_cc(0, 0);
+     fast_propagate_add(carry, sum);
+
+     r._limbs[lane] = sum;
+
+  }
+}
 
 __global__ void my_mul_const_kernel(my_instance_t *problem_instances, uint32_t instance_count, uint32_t f) {
   int32_t my_instance =(blockIdx.x*blockDim.x + threadIdx.x)/TPI;  // determine my instance number
