@@ -12,10 +12,11 @@ ifndef GMP_HOME
 endif
 
 INCLUDE_DIRS = -I./src -I./ff -L./ff/build/libff/ $(GMP_INC) $(GMP_LIB)
+# NVCC_FLAGS = -src-in-ptx -keep -ccbin $(CXX) -std=c++11 -Xcompiler -Wall,-Wextra -g -G -DUSE_GPU=1
 NVCC_FLAGS = -ccbin $(CXX) -std=c++11 -Xcompiler -Wall,-Wextra -g -G -DUSE_GPU=1
 NVCC_OPT_FLAGS = -DNDEBUG  
 NVCC_TEST_FLAGS = -lineinfo
-NVCC_DBG_FLAGS = -g -G
+NVCC_DBG_FLAGS = -g -G 
 NVCC_LIBS = -lstdc++ -lgmp -lff -lgomp -lprocps
 NVCC_TEST_LIBS = -lgtest
 
@@ -36,7 +37,10 @@ bench: bench/bench
 main: main.cu quad_mul.cu
 	nvcc $(NVCC_OPT_FLAGS) $(NVCC_FLAGS) $(GENCODES:%=--gpu-architecture=compute_%) $(GENCODES:%=--gpu-code=sm_%) $(INCLUDE_DIRS) $(NVCC_LIBS) -o $@ $<
 
-play: play.cu 
+play: play.cu  play_mul.cu
+	nvcc $(NVCC_OPT_FLAGS) $(NVCC_FLAGS) $(GENCODES:%=--gpu-architecture=compute_%) $(GENCODES:%=--gpu-code=sm_%) $(INCLUDE_DIRS) $(NVCC_LIBS) -o $@ $<
+
+p2: p2.cu
 	nvcc $(NVCC_OPT_FLAGS) $(NVCC_FLAGS) $(GENCODES:%=--gpu-architecture=compute_%) $(GENCODES:%=--gpu-code=sm_%) $(INCLUDE_DIRS) $(NVCC_LIBS) -o $@ $<
 
 add_exp: add_exp.cu 

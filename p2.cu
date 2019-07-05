@@ -12,7 +12,7 @@
 #include <libff/algebra/curves/mnt753/mnt4753/mnt4753_pp.hpp>
 #include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
 
-#include "play_mul.cu"
+#include "p2_mul.cu"
 
 using namespace libff;
 
@@ -25,6 +25,14 @@ const unsigned int io_bytes_per_elem = 96;
   // mnt6_q
   uint8_t mnt6_modulus[bytes_per_elem] = {1,0,0,64,226,118,7,217,79,58,161,15,23,153,160,78,151,87,0,63,188,129,195,214,164,58,153,52,118,249,223,185,54,38,33,41,148,202,235,62,155,169,89,200,40,92,108,178,157,247,90,161,217,36,209,153,141,237,160,232,37,185,253,7,115,216,151,108,249,232,183,94,237,175,143,91,80,151,249,183,173,205,226,238,34,144,34,16,17,196,146,45,198,196,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
+void fprint_fq(FILE* stream, Fq<mnt4753_pp> x) {
+    int size = libff::mnt4753_q_limbs * sizeof(mp_size_t);
+    uint8_t* array = (uint8_t*) x.mont_repr.data;
+    for (int i = 0; i < size; i ++) {
+        fprintf(stream, "%02x", array[i]);
+    }
+    fprintf(stream, "\n");
+}
 
 void write_mnt4_fq(FILE* output, Fq<mnt4753_pp> x) {
   fwrite((void *) x.mont_repr.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
@@ -110,30 +118,10 @@ void cpu_sum(uint64_t* a, uint64_t* b, int num) {
   } 
 }
 
-bool check(uint8_t* a, uint8_t* b, int num) {
-  return memcmp(a, b, num * sizeof(uint8_t));
-}
-
 Fq<mnt4753_pp> to_fq(uint8_t* data) {
   Fq<mnt4753_pp> x;
   memcpy((void *) x.mont_repr.data, data, libff::mnt4753_q_limbs * sizeof(mp_size_t));
   return x;
-}
-
-void fprint_fq(FILE* stream, Fq<mnt4753_pp> x) {
-    int size = libff::mnt4753_q_limbs * sizeof(mp_size_t);
-    uint8_t* array = (uint8_t*) x.mont_repr.data;
-    for (int i = 0; i < size; i ++) {
-        fprintf(stream, "%02x", array[i]);
-    }
-    fprintf(stream, "\n");
-}
-
-void fprint_uint8_array(FILE* stream, uint8_t* array, int size) {
-    for (int i = 0; i < size; i ++) {
-        fprintf(stream, "%02x", array[i]);
-    }
-    fprintf(stream, "\n");
 }
 
 void mul_play(std::vector<uint8_t*> x, std::vector<uint8_t*> y, FILE* debug_log) {
@@ -157,7 +145,11 @@ void mul_play(std::vector<uint8_t*> x, std::vector<uint8_t*> y, FILE* debug_log)
        fprint_fq(debug_log, out);
        }
     }
-    std::vector<uint8_t*>* result = compute_mont_mulcuda(x, y, mnt4_modulus, bytes_per_elem);
+    // TODO: FIX ME FIX ME 
+    // TODO: FIX ME FIX ME 
+    // TODO: FIX ME FIX ME 
+    // std::vector<uint8_t*>* result = compute_mont_mulcuda(x, y, mnt4_modulus, bytes_per_elem);
+    std::vector<uint8_t*>* result = new std::vector<uint8_t*>();
     for (int i = 0; i < 2; i++) {
        fprintf(debug_log, "\n x[%d]:", i);
        fprint_uint8_array(debug_log, x[i], io_bytes_per_elem);
@@ -235,8 +227,6 @@ int main(int argc, char* argv[]) {
 
   printf("\n sieze of mplimb_t = %d, %d, %d", sizeof(mp_limb_t), sizeof(mp_size_t), libff::mnt4753_q_limbs);
 
-  compute_gmp_inverse();
-
   while(true) {
   
     size_t array_size = fread((void*) &n, sizeof(size_t), 1, inputs);
@@ -266,35 +256,15 @@ int main(int argc, char* argv[]) {
 
     int num_threads = io_bytes_per_elem / 8;
 
-    mul_play(x, y, debug_file);
     start = clock();
     std::vector<uint8_t*>* result;
-    for (size_t i = 0; i < 1; ++i) {
-      gpu_sum<<< 1, num_threads >>>((uint64_t*) x[i], (uint64_t*) y[i], io_bytes_per_elem / 8);
-    }
-    cudaDeviceSynchronize();
+    result = compute_add_cuda(x, y, mnt4_modulus, bytes_per_elem, debug_file);
     end = clock();
-
 
     time_iter = ((double) end-start) * 1000.0 / CLOCKS_PER_SEC;
     time_used += time_iter;
     printf("\n GPU Round N, time = %5.4f ms.\n", time_iter); 
  
-    start = clock();
-    for (size_t i = 0; i < 1; ++i) {
-       cpu_sum((uint64_t*)z[i], (uint64_t*)y[i], io_bytes_per_elem/8);
-    }
-    end = clock();
-
-    time_iter = ((double) end-start) * 1000.0 / CLOCKS_PER_SEC;
-    printf("\n CPU Round N, time = %5.4f ms.\n", time_iter); 
-    
-    for (size_t i = 0; i < 1; ++i) {
-      if (check(x[i], z[i], io_bytes_per_elem) != 0) {
-        printf("\n Failed at %d.\n", i);
-      }
-    }
-   
     std::for_each(x.begin(), x.end(), delete_ptr_gpu());
     x.clear();
     std::for_each(y.begin(), y.end(), delete_ptr_gpu());

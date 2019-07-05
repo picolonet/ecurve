@@ -1,0 +1,3 @@
+
+fast_propagate_add:
+   carry is the carry out for the next limb
