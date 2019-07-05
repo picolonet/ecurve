@@ -258,7 +258,8 @@ int main(int argc, char* argv[]) {
 
     start = clock();
     std::vector<uint8_t*>* result;
-    result = compute_add_cuda(x, y, mnt4_modulus, bytes_per_elem, debug_file);
+    // result = compute_add_cuda(x, y, mnt4_modulus, bytes_per_elem, debug_file);
+    result = compute_mul_const_cuda(x, y, mnt4_modulus, bytes_per_elem, debug_file);
     end = clock();
 
     time_iter = ((double) end-start) * 1000.0 / CLOCKS_PER_SEC;
