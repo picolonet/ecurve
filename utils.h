@@ -8,7 +8,6 @@
 #include <libff/algebra/curves/mnt753/mnt4753/mnt4753_pp.hpp>
 #include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
 
-
 using namespace libff;
 void fprint_fq(FILE* stream, Fq<mnt4753_pp> x);
 
@@ -44,3 +43,6 @@ uint8_t* read_mnt_fq_2_gpu(FILE* inputs);
 
 Fq<mnt4753_pp> to_fq(uint8_t* data);
 
+bool check(uint8_t* a, uint8_t* b, int num);
+
+void fprint_uint8_array(FILE* stream, uint8_t* array, int size);

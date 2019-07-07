@@ -14,8 +14,8 @@
 
 #include "constants.h"
 
-#include "myfq.h"
-#include "utils.h"
+#include "myfq.cu"
+#include "utils.cu"
 
 const char* input_a = "/home/arunesh/github/snark-challenge/reference-01-field-arithmetic/inputs";
 
@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
 
     start = clock();
     std::vector<uint8_t*>* result;
-    test_fq_add(x, y);
+    test_fq_add(x, y, bytes_per_elem);
     end = clock();
 
     time_iter = ((double) end-start) * 1000.0 / CLOCKS_PER_SEC;

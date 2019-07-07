@@ -33,7 +33,7 @@ typedef struct {
 typedef struct {
   mfq2_t A;
   mfq2_t B;
-} mquad_t
+} mquad_t;
 
 
 typedef struct {
