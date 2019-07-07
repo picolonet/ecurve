@@ -19,6 +19,7 @@
 
 const char* input_a = "/home/arunesh/github/snark-challenge/reference-01-field-arithmetic/inputs";
 
+using namespace libff;
 
 void test_fq_add(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes) {
   mnt4753_pp::init_public_params();

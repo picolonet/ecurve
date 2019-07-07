@@ -59,7 +59,7 @@ __device__ __forceinline__ static int32_t fast_propagate_add_u64(thread_context&
 }
 
 __device__
-void fq2_add(fq2_t& a, fq2_t& b) {
+void fq2_add(mfq2_t& a, mfq2_t& b) {
   uint64_t sum, carry;
   sum = add_cc_u64(a.val, b.val);
   carry = addc_cc(0, 0);

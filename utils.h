@@ -9,6 +9,7 @@
 #include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
 
 
+using namespace libff;
 void fprint_fq(FILE* stream, Fq<mnt4753_pp> x);
 
 void write_mnt4_fq(FILE* output, Fq<mnt4753_pp> x);
