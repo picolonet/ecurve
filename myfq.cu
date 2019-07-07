@@ -82,6 +82,13 @@ __device__ __forceinline__ uint32_t add_cc(uint32_t a, uint32_t b) {
   return r;
 }
 
+__device__ __forceinline__ uint32_t addc_cc(uint32_t a, uint32_t b) {
+  uint32_t r;
+
+  asm volatile ("addc.cc.u32 %0, %1, %2;" : "=r"(r) : "r"(a), "r"(b));
+  return r;
+}
+
 __device__ static int32_t fast_propagate_add_u64(thread_context_t& tc,
       const uint32_t carry, uint64_t &x) {
     //uint32_t warp_thread=threadIdx.x & warpSize-1, lane=1<<warp_thread;
@@ -101,11 +108,12 @@ __device__ static int32_t fast_propagate_add_u64(thread_context_t& tc,
 }
 
 __device__
-void fq2_add(mfq2_t& a, mfq2_t& b) {
+void fq2_add(thread_context_t& tc, mfq2_t& a, mfq2_t& b) {
   uint64_t sum, carry;
-  sum = add_cc_u64(a.val, b.val);
+  // THIS IS WRONG.
+  sum = add_cc_u64(a.a0.val, b.a1.val);
   carry = addc_cc(0, 0);
-  fast_propagate_add_u64(carry, sum);
+  fast_propagate_add_u64(tc, carry, sum);
   a.val = sum;
 }
 

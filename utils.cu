@@ -77,20 +77,6 @@ Fqe<mnt4753_pp> read_mnt4_fq2(FILE* input) {
   return Fqe<mnt4753_pp>(c0, c1);
 }
 
-struct delete_ptr { // Helper function to ease cleanup of container
-    template <typename P>
-    void operator () (P p) {
-        delete p;
-    }
-};
-
-struct delete_ptr_gpu { // Helper function to ease cleanup of container
-    template <typename P>
-    void operator () (P p) {
-        cudaFree(p);
-    }
-};
-
 uint8_t* read_mnt_fq_2(FILE* inputs) {
   uint8_t* buf = (uint8_t*)calloc(bytes_per_elem, sizeof(uint8_t));
   // the input is montgomery representation x * 2^768 whereas cuda-fixnum expects x * 2^1024 so we shift over by (1024-768)/8 bytes
