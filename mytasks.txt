@@ -1,0 +1,5 @@
+1. Create test input for: mul with redc, add, sub. 
+2. Design that works without CGBN.
+    A C++ based OO design that would scale to cubic and more.
+
+3. Implement design, build quadex, cubex.
