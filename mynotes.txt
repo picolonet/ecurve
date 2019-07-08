@@ -1,3 +1,8 @@
+Possible performance improvements:
+
+1. In myfq.cu: mul by const, look at the fast version that is not working. Also from p2_mul.cu, try a 64 bit version of dev_mul_by_const.
+
+
 Elliptic curve crypto notes:
 
 Coding Plan:

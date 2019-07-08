@@ -23,6 +23,7 @@ using namespace libff;
 
 void test_fq_add(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file);
 void test_fq_sub(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file);
+void test_fq_mul_byconst(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file);
 
 struct fq_op { // Helper function to ease cleanup of container
     void operator () (std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file) ;
@@ -37,6 +38,12 @@ struct add_fq_op : fq_op {
 struct sub_fq_op : fq_op {
     void operator () (std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file) {
         test_fq_sub(x, y, num_bytes, debug_file);
+    } 
+};
+
+struct mul_by13_fq_op : fq_op {
+    void operator () (std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file) {
+        test_fq_mul_byconst(x, y, num_bytes, debug_file);
     } 
 };
 
@@ -189,6 +196,77 @@ void loadrun_fq_add(const char* input_file, const char* debug_filename) {
 }
 
 // We test basic big int addition by a0 + a1 for a fq2 element.
+void test_fq_mul_byconst(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file) {
+  mnt4753_pp::init_public_params();
+  mnt6753_pp::init_public_params();
+
+  std::vector<Fq<mnt4753_pp>> x0;
+  std::vector<Fq<mnt4753_pp>> x1;
+  cgbn_error_report_t *report;
+  NEW_CUDA_CHECK(cgbn_error_report_alloc(&report));
+
+  int tpb = TPB;
+  // printf("\n Threads per block =%d", tpb);
+  int IPB = TPB/TPI;
+
+  int n = x.size();
+  single_mfq_ti* gpuInstances;
+  single_mfq_ti* localInstances;
+  fprintf(debug_file, "\n size of fq2_t:%d", sizeof(single_mfq_ti));
+  localInstances = (single_mfq_ti*) calloc(n, sizeof(single_mfq_ti));
+  NEW_CUDA_CHECK(cudaSetDevice(0));
+  NEW_CUDA_CHECK(cudaMalloc((void **)&gpuInstances, sizeof(single_mfq_ti)*n));
+  load_mnt4_modulus();
+  
+  for (int i = 0; i < n; i++) {
+      std::memcpy((void*)localInstances[i].x, (void*)x[i], num_bytes);
+      //std::memcpy((void*)localInstances[i].y, (void*)y[i], num_bytes);
+  }
+  
+  NEW_CUDA_CHECK(cudaMemcpy(gpuInstances, localInstances, sizeof(single_mfq_ti) * n, cudaMemcpyHostToDevice));
+  //for (int i = 0; i < n; i++) {
+  //    NEW_CUDA_CHECK(cudaMemcpy(gpuInstances[i].a0, x[i], num_bytes, cudaMemcpyHostToDevice));
+  //    NEW_CUDA_CHECK(cudaMemcpy(gpuInstances[i].a1, y[i], num_bytes, cudaMemcpyHostToDevice));
+  //}
+
+  uint32_t num_blocks = (n + IPB-1)/IPB;
+  clock_t start, end;
+  double time_iter = 0.0;
+
+  start = clock();
+  fq_mul_const_kernel<<<num_blocks, TPB>>>(gpuInstances, n, mnt4_modulus_device, 13);
+  NEW_CUDA_CHECK(cudaDeviceSynchronize());
+  end = clock();
+  time_iter = ((double) end-start) * 1000.0 / CLOCKS_PER_SEC;
+  fprintf(debug_file, "\n num_elements = %d, compute ony latency = %8.7f ms, per element = %8.7f microseconds.\n", n,
+      time_iter, 1000.0*time_iter / (double)n); 
+  printf("\n num_elements = %d, compute ony latency = %8.7f ms, per element = %8.7f microseconds.\n", n,
+      time_iter, 1000.0*time_iter / (double)n); 
+  NEW_CUDA_CHECK(cudaMemcpy(localInstances, gpuInstances, sizeof(single_mfq_ti) * n, cudaMemcpyDeviceToHost));
+ 
+  Fq<mnt4753_pp> const13; 
+  const13.set_ulong(13ull);
+  for (int i = 0; i < n; i++) {
+    Fq<mnt4753_pp> out;
+    x0.emplace_back(to_fq(x[i]));
+    x1.emplace_back(to_fq(y[i]));
+    out = x0[i] * const13;
+    fprintf(debug_file, "\n REF ADD:\n");
+    fprint_fq(debug_file, out); 
+    fprintf(debug_file, "\n MY ADD:\n");
+    fprint_uint8_array(debug_file, (uint8_t*)localInstances[i].x, num_bytes); 
+    if (check((uint8_t*) out.mont_repr.data, (uint8_t*)localInstances[i].x, io_bytes_per_elem)) {
+      printf("\n TEST FAILED.");
+      fprintf(debug_file, "\n TEST FAILED.");
+    }
+  }
+
+  // free memory
+  cudaFree(gpuInstances);
+  free(localInstances);
+}
+
+// We test basic big int addition by a0 + a1 for a fq2 element.
 void test_fq_sub(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file) {
   mnt4753_pp::init_public_params();
   mnt6753_pp::init_public_params();
@@ -329,6 +407,7 @@ int main(int argc, char* argv[]) {
 
   //loadrun_fq_add(input_a, "debug_log");
   //loadrun_fq_op<add_fq_op>(input_a, "debug_log");
-  loadrun_fq_op<sub_fq_op>(input_a, "debug_log");
+  //loadrun_fq_op<sub_fq_op>(input_a, "debug_log");
+  loadrun_fq_op<mul_by13_fq_op>(input_a, "debug_log");
 }
 
