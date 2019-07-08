@@ -37,6 +37,8 @@ void test_fq_add(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes
   std::vector<Fq<mnt4753_pp>> x0;
   std::vector<Fq<mnt4753_pp>> x1;
   uint8_t* gpu_outbuf = (uint8_t*)calloc(num_bytes, sizeof(uint8_t));
+  cgbn_error_report_t *report;
+  NEW_CUDA_CHECK(cgbn_error_report_alloc(&report));
 
   int tpb = TPB;
   // printf("\n Threads per block =%d", tpb);
@@ -46,7 +48,8 @@ void test_fq_add(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes
   mfq2_t* gpuInstances;
   mfq2_t* localInstances;
   fprintf(debug_file, "\n size of fq2_t:%d", sizeof(mfq2_t));
-  localInstances = (myfq2_t*) calloc(n, sizeof(mfq2_t));
+  localInstances = (mfq2_t*) calloc(n, sizeof(mfq2_t));
+  NEW_CUDA_CHECK(cudaSetDevice(0));
   NEW_CUDA_CHECK(cudaMalloc((void **)&gpuInstances, sizeof(mfq2_t)*n));
   load_mnt4_modulus();
   
@@ -55,7 +58,7 @@ void test_fq_add(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes
       std::memcpy((void*)localInstances[i].a1, (void*)y[i], num_bytes);
   }
   
-  NEW_CUDA_CHECK(cudaMemcpy(gpuInstances, localInstances, sizeof(myfq2_t) * n, cudaMemcpyHostToDevice));
+  NEW_CUDA_CHECK(cudaMemcpy(gpuInstances, localInstances, sizeof(mfq2_t) * n, cudaMemcpyHostToDevice));
   //for (int i = 0; i < n; i++) {
   //    NEW_CUDA_CHECK(cudaMemcpy(gpuInstances[i].a0, x[i], num_bytes, cudaMemcpyHostToDevice));
   //    NEW_CUDA_CHECK(cudaMemcpy(gpuInstances[i].a1, y[i], num_bytes, cudaMemcpyHostToDevice));
@@ -64,7 +67,8 @@ void test_fq_add(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes
   uint32_t num_blocks = (n + IPB-1)/IPB;
 
   fq_add_kernel<<<num_blocks, TPB>>>(gpuInstances, n, mnt4_modulus_device);
-  NEW_CUDA_CHECK(cudaMemcpy(localInstances, gpuInstances, sizeof(myfq2_t) * n, cudaMemcpyDeviceToHost));
+  NEW_CUDA_CHECK(cudaDeviceSynchronize());
+  NEW_CUDA_CHECK(cudaMemcpy(localInstances, gpuInstances, sizeof(mfq2_t) * n, cudaMemcpyDeviceToHost));
   
   for (int i = 0; i < n; i++) {
     x0.emplace_back(to_fq(x[i]));
