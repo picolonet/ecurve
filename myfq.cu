@@ -33,6 +33,10 @@ typedef uint64_t mfq_t;
 
 __constant__ mfq_t mnt4_modulus_device[16];
 
+typedef struct {
+    mfq_t x[MyGpuParams::BI_LIMBS];  
+} single_mfq_ti;  // ti for instance, that is full array
+
 // Class represents a big integer vector. But since it uses a GPU, all operations are
 // defined on a single big integer which is of a fixed size.
 // The basic data type is kept fixed at uint64_t.
@@ -244,6 +248,26 @@ void fq_add_mod(thread_context_t& tc, mfq_t& a, mfq_t& b, mfq_t& m) {
   one_mod_u64(tc, a, m);
 }
 
+__device__ __forceinline__
+void dev_mul_by_2(thread_context_t& tc, mfq_t& a) {
+  uint64_t temp = __shfl_down_sync(tc.sync_mask, a, 1);
+  const uint64_t msb = 0x80000000000000ull;
+  a = a << 1;
+  a = a | (0x1 & ((temp & msb) >> 63 ));
+}
+
+__device__
+void fq_mul_const_mod(thread_context_t& tc, mfq_t& a, mfq_t& m, uint32_t mul_const) {
+  int bit = 0;
+  uint64_t temp_a = a, temp_exp_a = a;
+  while (mul_const > 0) {
+    bit = mul_const & 0x01;
+    if (bit) fq_add_mod(tc, temp_a, temp_exp_a, m); 
+    fq_add_mod(tc, temp_exp_a, temp_exp_a, m); 
+    mul_const = mul_const >> 1;
+  }
+}
+
 __device__
 void fq_sub_mod(thread_context_t& tc, mfq_t& a, mfq_t& b, mfq_t& m) {
   int which = dev_sub_u64(tc, a, b);
@@ -294,6 +318,19 @@ void fq_add_kernel(tuple_mfq_ti* instances, uint32_t instance_count, mfq_t modul
 
   fq_add_mod(tc, instances[tc.instance_number].x[tc.lane],
              instances[tc.instance_number].y[tc.lane], mnt4_modulus_device[tc.lane]);
+}
+
+__global__
+void fq_mul_const_kernel(single_mfq_ti* instances, uint32_t instance_count, mfq_t modulus[], uint32_t mul_const) {
+  int32_t my_instance =(blockIdx.x*blockDim.x + threadIdx.x)/TPI;  // determine my instance number
+  if(my_instance>=instance_count) return;    // return if my_instance is not valid
+
+  thread_context_t tc;
+  compute_context(tc, instance_count);
+
+  if (tc.instance_number >= instance_count) return;
+
+  fq_mul_const_mod(tc, instances[tc.instance_number].x[tc.lane], mnt4_modulus_device[tc.lane], mul_const);
 }
 
 void load_mnt4_modulus() {
