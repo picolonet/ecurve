@@ -21,17 +21,59 @@ const char* input_a = "/home/arunesh/github/snark-challenge/reference-01-field-a
 
 using namespace libff;
 
-void test_fq_add(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes) {
+uint8_t* read_mnt_fq_2_gpu(FILE* inputs) {
+  uint8_t* buf; 
+  cudaMallocManaged(&buf, bytes_per_elem , sizeof(uint8_t));
+  // the input is montgomery representation x * 2^768 whereas cuda-fixnum expects x * 2^1024 so we shift over by (1024-768)/8 bytes
+  fread((void*)buf, io_bytes_per_elem*sizeof(uint8_t), 1, inputs);
+  return buf;
+}
+
+// We test basic big int addition by a0 + a1 for a fq2 element.
+void test_fq_add(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file) {
   mnt4753_pp::init_public_params();
   mnt6753_pp::init_public_params();
 
   std::vector<Fq<mnt4753_pp>> x0;
   std::vector<Fq<mnt4753_pp>> x1;
+  uint8_t* gpu_outbuf = (uint8_t*)calloc(num_bytes, sizeof(uint8_t));
+
+  int tpb = TPB;
+  // printf("\n Threads per block =%d", tpb);
+  int IPB = TPB/TPI;
+
   int n = x.size();
+  mfq2_t* gpuInstances;
+  mfq2_t* localInstances;
+  fprintf(debug_file, "\n size of fq2_t:%d", sizeof(mfq2_t));
+  localInstances = (myfq2_t*) calloc(n, sizeof(mfq2_t));
+  NEW_CUDA_CHECK(cudaMalloc((void **)&gpuInstances, sizeof(mfq2_t)*n));
+  load_mnt4_modulus();
+  
+  for (int i = 0; i < n; i++) {
+      std::memcpy((void*)localInstances[i].a0, (void*)x[i], num_bytes);
+      std::memcpy((void*)localInstances[i].a1, (void*)y[i], num_bytes);
+  }
+  
+  NEW_CUDA_CHECK(cudaMemcpy(gpuInstances, localInstances, sizeof(myfq2_t) * n, cudaMemcpyHostToDevice));
+  //for (int i = 0; i < n; i++) {
+  //    NEW_CUDA_CHECK(cudaMemcpy(gpuInstances[i].a0, x[i], num_bytes, cudaMemcpyHostToDevice));
+  //    NEW_CUDA_CHECK(cudaMemcpy(gpuInstances[i].a1, y[i], num_bytes, cudaMemcpyHostToDevice));
+  //}
+
+  uint32_t num_blocks = (n + IPB-1)/IPB;
+
+  fq_add_kernel<<<num_blocks, TPB>>>(gpuInstances, n, mnt4_modulus_device);
+  NEW_CUDA_CHECK(cudaMemcpy(localInstances, gpuInstances, sizeof(myfq2_t) * n, cudaMemcpyDeviceToHost));
+  
   for (int i = 0; i < n; i++) {
     x0.emplace_back(to_fq(x[i]));
     x1.emplace_back(to_fq(y[i]));
     Fq<mnt4753_pp> out = x0[i] * x1[i];
+    fprintf(debug_file, "\n REF ADD:\n");
+    fprint_fq(debug_file, out); 
+    fprintf(debug_file, "\n MY ADD:\n");
+    fprint_uint8_array(debug_file, (uint8_t*)localInstances[i].a0, num_bytes); 
   }
 }
 
@@ -84,7 +126,7 @@ int main(int argc, char* argv[]) {
 
     start = clock();
     std::vector<uint8_t*>* result;
-    test_fq_add(x, y, bytes_per_elem);
+    test_fq_add(x, y, bytes_per_elem, debug_file);
     end = clock();
 
     time_iter = ((double) end-start) * 1000.0 / CLOCKS_PER_SEC;

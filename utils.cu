@@ -94,3 +94,10 @@ void fprint_uint8_array(FILE* stream, uint8_t* array, int size) {
     }
     fprintf(stream, "\n");
 }
+
+Fq<mnt4753_pp> to_fq(uint8_t* data) {
+  Fq<mnt4753_pp> x;
+  memcpy((void *) x.mont_repr.data, data, libff::mnt4753_q_limbs * sizeof(mp_size_t));
+  return x;
+}
+

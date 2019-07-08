@@ -30,8 +30,10 @@ struct MyGpuParams {
 // Fq really represents a biginteger of BI_LIMBS of type uint64_t. But since this is in
 // CUDA, and gets parallely executed the class represents a single limb.
 typedef struct MyFq {
-    uint64_t &val;
+    uint64_t val;
 } mfq_t;
+
+__constant__ mfq_t mnt4_modulus_device[16];
 
 // Class represents a big integer vector. But since it uses a GPU, all operations are
 // defined on a single big integer which is of a fixed size.
@@ -54,7 +56,7 @@ typedef struct {
   uint32_t warp_number;
 } thread_context_t;
 
-__device__ void fq2_add(thread_context_t& tc, mfq2_t& a, mfq2_t& b);
+__device__ void fq2_add(thread_context_t& tc, mfq_t& a, mfq_t& b);
 __device__ __forceinline__ static int32_t fast_propagate_add_u64(thread_context_t& tc,
       const uint32_t carry, uint64_t &x);
 
@@ -108,24 +110,123 @@ __device__ static int32_t fast_propagate_add_u64(thread_context_t& tc,
 }
 
 __device__
-void fq2_add(thread_context_t& tc, mfq2_t& a, mfq2_t& b) {
+void fq2_add_nomod(thread_context_t& tc, mfq_t& a, mfq_t& b) {
   uint64_t sum, carry;
-  // THIS IS WRONG.
-  sum = add_cc_u64(a.a0.val, b.a1.val);
+  // THIS IS WRONG. FIX ME.
+  sum = add_cc_u64(a.val, b.val);
   carry = addc_cc(0, 0);
   fast_propagate_add_u64(tc, carry, sum);
   a.val = sum;
 }
 
+__device__
+void fq2_add(thread_context_t& tc, mfq_t& a, mfq_t& b) {
+   // HUGELY WRONG. FIX ME.
+   fq2_add_nomod(tc, a, b);
+}
+
+__device__ __forceinline__ uint32_t sub_cc(uint32_t a, uint32_t b) {
+  uint32_t r;
+  asm volatile ("sub.cc.u32 %0, %1, %2;" : "=r"(r) : "r"(a), "r"(b));
+  return r;
+}
+
+__device__ __forceinline__ static int32_t fast_propagate_sub_u64(thread_context_t& tc, const uint64_t carry, uint64_t &x) {
+    uint32_t sync=0xFFFFFFFF, warp_thread=threadIdx.x & warpSize-1, lane=1<<warp_thread;
+    uint32_t lane_mask = 1 << tc.lane;
+    uint32_t g, p, c;
+    uint64_t sum;
+  
+    g=__ballot_sync(sync, carry==0xFFFFFFFFFFFFFFFF);
+    p=__ballot_sync(sync, x==0);
+
+    sum=(uint64_t)g+(uint64_t)g+(uint64_t)p;
+    c=lane_mask&(p^sum);
+
+    x=x-(c!=0);
+    return (sum>>32);     // -(p==0xFFFFFFFF);
+}
+
+__device__ __forceinline__ static int32_t fast_propagate_sub(const uint32_t carry, uint32_t &x) {
+    uint32_t sync=0xFFFFFFFF, warp_thread=threadIdx.x & warpSize-1, lane=1<<warp_thread;
+    uint32_t g, p, c;
+    uint64_t sum;
+  
+    g=__ballot_sync(sync, carry==0xFFFFFFFF);
+    p=__ballot_sync(sync, x==0);
+
+    sum=(uint64_t)g+(uint64_t)g+(uint64_t)p;
+    c=lane&(p^sum);
+
+    x=x-(c!=0);
+    return (sum>>32);     // -(p==0xFFFFFFFF);
+}
+
+__device__ __forceinline__ uint64_t sub_cc_u64(uint64_t a, uint64_t b) {
+  uint64_t r;
+
+  asm volatile ("sub.cc.u64 %0, %1, %2;" : "=l"(r) : "l"(a), "l"(b));
+  return r;
+}
+
+__device__
+int dev_sub(uint32_t& a, uint32_t& b) {
+   uint32_t carry = sub_cc(a, b);
+   return -fast_propagate_sub(carry, a); 
+}
+
+__device__
+int dev_sub_u64(thread_context_t& tc, uint64_t& a, uint64_t& b) {
+   uint64_t carry = sub_cc_u64(a, b);
+   return -fast_propagate_sub_u64(tc, carry, a); 
+}
+
+// Assuming either a < b or a > b and a < 2b. we subtract b
+// from a and test.
+__device__
+void one_mod_u64(thread_context_t& tc, uint64_t& a, uint64_t& b) {
+  uint64_t dummy_a = a;
+  int which = dev_sub_u64(tc, dummy_a, b);
+  a = (which == -1) ? a : dummy_a; 
+}
+
+__device__
+void fq_add_mod(thread_context_t& tc, mfq_t& a, mfq_t& b, mfq_t& m) {
+  uint64_t sum, carry;
+  sum = add_cc_u64(a.val, b.val);
+  carry = addc_cc(0, 0);
+  fast_propagate_add_u64(tc, carry, sum);
+  a.val = sum;
+
+  // DO THE MODULUS.
+  one_mod_u64(tc, a.val, m.val);
+}
+
 __global__
-void fq2_add_kernel(quad_t* instances, uint32_t instance_count) {
+void fq2_add_kernel(mquad_t* instances, uint32_t instance_count) {
   int32_t my_instance =(blockIdx.x*blockDim.x + threadIdx.x)/TPI;  // determine my instance number
   if(my_instance>=instance_count) return;    // return if my_instance is not valid
 
   thread_context_t tc;
   compute_context(tc);
 
-  fq2_add(tc, instances[tc.instance_number].A[tc.lane],
-              instances[tc.instance_number].B[tc.lane]);
+  // THIS IS WRONG.
+  fq2_add(tc, instances[tc.instance_number].A.a0[tc.lane],
+             instances[tc.instance_number].B.a0[tc.lane]);
 }
 
+__global__
+void fq_add_kernel(mfq2_t* instances, uint32_t instance_count, mfq_t modulus[]) {
+  int32_t my_instance =(blockIdx.x*blockDim.x + threadIdx.x)/TPI;  // determine my instance number
+  if(my_instance>=instance_count) return;    // return if my_instance is not valid
+
+  thread_context_t tc;
+  compute_context(tc);
+
+  fq_add_mod(tc, instances[tc.instance_number].a0[tc.lane],
+             instances[tc.instance_number].a1[tc.lane], modulus[tc.lane]);
+}
+
+void load_mnt4_modulus() {
+  cudaMemcpyToSymbol(mnt4_modulus_device, mnt4_modulus, bytes_per_elem, 0, cudaMemcpyHostToDevice);
+}
