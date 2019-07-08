@@ -29,9 +29,7 @@ struct MyGpuParams {
 
 // Fq really represents a biginteger of BI_LIMBS of type uint64_t. But since this is in
 // CUDA, and gets parallely executed the class represents a single limb.
-typedef struct MyFq {
-    uint64_t val;
-} mfq_t;
+typedef uint64_t mfq_t;
 
 __constant__ mfq_t mnt4_modulus_device[16];
 
@@ -39,15 +37,19 @@ __constant__ mfq_t mnt4_modulus_device[16];
 // defined on a single big integer which is of a fixed size.
 // The basic data type is kept fixed at uint64_t.
 typedef struct {
-    mfq_t a0[MyGpuParams::BI_LIMBS];  
-    mfq_t a1[MyGpuParams::BI_LIMBS];  
-} mfq2_t;
+    mfq_t x[MyGpuParams::BI_LIMBS];  
+    mfq_t y[MyGpuParams::BI_LIMBS];  
+} tuple_mfq_ti;  // ti for instance, that is full array
 
 typedef struct {
-  mfq2_t A;
-  mfq2_t B;
-} mquad_t;
+    mfq_t a0[MyGpuParams::BI_LIMBS];  
+    mfq_t a1[MyGpuParams::BI_LIMBS];  
+} mfq2_ti;  // ti for instance, that is full array
 
+typedef struct {
+  mfq2_ti A;
+  mfq2_ti B;
+} mquad_ti;
 
 typedef struct {
   uint32_t lane;
@@ -120,10 +122,10 @@ __device__
 void fq2_add_nomod(thread_context_t& tc, mfq_t& a, mfq_t& b) {
   uint64_t sum, carry;
   // THIS IS WRONG. FIX ME.
-  sum = add_cc_u64(a.val, b.val);
+  sum = add_cc_u64(a, b);
   carry = addc_cc(0, 0);
   fast_propagate_add_u64(tc, carry, sum);
-  a.val = sum;
+  a = sum;
 }
 
 __device__
@@ -221,19 +223,37 @@ void one_mod_u64(thread_context_t& tc, uint64_t& a, uint64_t& b) {
 }
 
 __device__
+int32_t fq_add_nomod(thread_context_t& tc, mfq_t& a, mfq_t& b) {
+  uint64_t sum, carry;
+  sum = add_cc_u64(a, b);
+  carry = addc_cc(0, 0);
+  carry = fast_propagate_add_u64(tc, carry, sum);
+  a = sum;
+  return carry;
+}
+
+__device__
 void fq_add_mod(thread_context_t& tc, mfq_t& a, mfq_t& b, mfq_t& m) {
   uint64_t sum, carry;
-  sum = add_cc_u64(a.val, b.val);
+  sum = add_cc_u64(a, b);
   carry = addc_cc(0, 0);
   fast_propagate_add_u64(tc, carry, sum);
-  a.val = sum;
+  a = sum;
 
   // DO THE MODULUS.
-  one_mod_u64(tc, a.val, m.val);
+  one_mod_u64(tc, a, m);
+}
+
+__device__
+void fq_sub_mod(thread_context_t& tc, mfq_t& a, mfq_t& b, mfq_t& m) {
+  int which = dev_sub_u64(tc, a, b);
+  if (which == -1) {
+     fq_add_nomod(tc, a, m);
+  }
 }
 
 __global__
-void fq2_add_kernel(mquad_t* instances, uint32_t instance_count) {
+void fq2_add_kernel(mquad_ti* instances, uint32_t instance_count) {
   int32_t my_instance =(blockIdx.x*blockDim.x + threadIdx.x)/TPI;  // determine my instance number
   if(my_instance>=instance_count) return;    // return if my_instance is not valid
 
@@ -247,8 +267,9 @@ void fq2_add_kernel(mquad_t* instances, uint32_t instance_count) {
              instances[tc.instance_number].B.a0[tc.lane]);
 }
 
+// X - Y
 __global__
-void fq_add_kernel(mfq2_t* instances, uint32_t instance_count, mfq_t modulus[]) {
+void fq_sub_kernel(tuple_mfq_ti* instances, uint32_t instance_count, mfq_t modulus[]) {
   int32_t my_instance =(blockIdx.x*blockDim.x + threadIdx.x)/TPI;  // determine my instance number
   if(my_instance>=instance_count) return;    // return if my_instance is not valid
 
@@ -257,8 +278,22 @@ void fq_add_kernel(mfq2_t* instances, uint32_t instance_count, mfq_t modulus[]) 
 
   if (tc.instance_number >= instance_count) return;
 
-  fq_add_mod(tc, instances[tc.instance_number].a0[tc.lane],
-             instances[tc.instance_number].a1[tc.lane], mnt4_modulus_device[tc.lane]);
+  fq_sub_mod(tc, instances[tc.instance_number].x[tc.lane],
+             instances[tc.instance_number].y[tc.lane], mnt4_modulus_device[tc.lane]);
+}
+
+__global__
+void fq_add_kernel(tuple_mfq_ti* instances, uint32_t instance_count, mfq_t modulus[]) {
+  int32_t my_instance =(blockIdx.x*blockDim.x + threadIdx.x)/TPI;  // determine my instance number
+  if(my_instance>=instance_count) return;    // return if my_instance is not valid
+
+  thread_context_t tc;
+  compute_context(tc, instance_count);
+
+  if (tc.instance_number >= instance_count) return;
+
+  fq_add_mod(tc, instances[tc.instance_number].x[tc.lane],
+             instances[tc.instance_number].y[tc.lane], mnt4_modulus_device[tc.lane]);
 }
 
 void load_mnt4_modulus() {

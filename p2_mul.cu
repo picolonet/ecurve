@@ -335,7 +335,6 @@ void reduce_wide(mp_limb_t* result, mp_limb_t* num, mp_limb_t* modulus, uint64_t
         mpn_copyi(result, res+n, n);
 }
 
-
 __global__ void my_mul_const_kernel1(my_instance_t *problem_instances, uint32_t instance_count, uint32_t f) {
   int32_t my_instance =(blockIdx.x*blockDim.x + threadIdx.x)/TPI;  // determine my instance number
   

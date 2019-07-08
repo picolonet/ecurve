@@ -1,0 +1,65 @@
+
+Main program. argc = 1 
+
+ Opening file /home/arunesh/github/snark-challenge/reference-01-field-arithmetic/inputs for reading.
+
+ Size of mplimb_t = 8, 8, 12
+ Array size = 1024
+
+ num_elements = 1024, compute ony latency = 0.1770000 ms, per element = 0.1728516 microseconds.
+
+ Full test function Round N, time = 23.0730 ms.
+
+ Array size = 2048
+
+ num_elements = 2048, compute ony latency = 0.3270000 ms, per element = 0.1596680 microseconds.
+
+ Full test function Round N, time = 41.6200 ms.
+
+ Array size = 4096
+
+ num_elements = 4096, compute ony latency = 0.6070000 ms, per element = 0.1481934 microseconds.
+
+ Full test function Round N, time = 82.4430 ms.
+
+ Array size = 8192
+
+ num_elements = 8192, compute ony latency = 1.0380000 ms, per element = 0.1267090 microseconds.
+
+ Full test function Round N, time = 163.5970 ms.
+
+ Array size = 16384
+
+ num_elements = 16384, compute ony latency = 1.8190000 ms, per element = 0.1110229 microseconds.
+
+ Full test function Round N, time = 326.7760 ms.
+
+ Array size = 32768
+
+ num_elements = 32768, compute ony latency = 3.3700000 ms, per element = 0.1028442 microseconds.
+
+ Full test function Round N, time = 678.1680 ms.
+
+ Array size = 65536
+
+ num_elements = 65536, compute ony latency = 7.2270000 ms, per element = 0.1102753 microseconds.
+
+ Full test function Round N, time = 1310.8310 ms.
+
+ Array size = 131072
+
+ num_elements = 131072, compute ony latency = 12.8150000 ms, per element = 0.0977707 microseconds.
+
+ Full test function Round N, time = 2630.0200 ms.
+
+ Array size = 262144
+
+ num_elements = 262144, compute ony latency = 26.8010000 ms, per element = 0.1022377 microseconds.
+
+ Full test function Round N, time = 5273.9260 ms.
+
+ Array size = 524288
+
+ num_elements = 524288, compute ony latency = 52.7360000 ms, per element = 0.1005859 microseconds.
+
+ Full test function Round N, time = 10582.2220 ms.
