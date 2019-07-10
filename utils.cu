@@ -79,6 +79,7 @@ Fqe<mnt4753_pp> read_mnt4_fq2(FILE* input) {
 
 uint8_t* read_mnt_fq_2(FILE* inputs) {
   uint8_t* buf = (uint8_t*)calloc(bytes_per_elem, sizeof(uint8_t));
+  std::memset(buf, 0, bytes_per_elem * sizeof(uint8_t));
   // the input is montgomery representation x * 2^768 whereas cuda-fixnum expects x * 2^1024 so we shift over by (1024-768)/8 bytes
   fread((void*)buf, io_bytes_per_elem*sizeof(uint8_t), 1, inputs);
   return buf;
