@@ -1,0 +1,808 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ASM_ERROR	arith/arith.h	29;"	d
+BITS	cgbn_cuda.h	/^  static const uint32_t        BITS=bits;$/;"	m	class:cgbn_env_t
+BITS	cgbn_mpz.h	/^  static const uint32_t BITS=bits;$/;"	m	class:cgbn_env_t
+BITS	core/core.cu	/^  static const uint32_t        BITS=env::BITS;$/;"	m	class:cgbn::core_t	file:
+BITS	core/dispatch_padding.cu	/^  static const uint32_t BITS=core::BITS;$/;"	m	struct:cgbn::dispatch_padding_t	file:
+BITS	core/dispatch_shift_rotate.cu	/^  static const uint32_t BITS=core::BITS;$/;"	m	class:cgbn::dispatch_shift_rotate_t	file:
+BITS	core/padded_resolver.cu	/^  static const uint32_t BITS=core::BITS;$/;"	m	class:cgbn::dispatch_resolver_t	file:
+BITS	core/unpadded.cu	/^  static const uint32_t        BITS=TPI*LIMBS*32;$/;"	m	class:cgbn::unpadded_t	file:
+CGBN_INF_CHAIN	arith/arith.h	81;"	d
+CONSANT_TIME	cgbn_cuda.h	/^  static const bool            CONSANT_TIME=context_t::CONSTANT_TIME;$/;"	m	class:cgbn_env_t
+CONSTANT_TIME	cgbn_cuda.h	/^  static const bool     CONSTANT_TIME=false;$/;"	m	class:cgbn_default_parameters_t
+CONSTANT_TIME	cgbn_cuda.h	/^  static const bool     CONSTANT_TIME=params::CONSTANT_TIME;$/;"	m	class:cgbn_context_t
+CONSTANT_TIME	core/core.cu	/^  static const bool            CONSTANT_TIME=env::CONSTANT_TIME;$/;"	m	class:cgbn::core_t	file:
+CONSTANT_TIME	core/unpadded.cu	/^  static const bool            CONSTANT_TIME=params::CONSTANT_TIME;$/;"	m	class:cgbn::unpadded_t	file:
+DLIMBS	core/core.cu	/^  static const uint32_t        DLIMBS=(LIMBS+TPI-1)\/TPI;$/;"	m	class:cgbn::core_t	file:
+DLIMBS	core/dispatch_dlimbs.cu	/^  static const uint32_t DLIMBS=core::DLIMBS;$/;"	m	class:cgbn::dispatch_dlimbs_t	file:
+DLIMBS_ALG	core/core.cu	/^  static const dlimbs_algs_t   DLIMBS_ALG=(LIMBS<=TPI\/2) ? dlimbs_algs_half : (LIMBS<=TPI) ? dlimbs_algs_full : dlimbs_algs_multi;$/;"	m	class:cgbn::core_t	file:
+GROUP_ONES	core/padded_resolver.cu	/^  static const uint32_t GROUP_ONES=0xFFFFFFFF \/ tpi_ONES;$/;"	m	class:cgbn::dispatch_resolver_t	file:
+GROUP_ONES	core/subwarp_resolver.cu	/^  static const uint32_t GROUP_ONES=0xFFFFFFFF \/ TPI_ONES;$/;"	m	class:cgbn::dispatch_resolver_t	file:
+LIMBS	cgbn_cuda.h	/^  static const uint32_t        LIMBS=(bits\/32+TPI-1)\/TPI;$/;"	m	class:cgbn_env_t
+LIMBS	cgbn_mpz.h	/^  static const uint32_t LIMBS=(bits\/32+TPI-1)\/TPI;$/;"	m	class:cgbn_env_t
+LIMBS	core/core.cu	/^  static const uint32_t        LIMBS=env::LIMBS;$/;"	m	class:cgbn::core_t	file:
+LIMBS	core/dispatch_dlimbs.cu	/^  static const uint32_t LIMBS=core::LIMBS;$/;"	m	class:cgbn::dispatch_dlimbs_t	file:
+LIMBS	core/dispatch_masking.cu	/^  static const uint32_t LIMBS=core::LIMBS;$/;"	m	class:cgbn::dispatch_masking_t	file:
+LIMBS	core/dispatch_padding.cu	/^  static const uint32_t LIMBS=core::LIMBS;$/;"	m	struct:cgbn::dispatch_padding_t	file:
+LIMBS	core/dispatch_shift_rotate.cu	/^  static const uint32_t LIMBS=core::LIMBS;$/;"	m	class:cgbn::dispatch_shift_rotate_t	file:
+LIMBS	core/padded_resolver.cu	/^  static const uint32_t LIMBS=core::LIMBS;$/;"	m	class:cgbn::dispatch_resolver_t	file:
+LIMBS	core/subwarp_resolver.cu	/^  static const uint32_t LIMBS=core::LIMBS;$/;"	m	class:cgbn::dispatch_resolver_t	file:
+LIMBS	core/unpadded.cu	/^  static const uint32_t        LIMBS=params::LIMBS;$/;"	m	class:cgbn::unpadded_t	file:
+LIMBS	core/warp_resolver.cu	/^  static const uint32_t LIMBS=core::LIMBS;$/;"	m	class:cgbn::dispatch_resolver_t	file:
+LIMB_OFFSET	core/dispatch_dlimbs.cu	/^  static const uint32_t LIMB_OFFSET=DLIMBS*TPI-LIMBS;$/;"	m	class:cgbn::dispatch_dlimbs_t	file:
+LOCAL_LIMBS	cgbn_cuda.h	/^  static const uint32_t        LOCAL_LIMBS=((bits+32)\/64+TPI-1)\/TPI*TPI;$/;"	m	class:cgbn_env_t
+LOCAL_LIMBS	cgbn_mpz.h	/^  static const uint32_t LOCAL_LIMBS=((bits+32)\/64+TPI-1)\/TPI*TPI;$/;"	m	class:cgbn_env_t
+MAX_ROTATION	cgbn_cuda.h	/^  static const uint32_t        MAX_ROTATION=context_t::MAX_ROTATION;$/;"	m	class:cgbn_env_t
+MAX_ROTATION	cgbn_cuda.h	/^  static const uint32_t MAX_ROTATION=4;$/;"	m	class:cgbn_default_parameters_t
+MAX_ROTATION	cgbn_cuda.h	/^  static const uint32_t MAX_ROTATION=params::MAX_ROTATION;$/;"	m	class:cgbn_context_t
+MAX_ROTATION	core/core.cu	/^  static const uint32_t        MAX_ROTATION=env::MAX_ROTATION;$/;"	m	class:cgbn::core_t	file:
+MAX_ROTATION	core/dispatch_shift_rotate.cu	/^  static const uint32_t MAX_ROTATION=core::MAX_ROTATION;$/;"	m	class:cgbn::dispatch_shift_rotate_t	file:
+MAX_ROTATION	core/unpadded.cu	/^  static const uint32_t        MAX_ROTATION=params::MAX_ROTATION;$/;"	m	class:cgbn::unpadded_t	file:
+PADDING	cgbn_cuda.h	/^  static const uint32_t        PADDING=bits\/32%TPI;$/;"	m	class:cgbn_env_t
+PADDING	core/core.cu	/^  static const uint32_t        PADDING=env::PADDING;$/;"	m	class:cgbn::core_t	file:
+PADDING	core/unpadded.cu	/^  static const uint32_t        PADDING=0;$/;"	m	class:cgbn::unpadded_t	file:
+PAD_LIMB	cgbn_cuda.h	/^  static const uint32_t        PAD_LIMB=(BITS\/32)%LIMBS;$/;"	m	class:cgbn_env_t
+PAD_LIMB	core/core.cu	/^  static const uint32_t        PAD_LIMB=(BITS\/32)%LIMBS;$/;"	m	class:cgbn::core_t	file:
+PAD_LIMB	core/dispatch_padding.cu	/^  static const uint32_t PAD_LIMB=core::PAD_LIMB;$/;"	m	struct:cgbn::dispatch_padding_t	file:
+PAD_LIMB	core/padded_resolver.cu	/^  static const uint32_t PAD_LIMB=core::PAD_LIMB;$/;"	m	class:cgbn::dispatch_resolver_t	file:
+PAD_THREAD	cgbn_cuda.h	/^  static const uint32_t        PAD_THREAD=(BITS\/32)\/LIMBS;$/;"	m	class:cgbn_env_t
+PAD_THREAD	core/core.cu	/^  static const uint32_t        PAD_THREAD=(BITS\/32)\/LIMBS;$/;"	m	class:cgbn::core_t	file:
+PAD_THREAD	core/dispatch_padding.cu	/^  static const uint32_t PAD_THREAD=core::PAD_THREAD;$/;"	m	struct:cgbn::dispatch_padding_t	file:
+PAD_THREAD	core/padded_resolver.cu	/^  static const uint32_t PAD_THREAD=core::PAD_THREAD;$/;"	m	class:cgbn::dispatch_resolver_t	file:
+SHM_LIMIT	cgbn_cuda.h	/^  static const uint32_t        SHM_LIMIT=context_t::SHM_LIMIT;$/;"	m	class:cgbn_env_t
+SHM_LIMIT	cgbn_cuda.h	/^  static const uint32_t SHM_LIMIT=0;$/;"	m	class:cgbn_default_parameters_t
+SHM_LIMIT	cgbn_cuda.h	/^  static const uint32_t SHM_LIMIT=params::SHM_LIMIT;$/;"	m	class:cgbn_context_t
+SHM_LIMIT	core/core.cu	/^  static const uint32_t        SHM_LIMIT=env::SHM_LIMIT;$/;"	m	class:cgbn::core_t	file:
+SHM_LIMIT	core/unpadded.cu	/^  static const uint32_t        SHM_LIMIT=params::SHM_LIMIT;$/;"	m	class:cgbn::unpadded_t	file:
+SYNCABLE	cgbn_cuda.h	/^  static const cgbn_syncable_t SYNCABLE=syncable;$/;"	m	class:cgbn_env_t
+SYNCABLE	core/core.cu	/^  static const cgbn_syncable_t SYNCABLE=env::SYNCABLE;  $/;"	m	class:cgbn::core_t	file:
+SYNCABLE	core/unpadded.cu	/^  static const cgbn_syncable_t SYNCABLE=params::SYNCABLE;  $/;"	m	class:cgbn::unpadded_t	file:
+TPB	cgbn_cuda.h	/^  static const uint32_t        TPB=context_t::TPB;$/;"	m	class:cgbn_env_t
+TPB	cgbn_cuda.h	/^  static const uint32_t TPB=0;$/;"	m	class:cgbn_default_parameters_t
+TPB	cgbn_cuda.h	/^  static const uint32_t TPB=params::TPB;$/;"	m	class:cgbn_context_t
+TPB	cgbn_mpz.h	/^  static const uint32_t TPB=0;$/;"	m	class:cgbn_default_parameters_t
+TPB	core/core.cu	/^  static const uint32_t        TPB=env::TPB;$/;"	m	class:cgbn::core_t	file:
+TPB	core/unpadded.cu	/^  static const uint32_t        TPB=params::TPB;$/;"	m	class:cgbn::unpadded_t	file:
+TPI	cgbn_cuda.h	/^  static const uint32_t        TPI=context_t::TPI;$/;"	m	class:cgbn_env_t
+TPI	cgbn_cuda.h	/^  static const uint32_t TPI=tpi;$/;"	m	class:cgbn_context_t
+TPI	cgbn_mpz.h	/^  static const uint32_t  TPI=tpi;$/;"	m	class:cgbn_context_t
+TPI	cgbn_mpz.h	/^  static const uint32_t TPI=context_t::TPI;$/;"	m	class:cgbn_env_t
+TPI	core/core.cu	/^  static const uint32_t        TPI=env::TPI;$/;"	m	class:cgbn::core_t	file:
+TPI	core/dispatch_dlimbs.cu	/^  static const uint32_t TPI=core::TPI;$/;"	m	class:cgbn::dispatch_dlimbs_t	file:
+TPI	core/dispatch_masking.cu	/^  static const uint32_t TPI=core::TPI;$/;"	m	class:cgbn::dispatch_masking_t	file:
+TPI	core/dispatch_padding.cu	/^  static const uint32_t TPI=core::TPI;$/;"	m	struct:cgbn::dispatch_padding_t	file:
+TPI	core/dispatch_shift_rotate.cu	/^  static const uint32_t TPI=core::TPI;$/;"	m	class:cgbn::dispatch_shift_rotate_t	file:
+TPI	core/unpadded.cu	/^  static const uint32_t        TPI=params::TPI;$/;"	m	class:cgbn::unpadded_t	file:
+TPI_ONES	core/core.cu	/^  static const uint32_t        TPI_ONES=(1ull<<TPI)-1;$/;"	m	class:cgbn::core_t	file:
+TPI_ONES	core/subwarp_resolver.cu	/^  static const uint32_t TPI_ONES=(1ull<<tpi)-1;$/;"	m	class:cgbn::dispatch_resolver_t	file:
+UNPADDED_BITS	cgbn_cuda.h	/^  static const uint32_t        UNPADDED_BITS=TPI*LIMBS*32;$/;"	m	class:cgbn_env_t
+UNPADDED_BITS	cgbn_mpz.h	/^  static const uint32_t UNPADDED_BITS=TPI*LIMBS*32;$/;"	m	class:cgbn_env_t
+XMP_IMAD	cgbn.h	71;"	d
+XMP_WMAD	cgbn.h	75;"	d
+XMP_XMAD	cgbn.h	73;"	d
+__host__	cgbn_mpz.h	30;"	d
+_blockIdx	cgbn.h	/^  dim3                  _blockIdx;$/;"	m	struct:__anon8
+_carry	cgbn_cuda.h	/^    uint32_t _carry;$/;"	m	struct:cgbn_env_t::cgbn_accumulator_t
+_context	cgbn_cuda.h	/^  const context_t &_context;$/;"	m	class:cgbn_env_t
+_context	cgbn_mpz.h	/^  const context_t &_context;$/;"	m	class:cgbn_env_t
+_error	cgbn.h	/^  volatile cgbn_error_t _error;$/;"	m	struct:__anon8
+_high	cgbn_cuda.h	/^    cgbn_t _low, _high;$/;"	m	struct:cgbn_env_t::cgbn_wide_t
+_high	cgbn_mpz.h	/^    cgbn_t _low, _high;$/;"	m	struct:cgbn_env_t::cgbn_wide_t
+_instance	cgbn.h	/^  uint32_t              _instance;$/;"	m	struct:__anon8
+_instance	cgbn_cuda.h	/^  const int32_t         _instance;$/;"	m	class:cgbn_context_t
+_instance	cgbn_mpz.h	/^  int32_t                _instance;$/;"	m	class:cgbn_context_t
+_limbs	cgbn_cuda.h	/^    uint32_t _limbs[LIMBS];$/;"	m	struct:cgbn_env_t::cgbn_accumulator_t
+_limbs	cgbn_cuda.h	/^    uint32_t _limbs[LIMBS];$/;"	m	struct:cgbn_env_t::cgbn_t
+_limbs	cgbn_cuda.h	/^    uint64_t _limbs[LOCAL_LIMBS];$/;"	m	struct:cgbn_env_t::cgbn_local_t
+_limbs	cgbn_cuda.h	/^  uint32_t _limbs[(bits+31)\/32];$/;"	m	struct:cgbn_mem_t
+_limbs	cgbn_mpz.h	/^  uint32_t _limbs[(bits+31)\/32];$/;"	m	struct:cgbn_mem_t
+_low	cgbn_cuda.h	/^    cgbn_t _low, _high;$/;"	m	struct:cgbn_env_t::cgbn_wide_t
+_low	cgbn_mpz.h	/^    cgbn_t _low, _high;$/;"	m	struct:cgbn_env_t::cgbn_wide_t
+_monitor	cgbn_cuda.h	/^  const cgbn_monitor_t  _monitor;$/;"	m	class:cgbn_context_t
+_monitor	cgbn_mpz.h	/^  const cgbn_monitor_t   _monitor;$/;"	m	class:cgbn_context_t
+_position	arith/arith.h	/^  uint32_t _position;$/;"	m	class:cgbn::chain_t
+_report	cgbn_cuda.h	/^  cgbn_error_report_t  *const _report;$/;"	m	class:cgbn_context_t
+_report	cgbn_mpz.h	/^  cgbn_error_report_t   *const _report;$/;"	m	class:cgbn_context_t
+_scratch	cgbn_cuda.h	/^  uint32_t             *_scratch;$/;"	m	class:cgbn_context_t
+_threadIdx	cgbn.h	/^  dim3                  _threadIdx;$/;"	m	struct:__anon8
+_z	cgbn_mpz.h	/^    mpz_t _z;$/;"	m	struct:cgbn_env_t::cgbn_accumulator_t
+_z	cgbn_mpz.h	/^    mpz_t _z;$/;"	m	struct:cgbn_env_t::cgbn_local_t
+_z	cgbn_mpz.h	/^    mpz_t _z;$/;"	m	struct:cgbn_env_t::cgbn_t
+add	arith/chain.cu	/^__device__ __forceinline__ uint32_t chain_t<length, carry_in, carry_out>::add(uint32_t a, uint32_t b) {$/;"	f	class:cgbn::chain_t
+add	core/core_add_sub.cu	/^__device__ __forceinline__ int32_t core_t<env>::add(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS]) {$/;"	f	class:cgbn::core_t
+add	impl_cuda.cu	/^__device__ __forceinline__ int32_t cgbn_env_t<context_t, bits, syncable>::add(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+add	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::add(cgbn_accumulator_t &accumulator, const cgbn_t &value) const {$/;"	f	class:cgbn_env_t
+add	impl_mpz.cc	/^__host__ void cgbn_env_t<context_t, bits, convergence>::add(cgbn_accumulator_t &accumulator, const cgbn_t &value) const {$/;"	f	class:cgbn_env_t
+add	impl_mpz.cc	/^int32_t cgbn_env_t<context_t, bits, convergence>::add(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+add_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t add_cc(uint32_t a, uint32_t b) {$/;"	f	namespace:cgbn
+add_ui32	core/core_short_math.cu	/^__device__ __forceinline__ int32_t core_t<env>::add_ui32(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t add) {$/;"	f	class:cgbn::core_t
+add_ui32	impl_cuda.cu	/^__device__ __forceinline__ int32_t cgbn_env_t<context_t, bits, syncable>::add_ui32(cgbn_t &r, const cgbn_t &a, const uint32_t add) const {$/;"	f	class:cgbn_env_t
+add_ui32	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::add_ui32(cgbn_accumulator_t &accumulator, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+add_ui32	impl_mpz.cc	/^__host__ void cgbn_env_t<context_t, bits, convergence>::add_ui32(cgbn_accumulator_t &accumulator, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+add_ui32	impl_mpz.cc	/^int32_t cgbn_env_t<context_t, bits, convergence>::add_ui32(cgbn_t &r, const cgbn_t &a, const uint32_t add) const {$/;"	f	class:cgbn_env_t
+addc	arith/asm.cu	/^__device__ __forceinline__ uint32_t addc(uint32_t a, uint32_t b) {$/;"	f	namespace:cgbn
+addc_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t addc_cc(uint32_t a, uint32_t b) {$/;"	f	namespace:cgbn
+alpha_a	core/core.cu	/^  int32_t alpha_a;$/;"	m	struct:cgbn::__anon4	file:
+alpha_a	core/core.cu	/^  uint32_t alpha_a;$/;"	m	struct:cgbn::__anon5	file:
+alpha_b	core/core.cu	/^  int32_t alpha_b;$/;"	m	struct:cgbn::__anon4	file:
+alpha_b	core/core.cu	/^  uint32_t alpha_b;$/;"	m	struct:cgbn::__anon5	file:
+barrett_approximation	impl_cuda.cu	/^__device__ __forceinline__ uint32_t cgbn_env_t<context_t, bits, syncable>::barrett_approximation(cgbn_t &approx, const cgbn_t &denom) const {$/;"	f	class:cgbn_env_t
+barrett_approximation	impl_mpz.cc	/^uint32_t cgbn_env_t<context_t, bits, convergence>::barrett_approximation(cgbn_t &approx, const cgbn_t &denom) const {$/;"	f	class:cgbn_env_t
+barrett_div	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::barrett_div(cgbn_t &q, const cgbn_t &num, const cgbn_t &denom, const cgbn_t &approx, const uint32_t denom_clz) const {$/;"	f	class:cgbn_env_t
+barrett_div	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::barrett_div(cgbn_t &q, const cgbn_t &num, const cgbn_t &denom, const cgbn_t &approx, const uint32_t denom_clz) const {$/;"	f	class:cgbn_env_t
+barrett_div_rem	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::barrett_div_rem(cgbn_t &q, cgbn_t &r, const cgbn_t &num, const cgbn_t &denom, const cgbn_t &approx, const uint32_t denom_clz) const {$/;"	f	class:cgbn_env_t
+barrett_div_rem	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::barrett_div_rem(cgbn_t &q, cgbn_t &r, const cgbn_t &num, const cgbn_t &denom, const cgbn_t &approx, const uint32_t denom_clz) const {$/;"	f	class:cgbn_env_t
+barrett_div_rem_wide	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::barrett_div_rem_wide(cgbn_t &q, cgbn_t &r, const cgbn_wide_t &num, const cgbn_t &denom, const cgbn_t &approx, const uint32_t denom_clz) const {$/;"	f	class:cgbn_env_t
+barrett_div_rem_wide	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::barrett_div_rem_wide(cgbn_t &q, cgbn_t &r, const cgbn_wide_t &num, const cgbn_t &denom, const cgbn_t &approx, const uint32_t denom_clz) const {$/;"	f	class:cgbn_env_t
+barrett_div_wide	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::barrett_div_wide(cgbn_t &q, const cgbn_wide_t &num, const cgbn_t &denom, const cgbn_t &approx, const uint32_t denom_clz) const {$/;"	f	class:cgbn_env_t
+barrett_div_wide	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::barrett_div_wide(cgbn_t &q, const cgbn_wide_t &num, const cgbn_t &denom, const cgbn_t &approx, const uint32_t denom_clz) const {$/;"	f	class:cgbn_env_t
+barrett_rem	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::barrett_rem(cgbn_t &r, const cgbn_t &num, const cgbn_t &denom, const cgbn_t &approx, const uint32_t denom_clz) const {$/;"	f	class:cgbn_env_t
+barrett_rem	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::barrett_rem(cgbn_t &q, const cgbn_t &num, const cgbn_t &denom, const cgbn_t &approx, const uint32_t denom_clz) const {$/;"	f	class:cgbn_env_t
+barrett_rem_wide	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::barrett_rem_wide(cgbn_t &r, const cgbn_wide_t &num, const cgbn_t &denom, const cgbn_t &approx, const uint32_t denom_clz) const {$/;"	f	class:cgbn_env_t
+barrett_rem_wide	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::barrett_rem_wide(cgbn_t &r, const cgbn_wide_t &num, const cgbn_t &denom, const cgbn_t &approx, const uint32_t denom_clz) const {$/;"	f	class:cgbn_env_t
+beta_a	core/core.cu	/^  int32_t beta_a;$/;"	m	struct:cgbn::__anon4	file:
+beta_a	core/core.cu	/^  uint32_t beta_a;$/;"	m	struct:cgbn::__anon5	file:
+beta_b	core/core.cu	/^  int32_t beta_b;$/;"	m	struct:cgbn::__anon4	file:
+beta_b	core/core.cu	/^  uint32_t beta_b;$/;"	m	struct:cgbn::__anon5	file:
+binary_inverse	core/core_binary_inverse.cu	/^__device__ __forceinline__ void core_t<env>::binary_inverse(uint32_t r[LIMBS], const uint32_t x[LIMBS]) {$/;"	f	class:cgbn::core_t
+binary_inverse	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::binary_inverse(cgbn_t &r, const cgbn_t &x) const {$/;"	f	class:cgbn_env_t
+binary_inverse	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::binary_inverse(cgbn_t &r, const cgbn_t &m) const {$/;"	f	class:cgbn_env_t
+binary_inverse_ui32	impl_cuda.cu	/^__device__ __forceinline__ uint32_t cgbn_env_t<context_t, bits, syncable>::binary_inverse_ui32(const uint32_t x) const {$/;"	f	class:cgbn_env_t
+binary_inverse_ui32	impl_mpz.cc	/^uint32_t cgbn_env_t<context_t, bits, convergence>::binary_inverse_ui32(const uint32_t n0) const {$/;"	f	class:cgbn_env_t
+bit_set	arith/shifter.cu	/^class bit_set {$/;"	c	namespace:cgbn	file:
+bit_set	arith/shifter.cu	/^class bit_set<1> {$/;"	c	namespace:cgbn	file:
+bits	core/dispatch_masking.cu	/^  static const int32_t  bits=(int32_t)core::BITS;$/;"	m	class:cgbn::dispatch_masking_t	file:
+bitwise_and	core/core_logical.cu	/^__device__ __forceinline__ void core_t<env>::bitwise_and(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS]) {$/;"	f	class:cgbn::core_t
+bitwise_and	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::bitwise_and(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+bitwise_and	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::bitwise_and(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+bitwise_complement	core/core_logical.cu	/^__device__ __forceinline__ void core_t<env>::bitwise_complement(uint32_t r[LIMBS], const uint32_t a[LIMBS]) {$/;"	f	class:cgbn::core_t
+bitwise_complement	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::bitwise_complement(cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+bitwise_complement	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::bitwise_complement(cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+bitwise_ior	core/core_logical.cu	/^__device__ __forceinline__ void core_t<env>::bitwise_ior(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS]) {$/;"	f	class:cgbn::core_t
+bitwise_ior	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::bitwise_ior(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+bitwise_ior	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::bitwise_ior(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+bitwise_mask_and	core/core.cu	/^  __device__ __forceinline__ static void     bitwise_mask_and(uint32_t r[LIMBS], const uint32_t a[LIMBS], const int32_t numbits) {$/;"	f	class:cgbn::core_t
+bitwise_mask_and	core/dispatch_masking.cu	/^  __device__ __forceinline__ static void bitwise_mask_and(uint32_t r[LIMBS], const uint32_t a[LIMBS], const int32_t numbits) {$/;"	f	class:cgbn::dispatch_masking_t
+bitwise_mask_and	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::bitwise_mask_and(cgbn_t &r, const cgbn_t &a, const int32_t numbits) const {$/;"	f	class:cgbn_env_t
+bitwise_mask_and	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::bitwise_mask_and(cgbn_t &r, const cgbn_t &a, const int32_t numbits) const {$/;"	f	class:cgbn_env_t
+bitwise_mask_copy	core/core.cu	/^  __device__ __forceinline__ static void     bitwise_mask_copy(uint32_t r[LIMBS], const int32_t numbits) {$/;"	f	class:cgbn::core_t
+bitwise_mask_copy	core/dispatch_masking.cu	/^  __device__ __forceinline__ static void bitwise_mask_copy(uint32_t r[LIMBS], const int32_t numbits) {$/;"	f	class:cgbn::dispatch_masking_t
+bitwise_mask_copy	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::bitwise_mask_copy(cgbn_t &r, const int32_t numbits) const {$/;"	f	class:cgbn_env_t
+bitwise_mask_copy	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::bitwise_mask_copy(cgbn_t &r, const int32_t numbits) const {$/;"	f	class:cgbn_env_t
+bitwise_mask_ior	core/core.cu	/^  __device__ __forceinline__ static void     bitwise_mask_ior(uint32_t r[LIMBS], const uint32_t a[LIMBS], const int32_t numbits) {$/;"	f	class:cgbn::core_t
+bitwise_mask_ior	core/dispatch_masking.cu	/^  __device__ __forceinline__ static void bitwise_mask_ior(uint32_t r[LIMBS], const uint32_t a[LIMBS], const int32_t numbits) {$/;"	f	class:cgbn::dispatch_masking_t
+bitwise_mask_ior	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::bitwise_mask_ior(cgbn_t &r, const cgbn_t &a, const int32_t numbits) const {$/;"	f	class:cgbn_env_t
+bitwise_mask_ior	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::bitwise_mask_ior(cgbn_t &r, const cgbn_t &a, const int32_t numbits) const {$/;"	f	class:cgbn_env_t
+bitwise_mask_select	core/core.cu	/^  __device__ __forceinline__ static void     bitwise_mask_select(uint32_t r[LIMBS], const uint32_t clear[LIMBS], const uint32_t set[LIMBS], const int32_t numbits) {$/;"	f	class:cgbn::core_t
+bitwise_mask_select	core/dispatch_masking.cu	/^  __device__ __forceinline__ static void bitwise_mask_select(uint32_t r[LIMBS], const uint32_t clear[LIMBS], const uint32_t set[LIMBS], const int32_t numbits) {$/;"	f	class:cgbn::dispatch_masking_t
+bitwise_mask_select	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::bitwise_mask_select(cgbn_t &r, const cgbn_t &clear, const cgbn_t &set, const int32_t numbits) const {$/;"	f	class:cgbn_env_t
+bitwise_mask_select	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::bitwise_mask_select(cgbn_t &r, const cgbn_t &clear, const cgbn_t &set, const int32_t numbits) const {$/;"	f	class:cgbn_env_t
+bitwise_mask_xor	core/core.cu	/^  __device__ __forceinline__ static void     bitwise_mask_xor(uint32_t r[LIMBS], const uint32_t a[LIMBS], const int32_t numbits) {$/;"	f	class:cgbn::core_t
+bitwise_mask_xor	core/dispatch_masking.cu	/^  __device__ __forceinline__ static void bitwise_mask_xor(uint32_t r[LIMBS], const uint32_t a[LIMBS], const int32_t numbits) {$/;"	f	class:cgbn::dispatch_masking_t
+bitwise_mask_xor	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::bitwise_mask_xor(cgbn_t &r, const cgbn_t &a, const int32_t numbits) const {$/;"	f	class:cgbn_env_t
+bitwise_mask_xor	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::bitwise_mask_xor(cgbn_t &r, const cgbn_t &a, const int32_t numbits) const {$/;"	f	class:cgbn_env_t
+bitwise_select	core/core_logical.cu	/^__device__ __forceinline__ void core_t<env>::bitwise_select(uint32_t r[LIMBS], const uint32_t clear[LIMBS], const uint32_t set[LIMBS], const uint32_t select[LIMBS]) {$/;"	f	class:cgbn::core_t
+bitwise_select	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::bitwise_select(cgbn_t &r, const cgbn_t &clear, const cgbn_t &set, const cgbn_t &select) const {$/;"	f	class:cgbn_env_t
+bitwise_select	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::bitwise_select(cgbn_t &r, const cgbn_t &clear, const cgbn_t &set, const cgbn_t &select) const {$/;"	f	class:cgbn_env_t
+bitwise_xor	core/core_logical.cu	/^__device__ __forceinline__ void core_t<env>::bitwise_xor(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS]) {$/;"	f	class:cgbn::core_t
+bitwise_xor	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::bitwise_xor(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+bitwise_xor	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::bitwise_xor(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+bn2mont	impl_cuda.cu	/^__device__ __forceinline__ uint32_t cgbn_env_t<context_t, bits, syncable>::bn2mont(cgbn_t &mont, const cgbn_t &bn, const cgbn_t &n) const {$/;"	f	class:cgbn_env_t
+bn2mont	impl_mpz.cc	/^uint32_t cgbn_env_t<context_t, bits, convergence>::bn2mont(cgbn_t &mont, const cgbn_t &bn, const cgbn_t &n) const {$/;"	f	class:cgbn_env_t
+cgbn	arith/arith.h	/^namespace cgbn {$/;"	n
+cgbn	arith/asm.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	arith/chain.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	arith/dmp.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	arith/math.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	arith/mp.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	arith/shifter.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	arith/static_divide.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_add_sub.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_binary_inverse.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_compare.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_counting.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_divide_multi.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_divide_single.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_gcd.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_insert_extract.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_logical.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_modular_inverse.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_mont.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_mont_imad.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_mont_wmad.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_mont_xmad.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_mul.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_mul_imad.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_mul_wmad.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_mul_xmad.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_short_math.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_singleton.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_sqrt_multi.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/core_sqrt_single.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/dispatch_dlimbs.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/dispatch_masking.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/dispatch_padding.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/dispatch_shift_rotate.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/padded_resolver.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/subwarp_resolver.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/unpadded.cu	/^namespace cgbn {$/;"	n	file:
+cgbn	core/warp_resolver.cu	/^namespace cgbn {$/;"	n	file:
+cgbn_accumulator_t	cgbn_cuda.h	/^  struct cgbn_accumulator_t {$/;"	s	class:cgbn_env_t
+cgbn_accumulator_t	cgbn_mpz.h	/^    __host__ cgbn_accumulator_t() {$/;"	f	struct:cgbn_env_t::cgbn_accumulator_t
+cgbn_accumulator_t	cgbn_mpz.h	/^  struct cgbn_accumulator_t {$/;"	s	class:cgbn_env_t
+cgbn_accumulator_t	impl_cuda.cu	/^__device__ __forceinline__ cgbn_env_t<context_t, bits, syncable>::cgbn_accumulator_t::cgbn_accumulator_t() {$/;"	f	class:cgbn_env_t::cgbn_accumulator_t
+cgbn_add	cgbn.h	/^__host__ __device__ __forceinline__ int32_t cgbn_add(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const typename env_t::cgbn_t &b) {$/;"	f
+cgbn_add	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_add(env_t env, typename env_t::cgbn_accumulator_t &accumulator, const typename env_t::cgbn_t &value) {$/;"	f
+cgbn_add_ui32	cgbn.h	/^__host__ __device__ __forceinline__ int32_t cgbn_add_ui32(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const uint32_t add) {$/;"	f
+cgbn_add_ui32	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_add_ui32(env_t env, typename env_t::cgbn_accumulator_t &accumulator, const uint32_t value) {$/;"	f
+cgbn_barrett_approximation	cgbn.h	/^__host__ __device__ __forceinline__ uint32_t cgbn_barrett_approximation(env_t env, typename env_t::cgbn_t &approx, const typename env_t::cgbn_t &denom) {$/;"	f
+cgbn_barrett_div	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_barrett_div(env_t env, typename env_t::cgbn_t &q, const typename env_t::cgbn_t &num, const typename env_t::cgbn_t &denom, const typename env_t::cgbn_t &approx, const uint32_t denom_clz) {$/;"	f
+cgbn_barrett_div_rem	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_barrett_div_rem(env_t env, typename env_t::cgbn_t &q, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &num, const typename env_t::cgbn_t &denom, const typename env_t::cgbn_t &approx, const uint32_t denom_clz) {$/;"	f
+cgbn_barrett_div_rem_wide	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_barrett_div_rem_wide(env_t env, typename env_t::cgbn_t &q, typename env_t::cgbn_t &r, const typename env_t::cgbn_wide_t &num, const typename env_t::cgbn_t &denom, const typename env_t::cgbn_t &approx, const uint32_t denom_clz) {$/;"	f
+cgbn_barrett_div_wide	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_barrett_div_wide(env_t env, typename env_t::cgbn_t &q, const typename env_t::cgbn_wide_t &num, const typename env_t::cgbn_t &denom, const typename env_t::cgbn_t &approx, const uint32_t denom_clz) {$/;"	f
+cgbn_barrett_rem	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_barrett_rem(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &num, const typename env_t::cgbn_t &denom, const typename env_t::cgbn_t &approx, const uint32_t denom_clz) {$/;"	f
+cgbn_barrett_rem_wide	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_barrett_rem_wide(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_wide_t &num, const typename env_t::cgbn_t &denom, const typename env_t::cgbn_t &approx, const uint32_t denom_clz) {$/;"	f
+cgbn_binary_inverse	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_binary_inverse(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &x) {$/;"	f
+cgbn_binary_inverse_ui32	cgbn.h	/^__host__ __device__ __forceinline__ uint32_t cgbn_binary_inverse_ui32(env_t env, const uint32_t n0) {$/;"	f
+cgbn_bitwise_and	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_bitwise_and(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const typename env_t::cgbn_t &b) {$/;"	f
+cgbn_bitwise_complement	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_bitwise_complement(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a) {$/;"	f
+cgbn_bitwise_ior	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_bitwise_ior(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const typename env_t::cgbn_t &b) {$/;"	f
+cgbn_bitwise_mask_and	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_bitwise_mask_and(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const int32_t numbits) {$/;"	f
+cgbn_bitwise_mask_copy	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_bitwise_mask_copy(env_t env, typename env_t::cgbn_t &r, const int32_t numbits) {$/;"	f
+cgbn_bitwise_mask_ior	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_bitwise_mask_ior(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const int32_t numbits) {$/;"	f
+cgbn_bitwise_mask_select	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_bitwise_mask_select(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &clear, const typename env_t::cgbn_t &set, int32_t numbits) {$/;"	f
+cgbn_bitwise_mask_xor	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_bitwise_mask_xor(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const int32_t numbits) {$/;"	f
+cgbn_bitwise_select	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_bitwise_select(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &clear, const typename env_t::cgbn_t &set, const typename env_t::cgbn_t &select) {$/;"	f
+cgbn_bitwise_xor	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_bitwise_xor(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const typename env_t::cgbn_t &b) {$/;"	f
+cgbn_block_converged	cgbn_mpz.h	/^  cgbn_block_converged,$/;"	e	enum:__anon3
+cgbn_block_syncable	cgbn_cuda.h	/^  cgbn_block_syncable,$/;"	e	enum:__anon1
+cgbn_bn2mont	cgbn.h	/^__host__ __device__ __forceinline__ uint32_t cgbn_bn2mont(env_t env, typename env_t::cgbn_t &mont, const typename env_t::cgbn_t &bn, const typename env_t::cgbn_t &n) {$/;"	f
+cgbn_clz	cgbn.h	/^__host__ __device__ __forceinline__ uint32_t cgbn_clz(env_t env, const typename env_t::cgbn_t &a) {$/;"	f
+cgbn_compare	cgbn.h	/^__host__ __device__ __forceinline__ int32_t cgbn_compare(env_t env, const typename env_t::cgbn_t &a, const typename env_t::cgbn_t &b) {$/;"	f
+cgbn_compare_ui32	cgbn.h	/^__host__ __device__ __forceinline__ int32_t cgbn_compare_ui32(env_t env, const typename env_t::cgbn_t &a, const uint32_t value) {$/;"	f
+cgbn_context_t	cgbn_cuda.h	/^class cgbn_context_t {$/;"	c
+cgbn_context_t	cgbn_mpz.h	/^class cgbn_context_t {$/;"	c
+cgbn_context_t	impl_cuda.cu	/^__device__ __forceinline__ cgbn_context_t<tpi, params>::cgbn_context_t() : _monitor(cgbn_no_checks), _report(NULL), _instance(0xFFFFFFFF) {$/;"	f	class:cgbn_context_t
+cgbn_context_t	impl_cuda.cu	/^__device__ __forceinline__ cgbn_context_t<tpi, params>::cgbn_context_t(cgbn_monitor_t monitor) : _monitor(monitor), _report(NULL), _instance(0xFFFFFFFF) {$/;"	f	class:cgbn_context_t
+cgbn_context_t	impl_cuda.cu	/^__device__ __forceinline__ cgbn_context_t<tpi, params>::cgbn_context_t(cgbn_monitor_t monitor, cgbn_error_report_t *report) : _monitor(monitor), _report(report), _instance(0xFFFFFFFF) {$/;"	f	class:cgbn_context_t
+cgbn_context_t	impl_cuda.cu	/^__device__ __forceinline__ cgbn_context_t<tpi, params>::cgbn_context_t(cgbn_monitor_t monitor, cgbn_error_report_t *report, uint32_t instance) : _monitor(monitor), _report(report), _instance(instance) {$/;"	f	class:cgbn_context_t
+cgbn_context_t	impl_mpz.cc	/^cgbn_context_t<tpi, params>::cgbn_context_t() : _monitor(cgbn_no_checks), _report(NULL), _instance(0xFFFFFFFF) {$/;"	f	class:cgbn_context_t
+cgbn_context_t	impl_mpz.cc	/^cgbn_context_t<tpi, params>::cgbn_context_t(cgbn_monitor_t monitor) : _monitor(monitor), _report(NULL), _instance(0xFFFFFFFF) {    $/;"	f	class:cgbn_context_t
+cgbn_context_t	impl_mpz.cc	/^cgbn_context_t<tpi, params>::cgbn_context_t(cgbn_monitor_t monitor, cgbn_error_report_t *report) : _monitor(monitor), _report(report), _instance(0xFFFFFFFF) {$/;"	f	class:cgbn_context_t
+cgbn_context_t	impl_mpz.cc	/^cgbn_context_t<tpi, params>::cgbn_context_t(cgbn_monitor_t monitor, cgbn_error_report_t *report, uint32_t instance) : _monitor(monitor), _report(report), _instance(instance) {$/;"	f	class:cgbn_context_t
+cgbn_convergence_t	cgbn_mpz.h	/^} cgbn_convergence_t;$/;"	t	typeref:enum:__anon3
+cgbn_ctz	cgbn.h	/^__host__ __device__ __forceinline__ uint32_t cgbn_ctz(env_t env, const typename env_t::cgbn_t &a) {$/;"	f
+cgbn_default_parameters_t	cgbn_cuda.h	/^class cgbn_default_parameters_t {$/;"	c
+cgbn_default_parameters_t	cgbn_mpz.h	/^class cgbn_default_parameters_t {$/;"	c
+cgbn_div	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_div(env_t env, typename env_t::cgbn_t &q, const typename env_t::cgbn_t &num, const typename env_t::cgbn_t &denom) {$/;"	f
+cgbn_div_rem	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_div_rem(env_t env, typename env_t::cgbn_t &q, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &num, const typename env_t::cgbn_t &denom) {$/;"	f
+cgbn_div_rem_wide	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_div_rem_wide(env_t env, typename env_t::cgbn_t &q, typename env_t::cgbn_t &r, const typename env_t::cgbn_wide_t &num, const typename env_t::cgbn_t &denom) {$/;"	f
+cgbn_div_ui32	cgbn.h	/^__host__ __device__ __forceinline__ uint32_t cgbn_div_ui32(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const uint32_t div) {$/;"	f
+cgbn_div_wide	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_div_wide(env_t env, typename env_t::cgbn_t &q, const typename env_t::cgbn_wide_t &num, const typename env_t::cgbn_t &denom) {$/;"	f
+cgbn_division_by_zero_error	cgbn.h	/^  cgbn_division_by_zero_error=7,$/;"	e	enum:__anon7
+cgbn_division_overflow_error	cgbn.h	/^  cgbn_division_overflow_error=8,$/;"	e	enum:__anon7
+cgbn_env_t	cgbn_cuda.h	/^class cgbn_env_t {$/;"	c
+cgbn_env_t	cgbn_mpz.h	/^class cgbn_env_t {$/;"	c
+cgbn_env_t	impl_cuda.cu	/^__device__ __forceinline__ cgbn_env_t<context_t, bits, syncable>::cgbn_env_t(const context_t &context) : _context(context) {$/;"	f	class:cgbn_env_t
+cgbn_env_t	impl_mpz.cc	/^cgbn_env_t<context_t, bits, convergence>::cgbn_env_t(const context_t &context) : _context(context) {$/;"	f	class:cgbn_env_t
+cgbn_equals	cgbn.h	/^__host__ __device__ __forceinline__ bool cgbn_equals(env_t env, const typename env_t::cgbn_t &a, const typename env_t::cgbn_t &b) {$/;"	f
+cgbn_equals_ui32	cgbn.h	/^__host__ __device__ __forceinline__ bool cgbn_equals_ui32(env_t env, const typename env_t::cgbn_t &a, const uint32_t value) {$/;"	f
+cgbn_error_report_alloc	cgbn.cu	/^cudaError_t cgbn_error_report_alloc(cgbn_error_report_t **report) {$/;"	f
+cgbn_error_report_check	cgbn.cu	/^bool cgbn_error_report_check(cgbn_error_report_t *report) {$/;"	f
+cgbn_error_report_free	cgbn.cu	/^cudaError_t cgbn_error_report_free(cgbn_error_report_t *report) {$/;"	f
+cgbn_error_report_reset	cgbn.cu	/^void cgbn_error_report_reset(cgbn_error_report_t *report) {$/;"	f
+cgbn_error_report_t	cgbn.h	/^} cgbn_error_report_t;$/;"	t	typeref:struct:__anon8
+cgbn_error_string	cgbn.cu	/^const char *cgbn_error_string(cgbn_error_report_t *report) {$/;"	f
+cgbn_error_t	cgbn.h	/^} cgbn_error_t;$/;"	t	typeref:enum:__anon7
+cgbn_extract_bits	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_extract_bits(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const uint32_t start, const uint32_t len) {$/;"	f
+cgbn_extract_bits_ui32	cgbn.h	/^__host__ __device__ __forceinline__ uint32_t cgbn_extract_bits_ui32(env_t env, const typename env_t::cgbn_t &a, const uint32_t start, const uint32_t len) {$/;"	f
+cgbn_gcd	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_gcd(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const typename env_t::cgbn_t &b) {$/;"	f
+cgbn_gcd_ui32	cgbn.h	/^__host__ __device__ __forceinline__ uint32_t cgbn_gcd_ui32(env_t env, const typename env_t::cgbn_t &a, const uint32_t value) {$/;"	f
+cgbn_get_ui32	cgbn.h	/^__host__ __device__ __forceinline__ uint32_t cgbn_get_ui32(env_t env, const typename env_t::cgbn_t &a) {$/;"	f
+cgbn_grid_converged	cgbn_mpz.h	/^  cgbn_grid_converged,$/;"	e	enum:__anon3
+cgbn_grid_syncable	cgbn_cuda.h	/^  cgbn_grid_syncable$/;"	e	enum:__anon1
+cgbn_halt_monitor	cgbn.h	/^  cgbn_halt_monitor,    \/* writes errors to the reporter and halts *\/$/;"	e	enum:__anon9
+cgbn_insert_bits	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_insert_bits(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const uint32_t start, const uint32_t len, const typename env_t::cgbn_t &value) {$/;"	f
+cgbn_insert_bits_ui32	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_insert_bits_ui32(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const uint32_t start, const uint32_t len, const uint32_t value) {$/;"	f
+cgbn_instance_converged	cgbn_mpz.h	/^  cgbn_instance_converged,$/;"	e	enum:__anon3
+cgbn_instance_syncable	cgbn_cuda.h	/^  cgbn_instance_syncable,$/;"	e	enum:__anon1
+cgbn_invalid_montgomery_modulus_error	cgbn.h	/^  cgbn_invalid_montgomery_modulus_error=9,$/;"	e	enum:__anon7
+cgbn_inverse_does_not_exist_error	cgbn.h	/^  cgbn_inverse_does_not_exist_error=11,$/;"	e	enum:__anon7
+cgbn_load	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_load(env_t env, typename env_t::cgbn_t &r, cgbn_mem_t<env_t::BITS> *const address) {$/;"	f
+cgbn_load	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_load(env_t env, typename env_t::cgbn_t &r, typename env_t::cgbn_local_t *const address) {$/;"	f
+cgbn_local_t	cgbn_cuda.h	/^  struct cgbn_local_t {$/;"	s	class:cgbn_env_t
+cgbn_local_t	cgbn_mpz.h	/^    __host__ cgbn_local_t() {$/;"	f	struct:cgbn_env_t::cgbn_local_t
+cgbn_local_t	cgbn_mpz.h	/^  struct cgbn_local_t {$/;"	s	class:cgbn_env_t
+cgbn_mem_t	cgbn_cuda.h	/^struct cgbn_mem_t {$/;"	s
+cgbn_mem_t	cgbn_mpz.h	/^struct cgbn_mem_t {$/;"	s
+cgbn_modular_inverse	cgbn.h	/^__host__ __device__ __forceinline__ bool cgbn_modular_inverse(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &x, const typename env_t::cgbn_t &modulus) {$/;"	f
+cgbn_modular_power	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_modular_power(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &x, const typename env_t::cgbn_t &exponent, const typename env_t::cgbn_t &modulus) {$/;"	f
+cgbn_modulus_not_odd_error	cgbn.h	/^  cgbn_modulus_not_odd_error=10,$/;"	e	enum:__anon7
+cgbn_monitor_t	cgbn.h	/^} cgbn_monitor_t;$/;"	t	typeref:enum:__anon9
+cgbn_mont2bn	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_mont2bn(env_t env, typename env_t::cgbn_t &bn, const typename env_t::cgbn_t &mont, const typename env_t::cgbn_t &n, const uint32_t np0) {$/;"	f
+cgbn_mont_mul	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_mont_mul(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const typename env_t::cgbn_t &b, const typename env_t::cgbn_t &n, const uint32_t np0) {$/;"	f
+cgbn_mont_reduce_wide	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_mont_reduce_wide(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_wide_t &a, const typename env_t::cgbn_t &n, const uint32_t np0) {$/;"	f
+cgbn_mont_sqr	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_mont_sqr(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const typename env_t::cgbn_t &n, const uint32_t np0) {$/;"	f
+cgbn_mul	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_mul(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const typename env_t::cgbn_t &b) {$/;"	f
+cgbn_mul_high	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_mul_high(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const typename env_t::cgbn_t &b) {$/;"	f
+cgbn_mul_ui32	cgbn.h	/^__host__ __device__ __forceinline__ uint32_t cgbn_mul_ui32(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const uint32_t mul) {$/;"	f
+cgbn_mul_wide	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_mul_wide(env_t env, typename env_t::cgbn_wide_t &r, const typename env_t::cgbn_t &a, const typename env_t::cgbn_t &b) {$/;"	f
+cgbn_negate	cgbn.h	/^__host__ __device__ __forceinline__ int32_t cgbn_negate(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a) {$/;"	f
+cgbn_no_checks	cgbn.h	/^  cgbn_no_checks,       \/* disable error checking - improves performance *\/$/;"	e	enum:__anon9
+cgbn_no_error	cgbn.h	/^  cgbn_no_error=0,$/;"	e	enum:__anon7
+cgbn_pop_count	cgbn.h	/^__host__ __device__ __forceinline__ uint32_t cgbn_pop_count(env_t env, const typename env_t::cgbn_t &a) {$/;"	f
+cgbn_print_monitor	cgbn.h	/^  cgbn_print_monitor,   \/* writes errors to the reporter and prints the error to stdout *\/$/;"	e	enum:__anon9
+cgbn_rem	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_rem(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &num, const typename env_t::cgbn_t &denom) {$/;"	f
+cgbn_rem_ui32	cgbn.h	/^__host__ __device__ __forceinline__ uint32_t cgbn_rem_ui32(env_t env, const typename env_t::cgbn_t &a, const uint32_t div) {$/;"	f
+cgbn_rem_wide	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_rem_wide(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_wide_t &num, const typename env_t::cgbn_t &denom) {$/;"	f
+cgbn_report_monitor	cgbn.h	/^  cgbn_report_monitor,  \/* writes errors to the reporter object, no other actions *\/$/;"	e	enum:__anon9
+cgbn_resolve	cgbn.h	/^__host__ __device__ __forceinline__ int32_t cgbn_resolve(env_t env, typename env_t::cgbn_t &sum, const typename env_t::cgbn_accumulator_t &accumulator) {$/;"	f
+cgbn_rotate_left	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_rotate_left(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const uint32_t numbits) {$/;"	f
+cgbn_rotate_right	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_rotate_right(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const uint32_t numbits) {$/;"	f
+cgbn_set	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_set(env_t env, typename env_t::cgbn_accumulator_t &accumulator, const typename env_t::cgbn_t &value) {$/;"	f
+cgbn_set	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_set(env_t env, typename env_t::cgbn_t &r, const source_cgbn_t &a) {$/;"	f
+cgbn_set_ui32	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_set_ui32(env_t env, typename env_t::cgbn_accumulator_t &accumulator, const uint32_t value) {$/;"	f
+cgbn_set_ui32	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_set_ui32(env_t env, typename env_t::cgbn_t &r, const uint32_t value) {$/;"	f
+cgbn_shift_left	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_shift_left(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const uint32_t numbits) {$/;"	f
+cgbn_shift_right	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_shift_right(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const uint32_t numbits) {$/;"	f
+cgbn_sqr	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_sqr(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a) {$/;"	f
+cgbn_sqr_high	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_sqr_high(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a) {$/;"	f
+cgbn_sqr_wide	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_sqr_wide(env_t env, typename env_t::cgbn_wide_t &r, const typename env_t::cgbn_t &a) {$/;"	f
+cgbn_sqrt	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_sqrt(env_t env, typename env_t::cgbn_t &s, const typename env_t::cgbn_t &a) {$/;"	f
+cgbn_sqrt_rem	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_sqrt_rem(env_t env, typename env_t::cgbn_t &s, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a) {$/;"	f
+cgbn_sqrt_rem_wide	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_sqrt_rem_wide(env_t env, typename env_t::cgbn_t &s, typename env_t::cgbn_wide_t &r, const typename env_t::cgbn_wide_t &a) {$/;"	f
+cgbn_sqrt_wide	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_sqrt_wide(env_t env, typename env_t::cgbn_t &s, const typename env_t::cgbn_wide_t &a) {$/;"	f
+cgbn_store	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_store(env_t env, cgbn_mem_t<env_t::BITS> *address, const typename env_t::cgbn_t &a) {$/;"	f
+cgbn_store	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_store(env_t env, typename env_t::cgbn_local_t *address, const typename env_t::cgbn_t &a) {$/;"	f
+cgbn_sub	cgbn.h	/^__host__ __device__ __forceinline__ int32_t cgbn_sub(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const typename env_t::cgbn_t &b) {$/;"	f
+cgbn_sub	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_sub(env_t env, typename env_t::cgbn_accumulator_t &accumulator, const typename env_t::cgbn_t &value) {$/;"	f
+cgbn_sub_ui32	cgbn.h	/^__host__ __device__ __forceinline__ int32_t cgbn_sub_ui32(env_t env, typename env_t::cgbn_t &r, const typename env_t::cgbn_t &a, const uint32_t sub) {$/;"	f
+cgbn_sub_ui32	cgbn.h	/^__host__ __device__ __forceinline__ void cgbn_sub_ui32(env_t env, typename env_t::cgbn_accumulator_t &accumulator, const uint32_t value) {$/;"	f
+cgbn_syncable_t	cgbn_cuda.h	/^} cgbn_syncable_t;$/;"	t	typeref:enum:__anon1
+cgbn_t	cgbn_cuda.h	/^  struct cgbn_t {$/;"	s	class:cgbn_env_t
+cgbn_t	cgbn_mpz.h	/^    __host__ cgbn_t() {$/;"	f	struct:cgbn_env_t::cgbn_t
+cgbn_t	cgbn_mpz.h	/^  struct cgbn_t {$/;"	s	class:cgbn_env_t
+cgbn_threads_per_block_mismatch	cgbn.h	/^  cgbn_threads_per_block_mismatch=5,$/;"	e	enum:__anon7
+cgbn_threads_per_instance_mismatch	cgbn.h	/^  cgbn_threads_per_instance_mismatch=6,$/;"	e	enum:__anon7
+cgbn_unsupported_limbs_per_thread	cgbn.h	/^  cgbn_unsupported_limbs_per_thread=3,$/;"	e	enum:__anon7
+cgbn_unsupported_operation	cgbn.h	/^  cgbn_unsupported_operation=4,$/;"	e	enum:__anon7
+cgbn_unsupported_size	cgbn.h	/^  cgbn_unsupported_size=2,$/;"	e	enum:__anon7
+cgbn_unsupported_threads_per_instance	cgbn.h	/^  cgbn_unsupported_threads_per_instance=1,$/;"	e	enum:__anon7
+cgbn_warp_converged	cgbn_mpz.h	/^  cgbn_warp_converged,$/;"	e	enum:__anon3
+cgbn_warp_syncable	cgbn_cuda.h	/^  cgbn_warp_syncable,$/;"	e	enum:__anon1
+cgbn_wide_t	cgbn_cuda.h	/^  struct cgbn_wide_t {$/;"	s	class:cgbn_env_t
+cgbn_wide_t	cgbn_mpz.h	/^  struct cgbn_wide_t {$/;"	s	class:cgbn_env_t
+chain_t	arith/arith.h	/^class chain_t {$/;"	c	namespace:cgbn
+chain_t	arith/chain.cu	/^__device__ __forceinline__ chain_t<length, carry_in, carry_out>::chain_t() : _position(0) {$/;"	f	class:cgbn::chain_t
+check_errors	impl_cuda.cu	/^__device__ __forceinline__ bool cgbn_context_t<tpi, params>::check_errors() const {$/;"	f	class:cgbn_context_t
+check_errors	impl_mpz.cc	/^bool cgbn_context_t<tpi, params>::check_errors() const {$/;"	f	class:cgbn_context_t
+clear_carry	core/core.cu	/^  __device__ __forceinline__ static uint32_t clear_carry(uint32_t &x) {$/;"	f	class:cgbn::core_t
+clear_carry	core/core.cu	/^  __device__ __forceinline__ static uint32_t clear_carry(uint32_t x[LIMBS]) {$/;"	f	class:cgbn::core_t
+clear_carry	core/dispatch_padding.cu	/^  __device__ __forceinline__ static uint32_t clear_carry(uint32_t &x) {$/;"	f	struct:cgbn::dispatch_padding_t
+clear_carry	core/dispatch_padding.cu	/^  __device__ __forceinline__ static uint32_t clear_carry(uint32_t x[LIMBS]) {$/;"	f	struct:cgbn::dispatch_padding_t
+clear_padding	core/core.cu	/^  __device__ __forceinline__ static void clear_padding(uint32_t &x) {$/;"	f	class:cgbn::core_t
+clear_padding	core/core.cu	/^  __device__ __forceinline__ static void clear_padding(uint32_t x[LIMBS]) {$/;"	f	class:cgbn::core_t
+clear_padding	core/dispatch_padding.cu	/^  __device__ __forceinline__ static void clear_padding(uint32_t &x) {$/;"	f	struct:cgbn::dispatch_padding_t
+clear_padding	core/dispatch_padding.cu	/^  __device__ __forceinline__ static void clear_padding(uint32_t x[LIMBS]) {$/;"	f	struct:cgbn::dispatch_padding_t
+clz	core/core_counting.cu	/^__device__ __forceinline__ uint32_t core_t<env>::clz(const uint32_t a[LIMBS]) {$/;"	f	class:cgbn::core_t
+clz	impl_cuda.cu	/^__device__ __forceinline__ uint32_t cgbn_env_t<context_t, bits, syncable>::clz(const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+clz	impl_mpz.cc	/^uint32_t cgbn_env_t<context_t, bits, convergence>::clz(const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+clzt	core/core_counting.cu	/^__device__ __forceinline__ uint32_t core_t<env>::clzt(const uint32_t a[LIMBS]) {$/;"	f	class:cgbn::core_t
+compare	core/core_compare.cu	/^__device__ __forceinline__ int32_t core_t<env>::compare(const uint32_t a[LIMBS], const uint32_t b[LIMBS]) {$/;"	f	class:cgbn::core_t
+compare	impl_cuda.cu	/^__device__ __forceinline__ int32_t cgbn_env_t<context_t, bits, syncable>::compare(const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+compare	impl_mpz.cc	/^int32_t cgbn_env_t<context_t, bits, convergence>::compare(const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+compare_ui32	core/core_short_math.cu	/^__device__ __forceinline__ int32_t core_t<env>::compare_ui32(const uint32_t a[LIMBS], const uint32_t value) {$/;"	f	class:cgbn::core_t
+compare_ui32	impl_cuda.cu	/^__device__ __forceinline__ int32_t cgbn_env_t<context_t, bits, syncable>::compare_ui32(const cgbn_t &a, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+compare_ui32	impl_mpz.cc	/^int32_t cgbn_env_t<context_t, bits, convergence>::compare_ui32(const cgbn_t &a, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+core_singleton_t	core/core_singleton.cu	/^class core_singleton_t {$/;"	c	namespace:cgbn	file:
+core_singleton_t	core/core_singleton.cu	/^class core_singleton_t<env, 1> {$/;"	c	namespace:cgbn	file:
+core_t	core/core.cu	/^class core_t {$/;"	c	namespace:cgbn	file:
+ctz	core/core_counting.cu	/^__device__ __forceinline__ uint32_t core_t<env>::ctz(const uint32_t a[LIMBS]) {$/;"	f	class:cgbn::core_t
+ctz	impl_cuda.cu	/^__device__ __forceinline__ uint32_t cgbn_env_t<context_t, bits, syncable>::ctz(const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+ctz	impl_mpz.cc	/^uint32_t cgbn_env_t<context_t, bits, convergence>::ctz(const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+ctzt	core/core_counting.cu	/^__device__ __forceinline__ uint32_t core_t<env>::ctzt(const uint32_t a[LIMBS]) {$/;"	f	class:cgbn::core_t
+dall_gather	arith/dmp.cu	/^__device__ __forceinline__ void dall_gather(const uint32_t sync, uint32_t dest[limbs], const uint32_t source) {$/;"	f	namespace:cgbn
+dcompare	arith/dmp.cu	/^__device__ __forceinline__ int32_t dcompare(const uint32_t sync, const uint32_t a[limbs], const uint32_t b[limbs]) {$/;"	f	namespace:cgbn
+dequals	arith/dmp.cu	/^__device__ __forceinline__ bool dequals(const uint32_t sync, const uint32_t a[limbs], const uint32_t b[limbs]) {$/;"	f	namespace:cgbn
+dim3	cgbn_mpz.h	/^  typedef struct {uint32_t x; uint32_t y; uint32_t z;} dim3;$/;"	t	typeref:struct:__anon2
+dispatch_dlimbs_t	core/dispatch_dlimbs.cu	/^class dispatch_dlimbs_t<core, dlimbs_algs_common> {$/;"	c	namespace:cgbn	file:
+dispatch_dlimbs_t	core/dispatch_dlimbs.cu	/^class dispatch_dlimbs_t<core, dlimbs_algs_full> {$/;"	c	namespace:cgbn	file:
+dispatch_dlimbs_t	core/dispatch_dlimbs.cu	/^class dispatch_dlimbs_t<core, dlimbs_algs_half> {$/;"	c	namespace:cgbn	file:
+dispatch_masking_t	core/dispatch_masking.cu	/^class dispatch_masking_t {$/;"	c	namespace:cgbn	file:
+dispatch_masking_t	core/dispatch_masking.cu	/^class dispatch_masking_t<core, 0> {$/;"	c	namespace:cgbn	file:
+dispatch_padding_t	core/dispatch_padding.cu	/^struct dispatch_padding_t {$/;"	s	namespace:cgbn	file:
+dispatch_padding_t	core/dispatch_padding.cu	/^struct dispatch_padding_t<core, 0> {$/;"	s	namespace:cgbn	file:
+dispatch_resolver_t	core/padded_resolver.cu	/^class dispatch_resolver_t {$/;"	c	namespace:cgbn	file:
+dispatch_resolver_t	core/subwarp_resolver.cu	/^class dispatch_resolver_t<core, tpi, 0> {$/;"	c	namespace:cgbn	file:
+dispatch_resolver_t	core/warp_resolver.cu	/^class dispatch_resolver_t<core, 32, 0> {$/;"	c	namespace:cgbn	file:
+dispatch_shift_rotate_t	core/dispatch_shift_rotate.cu	/^class dispatch_shift_rotate_t {$/;"	c	namespace:cgbn	file:
+dispatch_shift_rotate_t	core/dispatch_shift_rotate.cu	/^class dispatch_shift_rotate_t<core, 0> {$/;"	c	namespace:cgbn	file:
+div	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::div(cgbn_t &q, const cgbn_t &num, const cgbn_t &denom) const {$/;"	f	class:cgbn_env_t
+div	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::div(cgbn_t &q, const cgbn_t &num, const cgbn_t &denom) const {$/;"	f	class:cgbn_env_t
+div_rem	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::div_rem(cgbn_t &q, cgbn_t &r, const cgbn_t &num, const cgbn_t &denom) const {$/;"	f	class:cgbn_env_t
+div_rem	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::div_rem(cgbn_t &q, cgbn_t &r, const cgbn_t &num, const cgbn_t &denom) const {$/;"	f	class:cgbn_env_t
+div_rem_wide	core/core_divide_multi.cu	/^__device__ __forceinline__ void core_t<env>::div_rem_wide(uint32_t q[LIMBS], uint32_t r[LIMBS], const uint32_t lo[LIMBS], const uint32_t hi[LIMBS], const uint32_t denom[LIMBS], const uint32_t numthreads) {$/;"	f	class:cgbn::core_t
+div_rem_wide	core/core_divide_single.cu	/^__device__ __forceinline__ void core_t<env>::div_rem_wide(uint32_t &q, uint32_t &r, const uint32_t lo, const uint32_t hi, const uint32_t denom, const uint32_t numthreads) {$/;"	f	class:cgbn::core_t
+div_rem_wide	core/core_singleton.cu	/^  __device__ __forceinline__ static void      div_rem_wide(uint32_t q[limbs], uint32_t r[limbs], const uint32_t lo[limbs], const uint32_t hi[limbs], const uint32_t denom[limbs], const uint32_t numthreads) {$/;"	f	class:cgbn::core_singleton_t
+div_rem_wide	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::div_rem_wide(cgbn_t &q, cgbn_t &r, const cgbn_wide_t &num, const cgbn_t &denom) const {$/;"	f	class:cgbn_env_t
+div_rem_wide	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::div_rem_wide(cgbn_t &q, cgbn_t &r, const cgbn_wide_t &num, const cgbn_t &denom) const {$/;"	f	class:cgbn_env_t
+div_ui32	core/core_short_math.cu	/^__device__ __forceinline__ uint32_t core_t<env>::div_ui32(uint32_t &r, const uint32_t a, const uint32_t d) {$/;"	f	class:cgbn::core_t
+div_ui32	core/core_short_math.cu	/^__device__ __forceinline__ uint32_t core_t<env>::div_ui32(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t d) {$/;"	f	class:cgbn::core_t
+div_ui32	core/core_singleton.cu	/^  __device__ __forceinline__ static uint32_t  div_ui32(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t div) {$/;"	f	class:cgbn::core_singleton_t
+div_ui32	impl_cuda.cu	/^__device__ __forceinline__ uint32_t cgbn_env_t<context_t, bits, syncable>::div_ui32(cgbn_t &r, const cgbn_t &a, const uint32_t div) const {$/;"	f	class:cgbn_env_t
+div_ui32	impl_mpz.cc	/^uint32_t cgbn_env_t<context_t, bits, convergence>::div_ui32(cgbn_t &r, const cgbn_t &a, const uint32_t div) const {$/;"	f	class:cgbn_env_t
+div_wide	core/core_divide_multi.cu	/^__device__ __forceinline__ void core_t<env>::div_wide(uint32_t q[LIMBS], const uint32_t lo[LIMBS], const uint32_t hi[LIMBS], const uint32_t denom[LIMBS], const uint32_t numthreads) {$/;"	f	class:cgbn::core_t
+div_wide	core/core_divide_single.cu	/^__device__ __forceinline__ void core_t<env>::div_wide(uint32_t &q, const uint32_t lo, const uint32_t hi, const uint32_t denom, const uint32_t numthreads) {$/;"	f	class:cgbn::core_t
+div_wide	core/core_singleton.cu	/^  __device__ __forceinline__ static void      div_wide(uint32_t q[limbs], const uint32_t lo[limbs], const uint32_t hi[limbs], const uint32_t denom[limbs], const uint32_t numthreads) {$/;"	f	class:cgbn::core_singleton_t
+div_wide	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::div_wide(cgbn_t &q, const cgbn_wide_t &num, const cgbn_t &denom) const {$/;"	f	class:cgbn_env_t
+div_wide	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::div_wide(cgbn_t &q, const cgbn_wide_t &num, const cgbn_t &denom) const {$/;"	f	class:cgbn_env_t
+dlimbs_algs_common	core/dispatch_dlimbs.cu	/^  dlimbs_algs_common,$/;"	e	enum:cgbn::__anon6	file:
+dlimbs_algs_full	core/dispatch_dlimbs.cu	/^  dlimbs_algs_full,$/;"	e	enum:cgbn::__anon6	file:
+dlimbs_algs_half	core/dispatch_dlimbs.cu	/^  dlimbs_algs_half,$/;"	e	enum:cgbn::__anon6	file:
+dlimbs_algs_multi	core/dispatch_dlimbs.cu	/^  dlimbs_algs_multi$/;"	e	enum:cgbn::__anon6	file:
+dlimbs_algs_t	core/dispatch_dlimbs.cu	/^} dlimbs_algs_t;$/;"	t	namespace:cgbn	typeref:enum:cgbn::__anon6	file:
+dlimbs_all_gather	core/core.cu	/^  __device__ __forceinline__ static void     dlimbs_all_gather(uint32_t r[LIMBS], const uint32_t x[DLIMBS]) {$/;"	f	class:cgbn::core_t
+dlimbs_all_gather	core/dispatch_dlimbs.cu	/^  __device__ __forceinline__ static void dlimbs_all_gather(uint32_t r[LIMBS], const uint32_t x[DLIMBS]) {$/;"	f	class:cgbn::dispatch_dlimbs_t
+dlimbs_approximate	core/core.cu	/^  __device__ __forceinline__ static void     dlimbs_approximate(uint32_t approx[DLIMBS], const uint32_t denom[DLIMBS]) {$/;"	f	class:cgbn::core_t
+dlimbs_approximate	core/dispatch_dlimbs.cu	/^  __device__ __forceinline__ static void dlimbs_approximate(uint32_t approx[DLIMBS], const uint32_t denom[DLIMBS]) {$/;"	f	class:cgbn::dispatch_dlimbs_t
+dlimbs_div_estimate	core/core.cu	/^  __device__ __forceinline__ static void     dlimbs_div_estimate(uint32_t q[DLIMBS], const uint32_t num[DLIMBS], const uint32_t approx[DLIMBS]) {$/;"	f	class:cgbn::core_t
+dlimbs_div_estimate	core/dispatch_dlimbs.cu	/^  __device__ __forceinline__ static void dlimbs_div_estimate(uint32_t q[DLIMBS], const uint32_t x[DLIMBS], const uint32_t approx[DLIMBS]) {$/;"	f	class:cgbn::dispatch_dlimbs_t
+dlimbs_gather	core/core.cu	/^  __device__ __forceinline__ static void     dlimbs_gather(uint32_t r[LIMBS], const uint32_t x[DLIMBS], const uint32_t destination_thread) {$/;"	f	class:cgbn::core_t
+dlimbs_gather	core/dispatch_dlimbs.cu	/^  __device__ __forceinline__ static void dlimbs_gather(uint32_t r[LIMBS], const uint32_t x[DLIMBS], const uint32_t destination_thread) {$/;"	f	class:cgbn::dispatch_dlimbs_t
+dlimbs_scatter	core/core.cu	/^  __device__ __forceinline__ static void     dlimbs_scatter(uint32_t r[DLIMBS], const uint32_t x[LIMBS], const uint32_t source_thread) {$/;"	f	class:cgbn::core_t
+dlimbs_scatter	core/dispatch_dlimbs.cu	/^  __device__ __forceinline__ static void dlimbs_scatter(uint32_t r[DLIMBS], const uint32_t x[LIMBS], const uint32_t source_thread) {$/;"	f	class:cgbn::dispatch_dlimbs_t
+dlimbs_sqrt_estimate	core/core.cu	/^  __device__ __forceinline__ static void     dlimbs_sqrt_estimate(uint32_t q[DLIMBS], const uint32_t top, const uint32_t x[DLIMBS], const uint32_t approx[DLIMBS]) {$/;"	f	class:cgbn::core_t
+dlimbs_sqrt_estimate	core/dispatch_dlimbs.cu	/^  __device__ __forceinline__ static void dlimbs_sqrt_estimate(uint32_t q[DLIMBS], uint32_t top, const uint32_t x[DLIMBS], const uint32_t approx[DLIMBS]) {$/;"	f	class:cgbn::dispatch_dlimbs_t
+dlimbs_sqrt_rem_wide	core/core.cu	/^  __device__ __forceinline__ static uint32_t dlimbs_sqrt_rem_wide(uint32_t s[DLIMBS], uint32_t r[DLIMBS], const uint32_t lo[DLIMBS], const uint32_t hi[DLIMBS]) {$/;"	f	class:cgbn::core_t
+dlimbs_sqrt_rem_wide	core/dispatch_dlimbs.cu	/^  __device__ __forceinline__ static uint32_t dlimbs_sqrt_rem_wide(uint32_t s[DLIMBS], uint32_t r[DLIMBS], const uint32_t lo[DLIMBS], const uint32_t hi[DLIMBS]) {$/;"	f	class:cgbn::dispatch_dlimbs_t
+dmask_and	arith/dmp.cu	/^__device__ __forceinline__ void dmask_and(uint32_t r[limbs], const uint32_t a[limbs], const int32_t numbits) {$/;"	f	namespace:cgbn
+dmask_ior	arith/dmp.cu	/^__device__ __forceinline__ void dmask_ior(uint32_t r[limbs], const uint32_t a[limbs], const int32_t numbits) {$/;"	f	namespace:cgbn
+dmask_select	arith/dmp.cu	/^__device__ __forceinline__ void dmask_select(uint32_t r[limbs], const uint32_t clear[limbs], const uint32_t set[limbs], int32_t numbits) {$/;"	f	namespace:cgbn
+dmask_set	arith/dmp.cu	/^__device__ __forceinline__ void dmask_set(uint32_t r[limbs], const int32_t numbits) {$/;"	f	namespace:cgbn
+dmask_xor	arith/dmp.cu	/^__device__ __forceinline__ void dmask_xor(uint32_t r[limbs], const uint32_t a[limbs], const int32_t numbits) {$/;"	f	namespace:cgbn
+drotate_left	arith/dmp.cu	/^__device__ __forceinline__ void drotate_left(const uint32_t sync, uint32_t r[limbs], const uint32_t x[limbs], const uint32_t numbits) {$/;"	f	namespace:cgbn
+drotate_right	arith/dmp.cu	/^__device__ __forceinline__ void drotate_right(const uint32_t sync, uint32_t r[limbs], const uint32_t x[limbs], const uint32_t numbits) {$/;"	f	namespace:cgbn
+dscatter	arith/dmp.cu	/^__device__ __forceinline__ void dscatter(const uint32_t sync, uint32_t &dest, const uint32_t source[limbs], const uint32_t source_thread=31) {$/;"	f	namespace:cgbn
+env	cgbn_cuda.h	/^  __device__ __forceinline__ cgbn_env_t<cgbn_context_t, bits, syncable> env() {$/;"	f	class:cgbn_context_t
+env	cgbn_cuda.h	/^  __device__ __forceinline__ env_t env() {$/;"	f	class:cgbn_context_t
+env	cgbn_mpz.h	/^  cgbn_env_t<cgbn_context_t, bits, convergence> env() {$/;"	f	class:cgbn_context_t
+env	cgbn_mpz.h	/^  env_t env() {$/;"	f	class:cgbn_context_t
+equals	core/core_compare.cu	/^__device__ __forceinline__ bool core_t<env>::equals(const uint32_t a[LIMBS], const uint32_t b[LIMBS]) {$/;"	f	class:cgbn::core_t
+equals	impl_cuda.cu	/^__device__ __forceinline__ bool cgbn_env_t<context_t, bits, syncable>::equals(const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+equals	impl_mpz.cc	/^bool cgbn_env_t<context_t, bits, convergence>::equals(const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+equals_ui32	core/core_short_math.cu	/^__device__ __forceinline__ bool core_t<env>::equals_ui32(const uint32_t a[LIMBS], const uint32_t value) {$/;"	f	class:cgbn::core_t
+equals_ui32	impl_cuda.cu	/^__device__ __forceinline__ bool cgbn_env_t<context_t, bits, syncable>::equals_ui32(const cgbn_t &a, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+equals_ui32	impl_mpz.cc	/^bool cgbn_env_t<context_t, bits, convergence>::equals_ui32(const cgbn_t &a, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+extract_bits	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::extract_bits(cgbn_t &r, const cgbn_t &a, const uint32_t start, const uint32_t len) const {$/;"	f	class:cgbn_env_t
+extract_bits	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::extract_bits(cgbn_t &r, const cgbn_t &a, const uint32_t start, const uint32_t len) const {$/;"	f	class:cgbn_env_t
+extract_bits_ui32	core/core_insert_extract.cu	/^__device__ __forceinline__ uint32_t core_t<env>::extract_bits_ui32(const uint32_t a[LIMBS], const uint32_t start, const uint32_t len) {$/;"	f	class:cgbn::core_t
+extract_bits_ui32	impl_cuda.cu	/^__device__ __forceinline__ uint32_t cgbn_env_t<context_t, bits, syncable>::extract_bits_ui32(const cgbn_t &a, const uint32_t start, const uint32_t len) const {$/;"	f	class:cgbn_env_t
+extract_bits_ui32	impl_mpz.cc	/^uint32_t cgbn_env_t<context_t, bits, convergence>::extract_bits_ui32(const cgbn_t &a, const uint32_t start, const uint32_t len) const {$/;"	f	class:cgbn_env_t
+fast_negate	core/core.cu	/^  __device__ __forceinline__ static int32_t  fast_negate(uint32_t &x) {$/;"	f	class:cgbn::core_t
+fast_negate	core/core.cu	/^  __device__ __forceinline__ static int32_t  fast_negate(uint32_t x[LIMBS]) {$/;"	f	class:cgbn::core_t
+fast_negate	core/padded_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_negate(uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_negate	core/padded_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_negate(uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_negate	core/subwarp_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_negate(uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_negate	core/subwarp_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_negate(uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_negate	core/warp_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_negate(uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_negate	core/warp_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_negate(uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_propagate_add	core/core.cu	/^  __device__ __forceinline__ static int32_t  fast_propagate_add(const int32_t carry, uint32_t &x) {$/;"	f	class:cgbn::core_t
+fast_propagate_add	core/core.cu	/^  __device__ __forceinline__ static int32_t  fast_propagate_add(const uint32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::core_t
+fast_propagate_add	core/padded_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_propagate_add(const uint32_t carry, uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_propagate_add	core/padded_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_propagate_add(const uint32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_propagate_add	core/subwarp_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_propagate_add(const uint32_t carry, uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_propagate_add	core/subwarp_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_propagate_add(const uint32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_propagate_add	core/warp_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_propagate_add(const uint32_t carry, uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_propagate_add	core/warp_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_propagate_add(const uint32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_propagate_sub	core/core.cu	/^  __device__ __forceinline__ static int32_t  fast_propagate_sub(const uint32_t carry, uint32_t &x) {$/;"	f	class:cgbn::core_t
+fast_propagate_sub	core/core.cu	/^  __device__ __forceinline__ static int32_t  fast_propagate_sub(const uint32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::core_t
+fast_propagate_sub	core/padded_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_propagate_sub(const uint32_t carry, uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_propagate_sub	core/padded_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_propagate_sub(const uint32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_propagate_sub	core/subwarp_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_propagate_sub(const uint32_t carry, uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_propagate_sub	core/subwarp_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_propagate_sub(const uint32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_propagate_sub	core/warp_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_propagate_sub(const uint32_t carry, uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+fast_propagate_sub	core/warp_resolver.cu	/^  __device__ __forceinline__ static int32_t fast_propagate_sub(const uint32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+fwgather	arith/dmp.cu	/^__device__ __forceinline__ void fwgather(const uint32_t sync, uint32_t dest[limbs], const uint32_t source, const uint32_t destination_thread=31) {$/;"	f	namespace:cgbn
+gcd	core/core_gcd.cu	/^__device__ __forceinline__ void core_t<env>::gcd(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS]) {$/;"	f	class:cgbn::core_t
+gcd	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::gcd(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+gcd	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::gcd(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+gcd_product	core/core_gcd.cu	/^__device__ __forceinline__ void core_t<env>::gcd_product(const uint32_t sync, uint32_t r[LIMBS], const int32_t sa, const uint32_t a[LIMBS], const int32_t sb, const uint32_t b[LIMBS]) {$/;"	f	class:cgbn::core_t
+gcd_reduce	core/core_gcd.cu	/^__device__ __forceinline__ static void gcd_reduce(signed_coeff_t &coeffs, int32_t a, int32_t b) {$/;"	f	namespace:cgbn
+gcd_ui32	impl_cuda.cu	/^__device__ __forceinline__ uint32_t cgbn_env_t<context_t, bits, syncable>::gcd_ui32(const cgbn_t &a, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+gcd_ui32	impl_mpz.cc	/^uint32_t cgbn_env_t<context_t, bits, convergence>::gcd_ui32(const cgbn_t &a, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+get_ui32	core/core_short_math.cu	/^__device__ __forceinline__ uint32_t core_t<env>::get_ui32(const uint32_t a[LIMBS]) {$/;"	f	class:cgbn::core_t
+get_ui32	impl_cuda.cu	/^__device__ __forceinline__ uint32_t cgbn_env_t<context_t, bits, syncable>::get_ui32(const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+get_ui32	impl_mpz.cc	/^uint32_t cgbn_env_t<context_t, bits, convergence>::get_ui32(const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+high_bit	arith/shifter.cu	/^  static const uint32_t high_bit=1;$/;"	m	class:cgbn::bit_set	file:
+high_bit	arith/shifter.cu	/^  static const uint32_t high_bit=bit_set<value\/2>::high_bit<<1;$/;"	m	class:cgbn::bit_set	file:
+insert_bits	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::insert_bits(cgbn_t &r, const cgbn_t &a, const uint32_t start, const uint32_t len, const cgbn_t &value) const {$/;"	f	class:cgbn_env_t
+insert_bits	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::insert_bits(cgbn_t &r, const cgbn_t &a, const uint32_t start, const uint32_t len, const cgbn_t &value) const {$/;"	f	class:cgbn_env_t
+insert_bits_ui32	core/core_insert_extract.cu	/^__device__ __forceinline__ void core_t<env>::insert_bits_ui32(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t start, const uint32_t len, const uint32_t value) {$/;"	f	class:cgbn::core_t
+insert_bits_ui32	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::insert_bits_ui32(cgbn_t &r, const cgbn_t &a, const uint32_t start, const uint32_t len, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+insert_bits_ui32	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::insert_bits_ui32(cgbn_t &r, const cgbn_t &a, const uint32_t start, const uint32_t len, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+instance_sync_mask	core/core.cu	/^  __device__ __forceinline__ static uint32_t instance_sync_mask() {$/;"	f	class:cgbn::core_t
+limbs	core/core_singleton.cu	/^  static const uint32_t limbs=1;$/;"	m	class:cgbn::core_singleton_t	file:
+load	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::load(cgbn_t &r, cgbn_local_t *const address) const {$/;"	f	class:cgbn_env_t
+load	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::load(cgbn_t &r, cgbn_mem_t<bits> *const address) const {$/;"	f	class:cgbn_env_t
+load	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::load(cgbn_t &r, cgbn_local_t *const address) const {$/;"	f	class:cgbn_env_t
+load	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::load(cgbn_t &r, cgbn_mem_t<bits> *const address) const {$/;"	f	class:cgbn_env_t
+low_bit	arith/shifter.cu	/^  static const uint32_t low_bit=(value-1 & ~value)+1;$/;"	m	class:cgbn::bit_set	file:
+low_bit	arith/shifter.cu	/^  static const uint32_t low_bit=1;$/;"	m	class:cgbn::bit_set	file:
+mad_wide	arith/asm.cu	/^__device__ __forceinline__ uint64_t mad_wide(uint32_t a, uint32_t b, uint64_t c) {$/;"	f	namespace:cgbn
+madhi	arith/asm.cu	/^__device__ __forceinline__ uint32_t madhi(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+madhi	arith/chain.cu	/^__device__ __forceinline__ uint32_t chain_t<length, carry_in, carry_out>::madhi(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	class:cgbn::chain_t
+madhi_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t madhi_cc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+madhic	arith/asm.cu	/^__device__ __forceinline__ uint32_t madhic(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+madhic_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t madhic_cc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+madlo	arith/asm.cu	/^__device__ __forceinline__ uint32_t madlo(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+madlo	arith/chain.cu	/^__device__ __forceinline__ uint32_t chain_t<length, carry_in, carry_out>::madlo(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	class:cgbn::chain_t
+madlo_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t madlo_cc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+madloc	arith/asm.cu	/^__device__ __forceinline__ uint32_t madloc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+madloc_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t madloc_cc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+make_mask	impl_mpz.cc	/^void make_mask(mpz_t mask, int32_t numbits) {$/;"	f
+make_wide	arith/asm.cu	/^__device__ __forceinline__ uint64_t make_wide(uint32_t lo, uint32_t hi) {$/;"	f	namespace:cgbn
+modinv_small_delta	core/core_modular_inverse.cu	/^__device__ __forceinline__ bool core_t<env>::modinv_small_delta(const uint32_t sync, uint32_t a[LIMBS], uint32_t b[LIMBS], uint32_t u[LIMBS], uint32_t w[LIMBS], int32_t &delta) {$/;"	f	class:cgbn::core_t
+modinv_update_ab_sq	core/core_modular_inverse.cu	/^__device__ __forceinline__ void core_t<env>::modinv_update_ab_sq(const uint32_t sync, uint32_t r[LIMBS], const int32_t shift, const uint32_t q, const uint32_t x[LIMBS]) {$/;"	f	class:cgbn::core_t
+modinv_update_uw	core/core_modular_inverse.cu	/^__device__ __forceinline__ void core_t<env>::modinv_update_uw(uint32_t sync, uint32_t u[LIMBS], uint32_t w[LIMBS], const unsigned_coeff_t &coeffs) {$/;"	f	class:cgbn::core_t
+modinv_update_uw_qs	core/core_modular_inverse.cu	/^__device__ __forceinline__ void core_t<env>::modinv_update_uw_qs(const uint32_t sync, uint32_t r[LIMBS], const uint32_t q, const int32_t s, const uint32_t x[LIMBS]) {$/;"	f	class:cgbn::core_t
+modular_inverse	core/core_modular_inverse.cu	/^__device__ __forceinline__ bool core_t<env>::modular_inverse(uint32_t inv[LIMBS], const uint32_t x[LIMBS], const uint32_t y[LIMBS]) {$/;"	f	class:cgbn::core_t
+modular_inverse	impl_cuda.cu	/^__device__ __forceinline__ bool cgbn_env_t<context_t, bits, syncable>::modular_inverse(cgbn_t &r, const cgbn_t &x, const cgbn_t &m) const {$/;"	f	class:cgbn_env_t
+modular_inverse	impl_mpz.cc	/^bool cgbn_env_t<context_t, bits, convergence>::modular_inverse(cgbn_t &r, const cgbn_t &x, const cgbn_t &modulus) const {$/;"	f	class:cgbn_env_t
+modular_power	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::modular_power(cgbn_t &r, const cgbn_t &a, const cgbn_t &k, const cgbn_t &m) const {$/;"	f	class:cgbn_env_t
+modular_power	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::modular_power(cgbn_t &r, const cgbn_t &a, const cgbn_t &k, const cgbn_t &m) const {$/;"	f	class:cgbn_env_t
+mont2bn	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::mont2bn(cgbn_t &bn, const cgbn_t &mont, const cgbn_t &n, const uint32_t np0) const {$/;"	f	class:cgbn_env_t
+mont2bn	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::mont2bn(cgbn_t &bn, const cgbn_t &mont, const cgbn_t &n, uint32_t np0) const {$/;"	f	class:cgbn_env_t
+mont_mul	core/core_mont.cu	/^__device__ __forceinline__ void core_t<env>::mont_mul(uint32_t &r, const uint32_t a, const uint32_t b, const uint32_t n, const uint32_t np0) {$/;"	f	class:cgbn::core_t
+mont_mul	core/core_mont_imad.cu	/^__device__ __forceinline__ void core_t<env>::mont_mul(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS], const uint32_t n[LIMBS], const uint32_t np0) {$/;"	f	class:cgbn::core_t
+mont_mul	core/core_mont_wmad.cu	/^__device__ __forceinline__ void core_t<env>::mont_mul(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS], const uint32_t n[LIMBS], const uint32_t np0) {$/;"	f	class:cgbn::core_t
+mont_mul	core/core_mont_xmad.cu	/^__device__ __forceinline__ void core_t<env>::mont_mul(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS], const uint32_t n[LIMBS], const uint32_t np0) {$/;"	f	class:cgbn::core_t
+mont_mul	core/core_singleton.cu	/^  __device__ __forceinline__ static void      mont_mul(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t b[limbs], const uint32_t n[limbs], const uint32_t np0) {$/;"	f	class:cgbn::core_singleton_t
+mont_mul	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::mont_mul(cgbn_t &r, const cgbn_t &a, const cgbn_t &b, const cgbn_t &n, const uint32_t np0) const {$/;"	f	class:cgbn_env_t
+mont_mul	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::mont_mul(cgbn_t &r, const cgbn_t &a, const cgbn_t &b, const cgbn_t &n, uint32_t np0) const {$/;"	f	class:cgbn_env_t
+mont_reduce_wide	core/core_mont.cu	/^__device__ __forceinline__ void core_t<env>::mont_reduce_wide(uint32_t &r, const uint32_t lo, const uint32_t hi, const uint32_t n, const uint32_t np0, const bool zero) {$/;"	f	class:cgbn::core_t
+mont_reduce_wide	core/core_mont_imad.cu	/^__device__ __forceinline__ void core_t<env>::mont_reduce_wide(uint32_t r[LIMBS], const uint32_t lo[LIMBS], const uint32_t hi[LIMBS], const uint32_t n[LIMBS], const uint32_t np0, const bool zero) {$/;"	f	class:cgbn::core_t
+mont_reduce_wide	core/core_mont_wmad.cu	/^__device__ __forceinline__ void core_t<env>::mont_reduce_wide(uint32_t r[LIMBS], const uint32_t lo[LIMBS], const uint32_t hi[LIMBS], const uint32_t n[LIMBS], const uint32_t np0, const bool zero) {$/;"	f	class:cgbn::core_t
+mont_reduce_wide	core/core_mont_xmad.cu	/^__device__ __forceinline__ void core_t<env>::mont_reduce_wide(uint32_t r[LIMBS], const uint32_t lo[LIMBS], const uint32_t hi[LIMBS], const uint32_t n[LIMBS], const uint32_t np0, const bool zero) {$/;"	f	class:cgbn::core_t
+mont_reduce_wide	core/core_singleton.cu	/^  __device__ __forceinline__ static void      mont_reduce_wide(uint32_t r[limbs], const uint32_t lo[limbs], const uint32_t hi[limbs], const uint32_t n[limbs], const uint32_t np0, const bool zero) {$/;"	f	class:cgbn::core_singleton_t
+mont_reduce_wide	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::mont_reduce_wide(cgbn_t &r, const cgbn_wide_t &a, const cgbn_t &n, const uint32_t np0) const {$/;"	f	class:cgbn_env_t
+mont_reduce_wide	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::mont_reduce_wide(cgbn_t &r, const cgbn_wide_t &a, const cgbn_t &n, uint32_t np0) const {$/;"	f	class:cgbn_env_t
+mont_sqr	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::mont_sqr(cgbn_t &r, const cgbn_t &a, const cgbn_t &n, const uint32_t np0) const {$/;"	f	class:cgbn_env_t
+mont_sqr	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::mont_sqr(cgbn_t &r, const cgbn_t &a, const cgbn_t &n, uint32_t np0) const {$/;"	f	class:cgbn_env_t
+mpadd	arith/mp.cu	/^__device__ __forceinline__ uint32_t mpadd(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t b[limbs]) {$/;"	f	namespace:cgbn
+mpadd32	arith/mp.cu	/^__device__ __forceinline__ uint32_t mpadd32(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t b) {$/;"	f	namespace:cgbn
+mpadd32_cc	arith/mp.cu	/^__device__ __forceinline__ void mpadd32_cc(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t b) {$/;"	f	namespace:cgbn
+mpadd_cc	arith/mp.cu	/^__device__ __forceinline__ void mpadd_cc(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t b[limbs]) {$/;"	f	namespace:cgbn
+mpclz	arith/mp.cu	/^__device__ __forceinline__ uint32_t mpclz(const uint32_t a[limbs]) {$/;"	f	namespace:cgbn
+mpctz	arith/mp.cu	/^__device__ __forceinline__ uint32_t mpctz(const uint32_t a[limbs]) {$/;"	f	namespace:cgbn
+mpland	arith/mp.cu	/^__device__ __forceinline__ uint32_t mpland(const uint32_t a[limbs]) {$/;"	f	namespace:cgbn
+mpleft	arith/mp.cu	/^__device__ __forceinline__ void mpleft(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t numbits, const uint32_t fill=0) {$/;"	f	namespace:cgbn
+mplor	arith/mp.cu	/^__device__ __forceinline__ uint32_t mplor(const uint32_t a[limbs]) {$/;"	f	namespace:cgbn
+mpmul	arith/mp.cu	/^__device__ __forceinline__ void mpmul(uint32_t lo[limbs], uint32_t hi[limbs], const uint32_t a[limbs], const uint32_t b[limbs]) {$/;"	f	namespace:cgbn
+mpmul32	arith/mp.cu	/^__device__ __forceinline__ uint32_t mpmul32(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t b) {$/;"	f	namespace:cgbn
+mpones	arith/mp.cu	/^__device__ __forceinline__ bool mpones(const uint32_t a[limbs]) {$/;"	f	namespace:cgbn
+mprem32	arith/mp.cu	/^__device__ __forceinline__ uint32_t mprem32(const uint32_t a[limbs], const uint32_t d, const uint32_t approx) {$/;"	f	namespace:cgbn
+mpright	arith/mp.cu	/^__device__ __forceinline__ void mpright(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t numbits, const uint32_t fill=0) {$/;"	f	namespace:cgbn
+mprotate_left	arith/mp.cu	/^__device__ __forceinline__ void mprotate_left(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t numlimbs) {$/;"	f	namespace:cgbn
+mprotate_left	arith/shifter.cu	/^__device__ __forceinline__ void shifter_t<limbs, 0, false>::mprotate_left(uint32_t r[limbs], const uint32_t numlimbs) {$/;"	f	class:cgbn::shifter_t
+mprotate_left	arith/shifter.cu	/^__device__ __forceinline__ void shifter_t<limbs, bit, loop>::mprotate_left(uint32_t r[limbs], const uint32_t numlimbs) {$/;"	f	class:cgbn::shifter_t
+mprotate_left_bitcheck	arith/shifter.cu	/^__device__ __forceinline__ static void mprotate_left_bitcheck(uint32_t r[limbs], const uint32_t numlimbs) {$/;"	f	namespace:cgbn
+mprotate_left_static	arith/shifter.cu	/^__device__ __forceinline__ static void mprotate_left_static(uint32_t r[limbs]) {$/;"	f	namespace:cgbn
+mprotate_right	arith/mp.cu	/^__device__ __forceinline__ void mprotate_right(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t numlimbs) {$/;"	f	namespace:cgbn
+mprotate_right	arith/shifter.cu	/^__device__ __forceinline__ void shifter_t<limbs, 0, false>::mprotate_right(uint32_t r[limbs], const uint32_t numlimbs) {$/;"	f	class:cgbn::shifter_t
+mprotate_right	arith/shifter.cu	/^__device__ __forceinline__ void shifter_t<limbs, bit, loop>::mprotate_right(uint32_t r[limbs], const uint32_t numlimbs) {$/;"	f	class:cgbn::shifter_t
+mprotate_right_bitcheck	arith/shifter.cu	/^__device__ __forceinline__ static void mprotate_right_bitcheck(uint32_t r[limbs], const uint32_t numlimbs) {$/;"	f	namespace:cgbn
+mprotate_right_static	arith/shifter.cu	/^__device__ __forceinline__ static void mprotate_right_static(uint32_t r[limbs]) {$/;"	f	namespace:cgbn
+mpset	arith/mp.cu	/^__device__ __forceinline__ void mpset(uint32_t r[limbs], const uint32_t a[limbs]) {$/;"	f	namespace:cgbn
+mpsub	arith/mp.cu	/^__device__ __forceinline__ uint32_t mpsub(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t b[limbs]) {$/;"	f	namespace:cgbn
+mpsub32	arith/mp.cu	/^__device__ __forceinline__ uint32_t mpsub32(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t b) {$/;"	f	namespace:cgbn
+mpsub32_cc	arith/mp.cu	/^__device__ __forceinline__ void mpsub32_cc(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t b) {$/;"	f	namespace:cgbn
+mpsub_cc	arith/mp.cu	/^__device__ __forceinline__ void mpsub_cc(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t b[limbs]) {$/;"	f	namespace:cgbn
+mpswap	arith/mp.cu	/^__device__ __forceinline__ void mpswap(uint32_t x[limbs], uint32_t y[limbs]) {$/;"	f	namespace:cgbn
+mpzero	arith/mp.cu	/^__device__ __forceinline__ void mpzero(uint32_t r[limbs]) {$/;"	f	namespace:cgbn
+mpzeros	arith/mp.cu	/^__device__ __forceinline__ bool mpzeros(const uint32_t a[limbs]) {$/;"	f	namespace:cgbn
+mul	core/core_mul.cu	/^__device__ __forceinline__ void core_t<env>::mul(uint32_t &r, const uint32_t a, const uint32_t b, const uint32_t add) {$/;"	f	class:cgbn::core_t
+mul	core/core_mul_imad.cu	/^__device__ __forceinline__ void core_t<env>::mul(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS], const uint32_t add[LIMBS]) {$/;"	f	class:cgbn::core_t
+mul	core/core_mul_wmad.cu	/^__device__ __forceinline__ void core_t<env>::mul(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS], const uint32_t add[LIMBS]) {$/;"	f	class:cgbn::core_t
+mul	core/core_mul_xmad.cu	/^__device__ __forceinline__ void core_t<env>::mul(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS], const uint32_t add[LIMBS]) {$/;"	f	class:cgbn::core_t
+mul	core/core_singleton.cu	/^  __device__ __forceinline__ static void      mul(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t b[limbs], const uint32_t add[limbs]) {$/;"	f	class:cgbn::core_singleton_t
+mul	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::mul(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+mul	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::mul(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+mul_high	core/core_singleton.cu	/^  __device__ __forceinline__ static void      mul_high(uint32_t r[limbs], const uint32_t a[limbs], const uint32_t b[limbs], const uint32_t add[limbs]) {$/;"	f	class:cgbn::core_singleton_t
+mul_high	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::mul_high(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+mul_high	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::mul_high(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+mul_ui32	core/core_short_math.cu	/^__device__ __forceinline__ uint32_t core_t<env>::mul_ui32(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t mul) {$/;"	f	class:cgbn::core_t
+mul_ui32	impl_cuda.cu	/^__device__ __forceinline__ uint32_t cgbn_env_t<context_t, bits, syncable>::mul_ui32(cgbn_t &r, const cgbn_t &a, const uint32_t mul) const {$/;"	f	class:cgbn_env_t
+mul_ui32	impl_mpz.cc	/^uint32_t cgbn_env_t<context_t, bits, convergence>::mul_ui32(cgbn_t &r, const cgbn_t &a, const uint32_t mul) const {$/;"	f	class:cgbn_env_t
+mul_wide	core/core_mul.cu	/^__device__ __forceinline__ void core_t<env>::mul_wide(uint32_t &lo, uint32_t &hi, const uint32_t a, const uint32_t b, const uint32_t add) {$/;"	f	class:cgbn::core_t
+mul_wide	core/core_mul_imad.cu	/^__device__ __forceinline__ void core_t<env>::mul_wide(uint32_t lo[LIMBS], uint32_t hi[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS], const uint32_t add[LIMBS]) {$/;"	f	class:cgbn::core_t
+mul_wide	core/core_mul_wmad.cu	/^__device__ __forceinline__ void core_t<env>::mul_wide(uint32_t lo[LIMBS], uint32_t hi[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS], const uint32_t add[LIMBS]) {$/;"	f	class:cgbn::core_t
+mul_wide	core/core_mul_xmad.cu	/^__device__ __forceinline__ void core_t<env>::mul_wide(uint32_t lo[LIMBS], uint32_t hi[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS], const uint32_t add[LIMBS]) {$/;"	f	class:cgbn::core_t
+mul_wide	core/core_singleton.cu	/^  __device__ __forceinline__ static void      mul_wide(uint32_t lo[limbs], uint32_t hi[limbs], const uint32_t a[limbs], const uint32_t b[limbs], const uint32_t add[limbs]) {$/;"	f	class:cgbn::core_singleton_t
+mul_wide	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::mul_wide(cgbn_wide_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+mul_wide	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::mul_wide(cgbn_wide_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+negate	core/core_add_sub.cu	/^__device__ __forceinline__ int32_t core_t<env>::negate(uint32_t r[LIMBS], const uint32_t a[LIMBS]) {$/;"	f	class:cgbn::core_t
+negate	impl_cuda.cu	/^__device__ __forceinline__ int32_t cgbn_env_t<context_t, bits, syncable>::negate(cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+negate	impl_mpz.cc	/^int32_t cgbn_env_t<context_t, bits, convergence>::negate(cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+parent_env_t	cgbn_cuda.h	/^    typedef cgbn_env_t parent_env_t;$/;"	t	struct:cgbn_env_t::cgbn_t
+parent_env_t	cgbn_mpz.h	/^    typedef cgbn_env_t parent_env_t;$/;"	t	struct:cgbn_env_t::cgbn_t
+pop_count	core/core_counting.cu	/^__device__ __forceinline__ uint32_t core_t<env>::pop_count(const uint32_t a[LIMBS]) {$/;"	f	class:cgbn::core_t
+pop_count	impl_cuda.cu	/^__device__ __forceinline__ uint32_t cgbn_env_t<context_t, bits, syncable>::pop_count(const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+pop_count	impl_mpz.cc	/^uint32_t cgbn_env_t<context_t, bits, convergence>::pop_count(const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+rem	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::rem(cgbn_t &r, const cgbn_t &num, const cgbn_t &denom) const {$/;"	f	class:cgbn_env_t
+rem	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::rem(cgbn_t &r, const cgbn_t &num, const cgbn_t &denom) const {$/;"	f	class:cgbn_env_t
+rem_ui32	core/core_short_math.cu	/^__device__ __forceinline__ uint32_t core_t<env>::rem_ui32(const uint32_t a, const uint32_t d) {$/;"	f	class:cgbn::core_t
+rem_ui32	core/core_short_math.cu	/^__device__ __forceinline__ uint32_t core_t<env>::rem_ui32(const uint32_t a[LIMBS], const uint32_t d) {$/;"	f	class:cgbn::core_t
+rem_ui32	core/core_singleton.cu	/^  __device__ __forceinline__ static uint32_t  rem_ui32(const uint32_t a[limbs], const uint32_t div) {$/;"	f	class:cgbn::core_singleton_t
+rem_ui32	impl_cuda.cu	/^__device__ __forceinline__ uint32_t cgbn_env_t<context_t, bits, syncable>::rem_ui32(const cgbn_t &a, const uint32_t div) const {$/;"	f	class:cgbn_env_t
+rem_ui32	impl_mpz.cc	/^uint32_t cgbn_env_t<context_t, bits, convergence>::rem_ui32(const cgbn_t &a, const uint32_t div) const {$/;"	f	class:cgbn_env_t
+rem_wide	core/core_divide_multi.cu	/^__device__ __forceinline__ void core_t<env>::rem_wide(uint32_t r[LIMBS], const uint32_t lo[LIMBS], const uint32_t hi[LIMBS], const uint32_t denom[LIMBS], const uint32_t numthreads) {$/;"	f	class:cgbn::core_t
+rem_wide	core/core_divide_single.cu	/^__device__ __forceinline__ void core_t<env>::rem_wide(uint32_t &r, const uint32_t lo, const uint32_t hi, const uint32_t denom, const uint32_t numthreads) {$/;"	f	class:cgbn::core_t
+rem_wide	core/core_singleton.cu	/^  __device__ __forceinline__ static void      rem_wide(uint32_t r[limbs], const uint32_t lo[limbs], const uint32_t hi[limbs], const uint32_t denom[limbs], const uint32_t numthreads) {$/;"	f	class:cgbn::core_singleton_t
+rem_wide	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::rem_wide(cgbn_t &r, const cgbn_wide_t &num, const cgbn_t &denom) const {$/;"	f	class:cgbn_env_t
+rem_wide	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::rem_wide(cgbn_t &r, const cgbn_wide_t &num, const cgbn_t &denom) const {$/;"	f	class:cgbn_env_t
+report_error	impl_cuda.cu	/^__device__ __noinline__ void cgbn_context_t<tpi, params>::report_error(cgbn_error_t error) const {$/;"	f	class:cgbn_context_t
+report_error	impl_mpz.cc	/^void cgbn_context_t<tpi, params>::report_error(cgbn_error_t error) const {$/;"	f	class:cgbn_context_t
+resolve	impl_cuda.cu	/^__device__ __forceinline__ int32_t cgbn_env_t<context_t, bits, syncable>::resolve(cgbn_t &sum, const cgbn_accumulator_t &accumulator) const {$/;"	f	class:cgbn_env_t
+resolve	impl_mpz.cc	/^__host__ int32_t cgbn_env_t<context_t, bits, convergence>::resolve(cgbn_t &sum, const cgbn_accumulator_t &accumulator) const {$/;"	f	class:cgbn_env_t
+resolve_add	core/core.cu	/^  __device__ __forceinline__ static int32_t  resolve_add(const uint32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::core_t
+resolve_add	core/core.cu	/^  __device__ __forceinline__ static int32_t resolve_add(const uint32_t carry, uint32_t &x) {$/;"	f	class:cgbn::core_t
+resolve_add	core/padded_resolver.cu	/^  __device__ __forceinline__ static int32_t resolve_add(const int32_t carry, uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+resolve_add	core/padded_resolver.cu	/^  __device__ __forceinline__ static int32_t resolve_add(const int32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+resolve_add	core/subwarp_resolver.cu	/^  __device__ __forceinline__ static int32_t resolve_add(const int32_t carry, uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+resolve_add	core/subwarp_resolver.cu	/^  __device__ __forceinline__ static int32_t resolve_add(const int32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+resolve_add	core/warp_resolver.cu	/^  __device__ __forceinline__ static int32_t resolve_add(const int32_t carry, uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+resolve_add	core/warp_resolver.cu	/^  __device__ __forceinline__ static int32_t resolve_add(const int32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+resolve_sub	core/core.cu	/^  __device__ __forceinline__ static int32_t  resolve_sub(const uint32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::core_t
+resolve_sub	core/core.cu	/^  __device__ __forceinline__ static int32_t resolve_sub(const uint32_t carry, uint32_t &x) {$/;"	f	class:cgbn::core_t
+resolve_sub	core/padded_resolver.cu	/^  __device__ __forceinline__ static int32_t resolve_sub(const int32_t carry, uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+resolve_sub	core/padded_resolver.cu	/^  __device__ __forceinline__ static int32_t resolve_sub(const int32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+resolve_sub	core/subwarp_resolver.cu	/^  __device__ __forceinline__ static int32_t resolve_sub(const int32_t carry, uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+resolve_sub	core/subwarp_resolver.cu	/^  __device__ __forceinline__ static int32_t resolve_sub(const int32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+resolve_sub	core/warp_resolver.cu	/^  __device__ __forceinline__ static int32_t resolve_sub(const int32_t carry, uint32_t &x) {$/;"	f	class:cgbn::dispatch_resolver_t
+resolve_sub	core/warp_resolver.cu	/^  __device__ __forceinline__ static int32_t resolve_sub(const int32_t carry, uint32_t x[LIMBS]) {$/;"	f	class:cgbn::dispatch_resolver_t
+rotate_left	core/core.cu	/^  __device__ __forceinline__ static void     rotate_left(uint32_t r[LIMBS], const uint32_t a[LIMBS], const int32_t numbits) {$/;"	f	class:cgbn::core_t
+rotate_left	core/dispatch_shift_rotate.cu	/^  __device__ __forceinline__ static void rotate_left(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t numbits) {$/;"	f	class:cgbn::dispatch_shift_rotate_t
+rotate_left	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::rotate_left(cgbn_t &r, const cgbn_t &a, const uint32_t numbits) const {$/;"	f	class:cgbn_env_t
+rotate_left	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::rotate_left(cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+rotate_left	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::rotate_left(cgbn_t &r, const cgbn_t &a, const uint32_t numbits) const {$/;"	f	class:cgbn_env_t
+rotate_right	core/core.cu	/^  __device__ __forceinline__ static void     rotate_right(uint32_t r[LIMBS], const uint32_t a[LIMBS], const int32_t numbits) {$/;"	f	class:cgbn::core_t
+rotate_right	core/dispatch_shift_rotate.cu	/^  __device__ __forceinline__ static void rotate_right(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t numbits) {$/;"	f	class:cgbn::dispatch_shift_rotate_t
+rotate_right	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::rotate_right(cgbn_t &r, const cgbn_t &a, const uint32_t numbits) const {$/;"	f	class:cgbn_env_t
+rotate_right	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::rotate_right(cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+rotate_right	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::rotate_right(cgbn_t &r, const cgbn_t &a, const uint32_t numbits) const {$/;"	f	class:cgbn_env_t
+set	core/core.cu	/^  __device__ __forceinline__ static void     set(uint32_t r[LIMBS], const uint32_t a[LIMBS]) {$/;"	f	class:cgbn::core_t
+set	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::set(cgbn_accumulator_t &accumulator, const cgbn_t &value) const {$/;"	f	class:cgbn_env_t
+set	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::set(cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+set	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::set(cgbn_t &r, const source_cgbn_t &source) const {$/;"	f	class:cgbn_env_t
+set	impl_mpz.cc	/^__host__ void cgbn_env_t<context_t, bits, convergence>::set(cgbn_accumulator_t &accumulator, const cgbn_t &value) const {$/;"	f	class:cgbn_env_t
+set	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::set(cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+set	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::set(cgbn_t &r, const source_cgbn_t &source) const {$/;"	f	class:cgbn_env_t
+set_ui32	core/core_short_math.cu	/^__device__ __forceinline__ void core_t<env>::set_ui32(uint32_t r[LIMBS], const uint32_t value) {$/;"	f	class:cgbn::core_t
+set_ui32	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::set_ui32(cgbn_accumulator_t &accumulator, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+set_ui32	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::set_ui32(cgbn_t &r, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+set_ui32	impl_mpz.cc	/^__host__ void cgbn_env_t<context_t, bits, convergence>::set_ui32(cgbn_accumulator_t &accumulator, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+set_ui32	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::set_ui32(cgbn_t &r, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+shift_left	core/core.cu	/^  __device__ __forceinline__ static void     shift_left(uint32_t r[LIMBS], const uint32_t a[LIMBS], const int32_t numbits) {$/;"	f	class:cgbn::core_t
+shift_left	core/dispatch_shift_rotate.cu	/^  __device__ __forceinline__ static void shift_left(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t numbits) {$/;"	f	class:cgbn::dispatch_shift_rotate_t
+shift_left	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::shift_left(cgbn_t &r, const cgbn_t &a, const uint32_t numbits) const {$/;"	f	class:cgbn_env_t
+shift_left	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::shift_left(cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+shift_left	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::shift_left(cgbn_t &r, const cgbn_t &a, const uint32_t numbits) const {$/;"	f	class:cgbn_env_t
+shift_right	core/core.cu	/^  __device__ __forceinline__ static void     shift_right(uint32_t r[LIMBS], const uint32_t a[LIMBS], const int32_t numbits) {$/;"	f	class:cgbn::core_t
+shift_right	core/dispatch_shift_rotate.cu	/^  __device__ __forceinline__ static void shift_right(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t numbits) {$/;"	f	class:cgbn::dispatch_shift_rotate_t
+shift_right	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::shift_right(cgbn_t &r, const cgbn_t &a, const uint32_t numbits) const {$/;"	f	class:cgbn_env_t
+shift_right	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::shift_right(cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+shift_right	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::shift_right(cgbn_t &r, const cgbn_t &a, const uint32_t numbits) const {$/;"	f	class:cgbn_env_t
+shifter_t	arith/shifter.cu	/^class shifter_t {$/;"	c	namespace:cgbn	file:
+shifter_t	arith/shifter.cu	/^class shifter_t<limbs, 0, false> {$/;"	c	namespace:cgbn	file:
+signed_coeff_t	core/core.cu	/^} signed_coeff_t;$/;"	t	namespace:cgbn	typeref:struct:cgbn::__anon4	file:
+sqr	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::sqr(cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+sqr	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::sqr(cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+sqr_high	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::sqr_high(cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+sqr_high	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::sqr_high(cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+sqr_wide	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::sqr_wide(cgbn_wide_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+sqr_wide	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::sqr_wide(cgbn_wide_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+sqrt	core/core_singleton.cu	/^  __device__ __forceinline__ static void      sqrt(uint32_t s[limbs], const uint32_t a[limbs], const uint32_t numthreads) {$/;"	f	class:cgbn::core_singleton_t
+sqrt	core/core_sqrt_multi.cu	/^__device__ __forceinline__ void core_t<env>::sqrt(uint32_t s[LIMBS], const uint32_t x[LIMBS], const uint32_t numthreads) {$/;"	f	class:cgbn::core_t
+sqrt	core/core_sqrt_single.cu	/^__device__ __forceinline__ void core_t<env>::sqrt(uint32_t &s, const uint32_t a, const uint32_t numthreads) {$/;"	f	class:cgbn::core_t
+sqrt	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::sqrt(cgbn_t &s, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+sqrt	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::sqrt(cgbn_t &s, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+sqrt_rem	core/core_singleton.cu	/^  __device__ __forceinline__ static void      sqrt_rem(uint32_t s[limbs], uint32_t r[limbs], const uint32_t a[limbs], const uint32_t numthreads) {$/;"	f	class:cgbn::core_singleton_t
+sqrt_rem	core/core_sqrt_multi.cu	/^__device__ __forceinline__ void core_t<env>::sqrt_rem(uint32_t s[LIMBS], uint32_t r[LIMBS], const uint32_t x[LIMBS], const uint32_t numthreads) {$/;"	f	class:cgbn::core_t
+sqrt_rem	core/core_sqrt_single.cu	/^__device__ __forceinline__ void core_t<env>::sqrt_rem(uint32_t &s, uint32_t &r, const uint32_t a, const uint32_t numthreads) {$/;"	f	class:cgbn::core_t
+sqrt_rem	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::sqrt_rem(cgbn_t &s, cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+sqrt_rem	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::sqrt_rem(cgbn_t &s, cgbn_t &r, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+sqrt_rem_wide	core/core_singleton.cu	/^  __device__ __forceinline__ static uint32_t  sqrt_rem_wide(uint32_t s[limbs], uint32_t r[limbs], const uint32_t lo[limbs], const uint32_t hi[limbs], const uint32_t numthreads) {$/;"	f	class:cgbn::core_singleton_t
+sqrt_rem_wide	core/core_sqrt_multi.cu	/^__device__ __forceinline__ uint32_t core_t<env>::sqrt_rem_wide(uint32_t s[LIMBS], uint32_t r[LIMBS], const uint32_t lo[LIMBS], const uint32_t hi[LIMBS], const uint32_t numthreads) {$/;"	f	class:cgbn::core_t
+sqrt_rem_wide	core/core_sqrt_single.cu	/^__device__ __forceinline__ uint32_t core_t<env>::sqrt_rem_wide(uint32_t &s, uint32_t &r, const uint32_t lo, const uint32_t hi, const uint32_t numthreads) {$/;"	f	class:cgbn::core_t
+sqrt_rem_wide	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::sqrt_rem_wide(cgbn_t &s, cgbn_wide_t &r, const cgbn_wide_t &a) const {$/;"	f	class:cgbn_env_t
+sqrt_rem_wide	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::sqrt_rem_wide(cgbn_t &s, cgbn_wide_t &r, const cgbn_wide_t &a) const {$/;"	f	class:cgbn_env_t
+sqrt_resolve_rem	core/core_singleton.cu	/^  __device__ __forceinline__ static void      sqrt_resolve_rem(uint32_t rem[limbs], const uint32_t s[limbs], const uint32_t top, const uint32_t r[limbs], const uint32_t shift) {$/;"	f	class:cgbn::core_singleton_t
+sqrt_resolve_rem	core/core_sqrt_multi.cu	/^__device__ __forceinline__ void core_t<env>::sqrt_resolve_rem(uint32_t rem[LIMBS], const uint32_t s[LIMBS], const uint32_t top, const uint32_t r[LIMBS], const uint32_t shift) {$/;"	f	class:cgbn::core_t
+sqrt_resolve_rem	core/core_sqrt_single.cu	/^__device__ __forceinline__ void core_t<env>::sqrt_resolve_rem(uint32_t &rem, const uint32_t s, const uint32_t top, const uint32_t r, const uint32_t shift) {$/;"	f	class:cgbn::core_t
+sqrt_wide	core/core_singleton.cu	/^  __device__ __forceinline__ static void      sqrt_wide(uint32_t s[limbs], const uint32_t lo[limbs], const uint32_t hi[limbs], const uint32_t numthreads) {$/;"	f	class:cgbn::core_singleton_t
+sqrt_wide	core/core_sqrt_multi.cu	/^__device__ __forceinline__ void core_t<env>::sqrt_wide(uint32_t s[LIMBS], const uint32_t lo[LIMBS], const uint32_t hi[LIMBS], const uint32_t numthreads) {$/;"	f	class:cgbn::core_t
+sqrt_wide	core/core_sqrt_single.cu	/^__device__ __forceinline__ void core_t<env>::sqrt_wide(uint32_t &s, const uint32_t lo, const uint32_t hi, const uint32_t numthreads) {$/;"	f	class:cgbn::core_t
+sqrt_wide	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::sqrt_wide(cgbn_t &s, const cgbn_wide_t &a) const {$/;"	f	class:cgbn_env_t
+sqrt_wide	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::sqrt_wide(cgbn_t &s, const cgbn_wide_t &a) const {$/;"	f	class:cgbn_env_t
+static_divide_small	arith/static_divide.cu	/^__device__ __forceinline__ uint32_t static_divide_small(uint32_t numerator) {$/;"	f	namespace:cgbn
+static_remainder_small	arith/static_divide.cu	/^__device__ __forceinline__ uint32_t static_remainder_small(uint32_t numerator) {$/;"	f	namespace:cgbn
+store	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::store(cgbn_local_t *address, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+store	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::store(cgbn_mem_t<bits> *address, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+store	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::store(cgbn_local_t *address, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+store	impl_mpz.cc	/^void cgbn_env_t<context_t, bits, convergence>::store(cgbn_mem_t<bits> *address, const cgbn_t &a) const {$/;"	f	class:cgbn_env_t
+sub	arith/chain.cu	/^__device__ __forceinline__ uint32_t chain_t<length, carry_in, carry_out>::sub(uint32_t a, uint32_t b) {$/;"	f	class:cgbn::chain_t
+sub	core/core_add_sub.cu	/^__device__ __forceinline__ int32_t core_t<env>::sub(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t b[LIMBS]) {$/;"	f	class:cgbn::core_t
+sub	impl_cuda.cu	/^__device__ __forceinline__ int32_t cgbn_env_t<context_t, bits, syncable>::sub(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+sub	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::sub(cgbn_accumulator_t &accumulator, const cgbn_t &value) const {$/;"	f	class:cgbn_env_t
+sub	impl_mpz.cc	/^__host__ void cgbn_env_t<context_t, bits, convergence>::sub(cgbn_accumulator_t &accumulator, const cgbn_t &value) const {$/;"	f	class:cgbn_env_t
+sub	impl_mpz.cc	/^int32_t cgbn_env_t<context_t, bits, convergence>::sub(cgbn_t &r, const cgbn_t &a, const cgbn_t &b) const {$/;"	f	class:cgbn_env_t
+sub_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t sub_cc(uint32_t a, uint32_t b) {$/;"	f	namespace:cgbn
+sub_ui32	core/core_short_math.cu	/^__device__ __forceinline__ int32_t core_t<env>::sub_ui32(uint32_t r[LIMBS], const uint32_t a[LIMBS], const uint32_t sub) {$/;"	f	class:cgbn::core_t
+sub_ui32	impl_cuda.cu	/^__device__ __forceinline__ int32_t cgbn_env_t<context_t, bits, syncable>::sub_ui32(cgbn_t &r, const cgbn_t &a, const uint32_t sub) const {$/;"	f	class:cgbn_env_t
+sub_ui32	impl_cuda.cu	/^__device__ __forceinline__ void cgbn_env_t<context_t, bits, syncable>::sub_ui32(cgbn_accumulator_t &accumulator, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+sub_ui32	impl_mpz.cc	/^__host__ void cgbn_env_t<context_t, bits, convergence>::sub_ui32(cgbn_accumulator_t &accumulator, const uint32_t value) const {$/;"	f	class:cgbn_env_t
+sub_ui32	impl_mpz.cc	/^int32_t cgbn_env_t<context_t, bits, convergence>::sub_ui32(cgbn_t &r, const cgbn_t &a, const uint32_t sub) const {$/;"	f	class:cgbn_env_t
+subc	arith/asm.cu	/^__device__ __forceinline__ uint32_t subc(uint32_t a, uint32_t b) {$/;"	f	namespace:cgbn
+subc_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t subc_cc(uint32_t a, uint32_t b) {$/;"	f	namespace:cgbn
+sync_mask	core/core.cu	/^  __device__ __forceinline__ static uint32_t sync_mask() {$/;"	f	class:cgbn::core_t
+top32	core/core_modular_inverse.cu	/^__device__ __forceinline__ uint32_t top32(const uint32_t sync, uint32_t x[limbs]) {$/;"	f	namespace:cgbn
+top64	core/core_modular_inverse.cu	/^__device__ __forceinline__ uint64_t top64(const uint32_t sync, uint32_t x[limbs]) {$/;"	f	namespace:cgbn
+tpi_ONES	core/padded_resolver.cu	/^  static const uint32_t tpi_ONES=(1ull<<tpi)-1;$/;"	m	class:cgbn::dispatch_resolver_t	file:
+uabs	arith/asm.cu	/^__device__ __forceinline__ uint32_t uabs(int32_t x) {$/;"	f	namespace:cgbn
+uapprox	arith/math.cu	/^__device__ __forceinline__ uint32_t uapprox(uint32_t d) {$/;"	f	namespace:cgbn
+ubinary_inverse	arith/math.cu	/^__device__ __forceinline__ uint32_t ubinary_inverse(uint32_t x) {$/;"	f	namespace:cgbn
+uclz	arith/math.cu	/^__device__ __forceinline__ uint32_t uclz(uint32_t x) {$/;"	f	namespace:cgbn
+ucmp	arith/math.cu	/^__device__ __forceinline__ int32_t ucmp(uint32_t a, uint32_t b) {$/;"	f	namespace:cgbn
+ucorrect	arith/math.cu	/^__device__ __forceinline__ uint32_t ucorrect(const uint32_t x0, const uint32_t x1, const int32_t x2, const uint32_t d0, const uint32_t d1) {$/;"	f	namespace:cgbn
+uctz	arith/math.cu	/^__device__ __forceinline__ uint32_t uctz(uint32_t x) {$/;"	f	namespace:cgbn
+udiv	arith/math.cu	/^__device__ __forceinline__ uint32_t udiv(const uint32_t lo, const uint32_t hi, const uint32_t d, const uint32_t approx) {$/;"	f	namespace:cgbn
+udiv	arith/math.cu	/^__device__ __forceinline__ uint32_t udiv(const uint32_t x0, const uint32_t x1, const uint32_t x2, const uint32_t d0, const uint32_t d1, const uint32_t approx) {$/;"	f	namespace:cgbn
+ugcd	arith/math.cu	/^__device__ __forceinline__ uint32_t ugcd(uint32_t a, uint32_t b) {$/;"	f	namespace:cgbn
+uhigh	arith/asm.cu	/^__device__ __forceinline__ uint32_t uhigh(uint64_t wide) {$/;"	f	namespace:cgbn
+uleft_clamp	arith/asm.cu	/^__device__ __forceinline__ uint32_t uleft_clamp(uint32_t lo, uint32_t hi, uint32_t amt) {$/;"	f	namespace:cgbn
+uleft_wrap	arith/asm.cu	/^__device__ __forceinline__ uint32_t uleft_wrap(uint32_t lo, uint32_t hi, uint32_t amt) {$/;"	f	namespace:cgbn
+ulow	arith/asm.cu	/^__device__ __forceinline__ uint32_t ulow(uint64_t wide) {$/;"	f	namespace:cgbn
+umax	arith/asm.cu	/^__device__ __forceinline__ uint32_t umax(uint32_t a, uint32_t b) {$/;"	f	namespace:cgbn
+umin	arith/asm.cu	/^__device__ __forceinline__ uint32_t umin(uint32_t a, uint32_t b) {$/;"	f	namespace:cgbn
+unpadded_t	core/unpadded.cu	/^class unpadded_t {$/;"	c	namespace:cgbn	file:
+unsigned_coeff_t	core/core.cu	/^} unsigned_coeff_t;$/;"	t	namespace:cgbn	typeref:struct:cgbn::__anon5	file:
+urem	arith/math.cu	/^__device__ __forceinline__ uint32_t urem(const uint32_t lo, const uint32_t hi, const uint32_t d, const uint32_t approx) {$/;"	f	namespace:cgbn
+uright_clamp	arith/asm.cu	/^__device__ __forceinline__ uint32_t uright_clamp(uint32_t lo, uint32_t hi, uint32_t amt) {$/;"	f	namespace:cgbn
+uright_wrap	arith/asm.cu	/^__device__ __forceinline__ uint32_t uright_wrap(uint32_t lo, uint32_t hi, uint32_t amt) {$/;"	f	namespace:cgbn
+ushiftamt	arith/math.cu	/^__device__ __forceinline__ int32_t ushiftamt(uint32_t x) {$/;"	f	namespace:cgbn
+usqrt	arith/math.cu	/^__device__ __forceinline__ uint32_t usqrt(const uint32_t lo, const uint32_t hi) {$/;"	f	namespace:cgbn
+usqrt	arith/math.cu	/^__device__ __forceinline__ uint32_t usqrt(const uint32_t x) {$/;"	f	namespace:cgbn
+usqrt_div	arith/math.cu	/^__device__ __forceinline__ uint32_t usqrt_div(const uint32_t lo, const uint32_t hi, const uint32_t d, const uint32_t approx) {$/;"	f	namespace:cgbn
+x	cgbn_mpz.h	/^  typedef struct {uint32_t x; uint32_t y; uint32_t z;} dim3;$/;"	m	struct:__anon2
+xmadhh	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadhh(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadhh	arith/chain.cu	/^__device__ __forceinline__ uint32_t chain_t<length, carry_in, carry_out>::xmadhh(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	class:cgbn::chain_t
+xmadhh_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadhh_cc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadhhc	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadhhc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadhhc_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadhhc_cc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadhl	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadhl(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadhl	arith/chain.cu	/^__device__ __forceinline__ uint32_t chain_t<length, carry_in, carry_out>::xmadhl(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	class:cgbn::chain_t
+xmadhl_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadhl_cc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadhlc	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadhlc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadhlc_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadhlc_cc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadlh	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadlh(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadlh	arith/chain.cu	/^__device__ __forceinline__ uint32_t chain_t<length, carry_in, carry_out>::xmadlh(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	class:cgbn::chain_t
+xmadlh_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadlh_cc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadlhc	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadlhc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadlhc_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadlhc_cc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadll	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadll(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadll	arith/chain.cu	/^__device__ __forceinline__ uint32_t chain_t<length, carry_in, carry_out>::xmadll(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	class:cgbn::chain_t
+xmadll_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadll_cc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadllc	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadllc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+xmadllc_cc	arith/asm.cu	/^__device__ __forceinline__ uint32_t xmadllc_cc(uint32_t a, uint32_t b, uint32_t c) {$/;"	f	namespace:cgbn
+y	cgbn_mpz.h	/^  typedef struct {uint32_t x; uint32_t y; uint32_t z;} dim3;$/;"	m	struct:__anon2
+z	cgbn_mpz.h	/^  typedef struct {uint32_t x; uint32_t y; uint32_t z;} dim3;$/;"	m	struct:__anon2
+~cgbn_accumulator_t	cgbn_mpz.h	/^    __host__ ~cgbn_accumulator_t() {$/;"	f	struct:cgbn_env_t::cgbn_accumulator_t
+~cgbn_local_t	cgbn_mpz.h	/^    __host__ ~cgbn_local_t() {$/;"	f	struct:cgbn_env_t::cgbn_local_t
+~cgbn_t	cgbn_mpz.h	/^    __host__ ~cgbn_t() {$/;"	f	struct:cgbn_env_t::cgbn_t
+~chain_t	arith/chain.cu	/^__device__ __forceinline__ chain_t<length, carry_in, carry_out>::~chain_t() {$/;"	f	class:cgbn::chain_t
