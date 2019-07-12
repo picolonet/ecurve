@@ -1,0 +1,13 @@
+TODOs:
+
+1. get rid of redundant modulus constant passing to kernel that is not
+   used.
+2. Get rid of additional array passing a[]. replace with lane 
+   variable, check TODO in myfq.cu.
+
+
+Possible performance improvements:
+
+1. In myfq.cu: mul by const, look at the fast version that is not working. Also from p2_mul.cu, try a 64 bit version of dev_mul_by_const.
+
+
