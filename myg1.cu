@@ -16,9 +16,29 @@ typedef struct {
 class m4g1 {
   public:
 
+__device__
      static m4g1* get(g1mfq_ti* instance, thread_context_t& tc);
+
+__device__
+     void plusEquals(m4g1& x);
+
+     void dbl();
+
      mfq_t x, y, z;
+     thread_context_t& tc;
 };
+
+
+__device__
+m4g1* m4g1::get(g1mfq_ti* instance, thread_context_t& tc) {
+  return NULL;
+}
+     
+void m4g1::plusEquals(m4g1& x) {
+}
+
+void m4g1::dbl() {
+}
 
 __global__
 void fq_g1mfq_add_kernel(g1mfq_ti* instances, uint32_t instance_count) {
@@ -27,7 +47,7 @@ void fq_g1mfq_add_kernel(g1mfq_ti* instances, uint32_t instance_count) {
   thread_context_t tc;
   compute_context(tc, instance_count);
   if (tc.instance_number >= instance_count) return;
-  m4g1* my_instance = m4g1::get(instances[tc.instance_number], tc);
+  m4g1* my_instance = m4g1::get(&instances[tc.instance_number], tc);
 }
 
 __global__
