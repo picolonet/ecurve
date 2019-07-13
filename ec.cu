@@ -71,7 +71,6 @@ int main(int argc, char* argv[]) {
       myread_mnt4_g1fq2(g1m4fq2_instances + i, input, kNumBytes, kNumIoBytes);
     }
 
-
     //  Optional vector based access.
     // std::vector<g1mfq_ti> g1m4_instances(g1m4_instances, g1m4_instances + (n-1));
     free(g1m4_instances);

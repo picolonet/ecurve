@@ -6,6 +6,12 @@ TODOs:
    variable, check TODO in myfq.cu.
 
 
+G1 fq Plan:
+
+1. Kernel routine to copy the data over to the GPU.
+2. Jacobian sum and double routines.
+3. Reduction to affine.
+
 Possible performance improvements:
 
 1. In myfq.cu: mul by const, look at the fast version that is not working. Also from p2_mul.cu, try a 64 bit version of dev_mul_by_const.
