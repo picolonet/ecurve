@@ -1,5 +1,3 @@
-1. Create test input for: mul with redc, add, sub. 
-2. Design that works without CGBN.
-    A C++ based OO design that would scale to cubic and more.
-
-3. Implement design, build quadex, cubex.
+1. Test for mul_by_const.
+2. Test for mont_mul with shared mem.
+3. Optimized mont-mul for square. Test.

@@ -6,6 +6,22 @@
 
 using namespace libff;
 
+void fprint_fq(FILE* stream, Fq<mnt4753_pp> x) {
+    int size = libff::mnt4753_q_limbs * sizeof(mp_size_t);
+    uint8_t* array = (uint8_t*) x.mont_repr.data;
+    fprintf(stream, "{");
+    int full_size = 128;
+    for (int i = 0; i < full_size; i ++) {
+        if (i < size) {
+        fprintf(stream, "0x%02x,", array[i]);
+        } else {
+        fprintf(stream, "0,");
+        }
+    }
+    fprintf(stream, "}");
+    fprintf(stream, " size = %d\n", size);
+}
+
 void write_mnt4_fq(FILE* output, Fq<mnt4753_pp> x) {
   fwrite((void *) x.mont_repr.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
 }
@@ -115,6 +131,14 @@ int main(int argc, char *argv[])
 
     auto inputs = fopen(argv[2], "r");
     auto outputs = fopen(argv[3], "w");
+
+    printf("\n\n coeff_a:\n");
+    fprint_fq(stdout, mnt4753_G1::coeff_a);
+    printf("\n\n DONE.\n");
+
+    printf("\n\n coeff_b:\n");
+    fprint_fq(stdout, mnt4753_G1::coeff_b);
+    printf("\n\n DONE.\n");
 
     while (true) {
       size_t elts_read = fread((void *) &n, sizeof(size_t), 1, inputs);

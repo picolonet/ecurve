@@ -94,6 +94,12 @@ __device__ void compute_context(thread_context_t& t, uint32_t instance_count) {
   t.sync_mask = (t.subwarp_number == 0) ? 0x0000FFFF: 0xFFFF0000;
 }
 
+__device__ __forceinline__ 
+bool is_zero(thread_context_t& tc, mfq_t x) {
+  uint
+  g = __ballot_sync(tc.sync_mask, x==0);
+}
+
 __device__ __forceinline__ uint64_t addc_u64(uint64_t a, uint64_t b) {
   uint64_t r;
 
@@ -392,7 +398,7 @@ void fq_sub_mod(thread_context_t& tc, mfq_t& a, mfq_t& b, mfq_t& m) {
 }
 
 // TODO: Get rid of a[] and pass in the lane variable.
-__device__
+__device__ __forceinline__
 uint64_t dev_mul_by_const(thread_context_t& tc, uint64_t& r, uint64_t a[], uint64_t f) {
   uint64_t carry = 0;
   uint64_t prd;
@@ -404,7 +410,7 @@ uint64_t dev_mul_by_const(thread_context_t& tc, uint64_t& r, uint64_t a[], uint6
   return carry;
 }
 
-__device__
+__device__ __forceinline__
 uint64_t dev_add_ab2(thread_context_t& tc, uint64_t& a, uint64_t b) {
   uint64_t sum, carry;
   sum = add_cc_u64(a, b);
@@ -417,7 +423,7 @@ uint64_t dev_add_ab2(thread_context_t& tc, uint64_t& a, uint64_t b) {
   return carry;
 }
 
-__device__
+__device__ __forceinline__
 uint64_t add_extra_u64(thread_context_t& tc, uint64_t& a,
          const uint64_t extra, const uint64_t extra_carry) {
   uint64_t sum, carry, result;
@@ -445,6 +451,59 @@ uint64_t fq_mul_const_mod_test(thread_context_t& tc, mfq_t& a, mfq_t& m, uint64_
   //linear_mod_u64(tc, a, m);
   //one_mod_u64(tc, a, m);
   return carry;
+}
+
+// THIS will ONLY work when n is 12 as we use shared memory. 
+__device__ 
+void mont_mul_64_lane(thread_context_t& tc, uint64_t& a_limb, uint64_t& x_limb,
+      uint64_t& y_limb, uint64_t m[], uint64_t inv, int n) {
+  //const uint32_t sync=0xFFFFFFFF;
+  //uint32_t lane = threadIdx.x % TPI;
+  uint64_t ui, carry;
+  uint64_t temp = 0, temp2 = 0;
+  uint64_t temp_carry = 0, temp_carry2 = 0;
+  uint64_t my_lane_a;
+  uint64_t temp_carry3 = 0, temp_carry4 = 0;
+  __shared__ uint64_t y[12];
+  __shared__ uint64_t x[12];
+  __shared__ uint64_t a[12];
+
+  a[tc.lane] = 0;
+  y[tc.lane] = y_limb;
+  x[tc.lane] = x_limb;
+  __syncthreads();
+
+  for (int i = 0; i < n; i ++) {
+     ui = madlo_cc_u64(x[i], y[0], a[0]);
+     ui = madlo_cc_u64(ui, inv, 0);
+     temp_carry = dev_mul_by_const(tc, temp, y, x[i]);
+     temp_carry2 = dev_mul_by_const(tc, temp2, m, ui); 
+
+     temp_carry3 =  dev_add_ab2(tc, temp2, temp);
+     temp_carry4 = dev_add_ab2(tc, a[tc.lane], temp2);
+
+     //temp_carry3 =  fq_add_nomod(tc, temp2, temp);
+     //temp_carry4 = fq_add_nomod(tc, a[tc.lane], temp2);
+
+     //temp_carry = add_cc(temp_carry,  temp_carry3);
+     //temp_carry = addc_cc(temp_carry, temp_carry4);
+
+     //temp_carry = add_cc_u64(temp_carry, temp_carry2);
+
+     // missing one BIG add.
+     //add_extra_u64(tc, a[tc.lane], temp_carry, 0);
+ 
+     // right shift one limb
+     my_lane_a = a[tc.lane];
+     a[tc.lane] =__shfl_down_sync(tc.sync_mask, my_lane_a, 1);
+     a[tc.lane] = (tc.lane == (TPI - 1)) ? 0 : a[tc.lane];
+  }
+
+  // compare and subtract. Essentially the logic of:
+  // one_mod_u64(tc, a[tc.lane], m[tc.lane]);
+  a_limb = a[tc.lane];
+  int which = dev_sub_u64(tc, a_limb, m[tc.lane]);
+  a_limb = (which == -1) ? a[tc.lane] : a_limb; 
 }
 
 __device__ 
@@ -503,6 +562,17 @@ void fq_mont_mul_mod(thread_context_t& tc, mfq_t& a, mfq_t& b, mfq_t& m) {
   one_mod_u64(tc, a, m);
 }
 
+__device__
+mfq_t myfq_square(thread_context_t& tc, mfq_t& limb) {
+  uint64_t result_limb;
+  mont_mul_64_lane(tc, result_limb, limb,
+       limb, mnt4_modulus_device, MNT4_INV, 12);
+  return result_limb;
+}
+
+////////////////////////////////////////////////////
+// GLOBAL ROUTINES.
+////////////////////////////////////////////////////
 __global__
 void fq2_add_kernel(mquad_ti* instances, uint32_t instance_count) {
 
@@ -590,8 +660,9 @@ void fq_mul_const_kernel(single_mfq_ti* instances, uint32_t instance_count, mfq_
   if (tc.instance_number >= instance_count) return;
 
   //fq_mul_const_mod_fast(tc, instances[tc.instance_number].x[tc.lane], mnt4_modulus_device[tc.lane], mul_const);
-  instances[tc.instance_number].carry = 
-  fq_mul_const_mod_test(tc, instances[tc.instance_number].x[tc.lane], mnt4_modulus_device[tc.lane], mul_const);
+  // instances[tc.instance_number].carry = 
+  // fq_mul_const_mod_test(tc, instances[tc.instance_number].x[tc.lane], mnt4_modulus_device[tc.lane], mul_const);
+  fq_mul_const_mod(tc, instances[tc.instance_number].x[tc.lane], mnt4_modulus_device[tc.lane], mul_const);
 }
 
 void load_mnt4_modulus() {

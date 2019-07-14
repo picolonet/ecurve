@@ -587,7 +587,7 @@ int main(int argc, char* argv[]) {
   //loadrun_fq_add(input_a, "debug_log");
   //loadrun_fq_op<add_fq_op>(input_a, "debug_log");
   //loadrun_fq_op<sub_fq_op>(input_a, "debug_log");
-   //loadrun_fq_op<mul_by13_fq_op>(input_a, "debug_log");
+  loadrun_fq_op<mul_by13_fq_op>(input_a, "debug_log");
   loadrun_fq_op<mont_mul_fq_op>(input_a, "debug_log");
 
   //loadrun_fq_op<sub_newtest>(input_a, "debug_log");
