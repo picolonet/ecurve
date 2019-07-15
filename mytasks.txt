@@ -1,3 +1,8 @@
 1. Test for mul_by_const.
 2. Test for mont_mul with shared mem.
 3. Optimized mont-mul for square. Test.
+4. Clean up all tests.
+
+
+Optimizations:
+1. mont_mul_64_lane for when one is a coeff constant.

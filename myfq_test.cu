@@ -476,7 +476,7 @@ void test_fq_mont_mul(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_
   double time_iter = 0.0;
 
   start = clock();
-  fq_mont_mul_kernel<<<num_blocks, TPB>>>(gpuInstances, n, mnt4_modulus_device);
+  fq_mont_mul_lane_kernel<<<num_blocks, TPB>>>(gpuInstances, n, mnt4_modulus_device);
   NEW_CUDA_CHECK(cudaDeviceSynchronize());
   end = clock();
   time_iter = ((double) end-start) * 1000.0 / CLOCKS_PER_SEC;
@@ -587,7 +587,7 @@ int main(int argc, char* argv[]) {
   //loadrun_fq_add(input_a, "debug_log");
   //loadrun_fq_op<add_fq_op>(input_a, "debug_log");
   //loadrun_fq_op<sub_fq_op>(input_a, "debug_log");
-  loadrun_fq_op<mul_by13_fq_op>(input_a, "debug_log");
+  //loadrun_fq_op<mul_by13_fq_op>(input_a, "debug_log");
   loadrun_fq_op<mont_mul_fq_op>(input_a, "debug_log");
 
   //loadrun_fq_op<sub_newtest>(input_a, "debug_log");
