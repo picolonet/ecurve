@@ -19,20 +19,20 @@ typedef struct {
 // G1 for the MNT4 curve.
 class m4g1 {
   public:
-     m4g1(mfq_t const& x_, mfq_t const& y_, mfq_t const& z_) : x(x_), y(y_), z(z_) {}
+     m4g1(mfq_t& x_, mfq_t& y_, mfq_t& z_) : x(x_), y(y_), z(z_) {}
 
 __device__
-     void plusEquals(m4g1& x);
+     void plusEquals(thread_context_t& tc, m4g1& x);
 
 __device__
-     void dbl();
+     void dbl(thread_context_t& tc);
    
 __device__
      bool is_zero(thread_context_t& tc);
 
-     mfq_t const& x;
-     mfq_t const& y;
-     mfq_t const& z;
+     mfq_t& x;
+     mfq_t& y;
+     mfq_t& z;
 };
 
 __device__
@@ -61,7 +61,7 @@ void load_constants() {
 //}
      
 __device__
-void m4g1::plusEquals(m4g1& x) {
+void m4g1::plusEquals(thread_context_t& tc, m4g1& x) {
   // TODO build
 }
 
@@ -72,10 +72,10 @@ void m4g1::dbl(thread_context_t& tc) {
   if (is_zero(tc)) return;
 
   // const mnt4753_Fq XX   = (this->X_).squared();                   // XX  = X1^2
-  const mfq_t XX = myfq_square(tc, x);
+  mfq_t XX = myfq_square(tc, x);
 
   // const mnt4753_Fq ZZ   = (this->Z_).squared();                   // ZZ  = Z1^2
-  const mfq_t ZZ = myfq_square(tc, z);
+  mfq_t ZZ = myfq_square(tc, z);
 
   // const mnt4753_Fq w    = mnt4753_G1::coeff_a * ZZ + (XX + XX + XX); // w   = a*ZZ + 3*XX
   mfq_t aZZ;  
@@ -87,11 +87,11 @@ void m4g1::dbl(thread_context_t& tc) {
 
   // const mnt4753_Fq Y1Z1 = (this->Y_) * (this->Z_);
   mfq_t Y1Z1;
-  mont_mul_64_lane(tz, Y1Z1, y, z, mnt4_modulus_device, MNT4_INV, 12);
+  mont_mul_64_lane(tc, Y1Z1, y, z, mnt4_modulus_device, MNT4_INV, 12);
 
   mfq_t s = Y1Z1;
   // const mnt4753_Fq s    = Y1Z1 + Y1Z1;                            // s   = 2*Y1*Z1
-  fq_add_mod(tc, s, YIZ1, mnt4_modulus_device[tc.lane]);
+  fq_add_mod(tc, s, Y1Z1, mnt4_modulus_device[tc.lane]);
 
   // const mnt4753_Fq ss   = s.squared();                            // ss  = s^2
   mfq_t ss = myfq_square(tc, Y1Z1);
@@ -105,32 +105,32 @@ void m4g1::dbl(thread_context_t& tc) {
   mont_mul_64_lane(tc, R, y, s, mnt4_modulus_device, MNT4_INV, 12);
 
   // const mnt4753_Fq RR   = R.squared();                            // RR  = R^2
-  const mfq_t RR = myfq_square(tc, R);
+  mfq_t RR = myfq_square(tc, R);
 
   // const mnt4753_Fq B    = ((this->X_)+R).squared()-XX-RR;         // B   = (X1+R)^2 - XX - RR
   mfq_t B = x;
   fq_add_mod(tc, B, R, mnt4_modulus_device[tc.lane]);
   mfq_t BB = myfq_square(tc, B);
-  fq_sub_mod(tc, BB, XX, mnt4_modulus_device);
-  fq_sub_mod(tc, BB, RR, mnt4_modulus_device);
+  fq_sub_mod(tc, BB, XX, mnt4_modulus_device[tc.lane]);
+  fq_sub_mod(tc, BB, RR, mnt4_modulus_device[tc.lane]);
 
   // const mnt4753_Fq h    = w.squared() - (B+B);                    // h   = w^2 - 2*B
   mfq_t h = myfq_square(tc, w);
-  fq_sub_mod(tc, h, B, mnt4_modulus_device);
-  fq_sub_mod(tc, h, B, mnt4_modulus_device);
+  fq_sub_mod(tc, h, B, mnt4_modulus_device[tc.lane]);
+  fq_sub_mod(tc, h, B, mnt4_modulus_device[tc.lane]);
 
   // const mnt4753_Fq X3   = h * s;                                  // X3  = h*s
   mfq_t X3;
   mont_mul_64_lane(tc, X3, h, s, mnt4_modulus_device, MNT4_INV, 12);
 
   // const mnt4753_Fq Y3   = w * (B-h)-(RR+RR);                      // Y3  = w*(B-h) - 2*RR
-  const mfq_t RR2 = RR;
+  mfq_t RR2 = RR;
   fq_add_mod(tc, RR2, RR2, mnt4_modulus_device[tc.lane]);
-  const mfq_t B_h = B;
-  fq_sub_mod(tc, B, h, mnt4_modulus_device);
-  const mfq_t Y3 = w;
+  mfq_t B_h = B;
+  fq_sub_mod(tc, B, h, mnt4_modulus_device[tc.lane]);
+  mfq_t Y3 = w;
   mont_mul_64_lane(tc, Y3, w, B_h, mnt4_modulus_device, MNT4_INV, 12);
-  fq_sub_mod(tc, Y3, RR2, mnt4_modulus_device);
+  fq_sub_mod(tc, Y3, RR2, mnt4_modulus_device[tc.lane]);
 
   // const mnt4753_Fq Z3   = sss;                                    // Z3  = sss
   mfq_t Z3 = sss;
@@ -169,7 +169,7 @@ void fq_g1mfq_add_kernel(g1mfq_ti* instances, uint32_t instance_count) {
   thread_context_t tc;
   compute_context(tc, instance_count);
   if (tc.instance_number >= instance_count) return;
-  m4g1* my_instance = m4g1::get(&instances[tc.instance_number], tc);
+  //m4g1* my_instance = m4g1::get(&instances[tc.instance_number], tc);
 }
 
 __global__
