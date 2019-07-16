@@ -28,7 +28,7 @@ __device__
      void dbl();
    
 __device__
-     bool is_zero();
+     bool is_zero(thread_context_t& tc);
 
      mfq_t const& x;
      mfq_t const& y;
@@ -53,9 +53,6 @@ void load_constants() {
   load_g1_mnt4_coeffs();
 }
 
-m4g1::init(g1mfq_ti* instance, thread_context_t& tc) {
-}
-
 // TODO: Handle is_zero and is_one conditions.
 //__device__
 //m4g1* m4g1::get(g1mfq_ti* instance, thread_context_t& tc) {
@@ -69,16 +66,16 @@ void m4g1::plusEquals(m4g1& x) {
 }
 
 __device__
-void m4g1::dbl() {
+void m4g1::dbl(thread_context_t& tc) {
 
   // TODO build
-  if (is_zero()) return;
+  if (is_zero(tc)) return;
 
   // const mnt4753_Fq XX   = (this->X_).squared();                   // XX  = X1^2
-  const mfq_t XX = myfq_square(x);
+  const mfq_t XX = myfq_square(tc, x);
 
   // const mnt4753_Fq ZZ   = (this->Z_).squared();                   // ZZ  = Z1^2
-  const mfq_t ZZ = myfq_square(z);
+  const mfq_t ZZ = myfq_square(tc, z);
 
   // const mnt4753_Fq w    = mnt4753_G1::coeff_a * ZZ + (XX + XX + XX); // w   = a*ZZ + 3*XX
   mfq_t aZZ;  
@@ -97,7 +94,7 @@ void m4g1::dbl() {
   fq_add_mod(tc, s, YIZ1, mnt4_modulus_device[tc.lane]);
 
   // const mnt4753_Fq ss   = s.squared();                            // ss  = s^2
-  mfq_t ss = myfq_square(Y1Z1);
+  mfq_t ss = myfq_square(tc, Y1Z1);
 
   // const mnt4753_Fq sss  = s * ss;                                 // sss = s*ss
   mfq_t sss;
@@ -108,17 +105,17 @@ void m4g1::dbl() {
   mont_mul_64_lane(tc, R, y, s, mnt4_modulus_device, MNT4_INV, 12);
 
   // const mnt4753_Fq RR   = R.squared();                            // RR  = R^2
-  const mfq_t RR = myfq_square(R);
+  const mfq_t RR = myfq_square(tc, R);
 
   // const mnt4753_Fq B    = ((this->X_)+R).squared()-XX-RR;         // B   = (X1+R)^2 - XX - RR
   mfq_t B = x;
   fq_add_mod(tc, B, R, mnt4_modulus_device[tc.lane]);
-  mfq_t BB = myfq_square(B);
+  mfq_t BB = myfq_square(tc, B);
   fq_sub_mod(tc, BB, XX, mnt4_modulus_device);
   fq_sub_mod(tc, BB, RR, mnt4_modulus_device);
 
   // const mnt4753_Fq h    = w.squared() - (B+B);                    // h   = w^2 - 2*B
-  mfq_t h = myfq_square(w);
+  mfq_t h = myfq_square(tc, w);
   fq_sub_mod(tc, h, B, mnt4_modulus_device);
   fq_sub_mod(tc, h, B, mnt4_modulus_device);
 
