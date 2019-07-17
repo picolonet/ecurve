@@ -7,6 +7,8 @@
 #include "cgbn/cgbn.h"
 #include "utility/support.h"
 
+#include "constants.h"
+
 #define TPI 16
 #define BITS 1024 
 #define TPB 128    // threads per block (divible by 32)
@@ -77,6 +79,12 @@ typedef struct {
   uint32_t subwarp_number; // 0 or 1
 } thread_context_t;
 
+__device__ mfq_t mfq_zero() { return 0;}
+
+__device__ mfq_t mfq_one(thread_context_t& tc) { 
+   return ((uint64_t*)mnt4_const_one)[tc.lane];
+}
+
 __device__ void fq2_add(thread_context_t& tc, mfq_t& a, mfq_t& b);
 
 __device__ __forceinline__ static uint64_t fast_propagate_add_u64(thread_context_t& tc,
@@ -94,10 +102,31 @@ __device__ void compute_context(thread_context_t& t, uint32_t instance_count) {
   t.sync_mask = (t.subwarp_number == 0) ? 0x0000FFFF: 0xFFFF0000;
 }
 
+__device__
+mfq_t get_const_limb(thread_context_t& tc, uint64_t limb) {
+  return (tc.lane == 0) ? limb : 0;
+}
+
+// Returns true if the multi-precision x is equal to 00..00limb
+__device__
+bool is_equal_limb(thread_context_t& tc, mfq_t x, uint64_t limb) {
+  uint64_t val = (tc.lane == 0) ? limb : 0;
+  uint32_t g = __ballot_sync(tc.sync_mask, x==val);
+  return g == tc.sync_mask;
+}
+
+// Returns true if the multi-precision x is equal to 00..00limb
+__device__
+bool is_even(thread_context_t& tc, mfq_t x) {
+  uint32_t lsb_thread = (tc.subwarp_number == 0) ? 0 : 16;
+  uint32_t limb = __shfl_sync(tc.sync_mask, x, lsb_thread) ;
+  return (limb & 0x01) == 0;
+}
+
 __device__ __forceinline__ 
 bool is_zero(thread_context_t& tc, mfq_t x) {
-  uint
-  g = __ballot_sync(tc.sync_mask, x==0);
+  uint32_t g = __ballot_sync(tc.sync_mask, x==0);
+  return g == tc.sync_mask;
 }
 
 __device__ __forceinline__ uint64_t addc_u64(uint64_t a, uint64_t b) {
@@ -557,6 +586,22 @@ void mont_mul_64(thread_context_t& tc, uint64_t a[], uint64_t x[],
 
   // compare and subtract.
   one_mod_u64(tc, a[tc.lane], m[tc.lane]);
+}
+
+// Computes the inverse of a mod m
+__device__
+void fq_inverse(thread_context_t& tc, mfq_t&a, mfq_t& m) {
+  mfq_t u = a;
+  mfq_t v = p;
+
+  mfq_t x1 = get_const_limb(tc, 1);  // x1 = 1;
+  mfq_t x2 = 0;
+
+  while (!is_equal_limb(u, 1) && !is_equal_limb(v, 1)) {
+    while (is_even(u)) {
+      //right_shift_onebit(u);
+    }
+  }
 }
 
 // THIS IS WRONG

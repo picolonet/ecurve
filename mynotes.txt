@@ -46,6 +46,28 @@ libff notes:
 
 ./libff/algebra/curves/mnt753/mnt4753/mnt4753_init.cpp:    typedef bigint<mnt4753_q_limbs> bigint_q;
 
+These are defined in: ./libff/algebra/curves/mnt/mnt4/mnt4_init.hpp
+mnt4_Fq:
+typedef Fp_model<mnt4_q_limbs, mnt4_modulus_q> mnt4_Fq; 
+
+mnt4_Fq2:
+typedef Fp2_model<mnt4_q_limbs, mnt4_modulus_q> mnt4_Fq2;
+
+
+Fp_model:
+./libff/algebra/fields/fp.hpp 
+
+Fp2_model:
+./libff/algebra/fields/fp2.hpp
+
+The short aliases such as Fq etc are typedefed in:
+libff/algebra/curves/public_params.hpp
+
+Bigint:
+libff/algebra/fields/bigint.hpp
+
+G1_zero: defined in  ./libff/algebra/curves/mnt/mnt4/mnt4_init.cpp
+
 
 cuda CGBN notes:
    cgbn/core/core_mont_xmad.cu 

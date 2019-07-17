@@ -19,7 +19,10 @@ typedef struct {
 // G1 for the MNT4 curve.
 class m4g1 {
   public:
+__device__
      m4g1(mfq_t& x_, mfq_t& y_, mfq_t& z_) : x(x_), y(y_), z(z_) {}
+__device__
+     m4g1(m4g1 other) : x(x_), y(y_), z(z_) {}
 
 __device__
      void plusEquals(thread_context_t& tc, m4g1& x);
@@ -30,10 +33,21 @@ __device__
 __device__
      bool is_zero(thread_context_t& tc);
 
+__device__
+     void to_affine(thread_context_t& tc);
+
+__device__
+     static m4g1 zero();
+
      mfq_t& x;
      mfq_t& y;
      mfq_t& z;
 };
+
+__device__
+static m4g1 m4g1::zero() {
+  return m4g1(0, mfq_one(), 0);
+}
 
 __device__
 bool m4g1::is_zero(thread_context_t& tc) {
@@ -53,6 +67,10 @@ void load_constants() {
   load_g1_mnt4_coeffs();
 }
 
+__device__
+void m4g1::to_affine(thread_context_t& tc) {
+}
+
 // TODO: Handle is_zero and is_one conditions.
 //__device__
 //m4g1* m4g1::get(g1mfq_ti* instance, thread_context_t& tc) {
@@ -61,8 +79,93 @@ void load_constants() {
 //}
      
 __device__
-void m4g1::plusEquals(thread_context_t& tc, m4g1& x) {
+void m4g1::plusEquals(thread_context_t& tc, m4g1& other) {
   // TODO build
+  if (is_zero(tc)) {
+    return other;
+  }
+
+  if (other.is_zero(tc)) {
+    return *this;
+  }
+ 
+  // Algo from: libff/algebra/curves/mnt753/mnt4753/mnt4753_g1.cpp#L164 
+  
+  // const mnt4753_Fq X1Z2 = (this->X_) * (other.Z_);        // X1Z2 = X1*Z2
+  mfq_t X1Z2;
+  mont_mul_64_lane(tc, X1Z2, x, other.z, mnt4_modulus_device, MNT4_INV, 12);
+
+  // const mnt4753_Fq X2Z1 = (this->Z_) * (other.X_);        // X2Z1 = X2*Z1
+  mfq_t X2Z1;
+  mont_mul_64_lane(tc, X2Z1, z, other.x, mnt4_modulus_device, MNT4_INV, 12);
+
+  // const mnt4753_Fq Y1Z2 = (this->Y_) * (other.Z_);        // Y1Z2 = Y1*Z2
+  mfq_t Y1Z2;
+  mont_mul_64_lane(tc, Y1Z2, y, other.z, mnt4_modulus_device, MNT4_INV, 12);
+
+  // const mnt4753_Fq Y2Z1 = (this->Z_) * (other.Y_);        // Y2Z1 = Y2*Z1
+  mfq_t Y2Z1;
+  mont_mul_64_lane(tc, Y2Z1, z, other.y, mnt4_modulus_device, MNT4_INV, 12);
+  
+  if (X1Z2 == X2Z1 && Y1Z2 == Y2Z1) {
+    // perform dbl case
+    return dbl(tc);
+  }
+
+  // Add case:
+  // if we have arrived here we are in the add case
+
+  // const mnt4753_Fq Z1Z2 = (this->Z_) * (other.Z_);        // Z1Z2 = Z1*Z2
+  mfq_t Z1Z2;
+  mont_mul_64_lane(tc, Z1Z2, z, other.z, mnt4_modulus_device, MNT4_INV, 12);
+  // const mnt4753_Fq u    = Y2Z1 - Y1Z2; // u    = Y2*Z1-Y1Z2
+  mfq_t u;
+  fq_sub_mod(tc, Y2Z1, Y1Z2, mnt4_modulus_device[tc.lane]);
+
+  // const mnt4753_Fq uu   = u.squared();                  // uu   = u^2
+  mfq_t uu = myfq_square(tc, u);
+
+  // const mnt4753_Fq v    = X2Z1 - X1Z2; // v    = X2*Z1-X1Z2
+  mfq_t v;
+  fq_sub_mod(tc, X2Z1, X1Z2, mnt4_modulus_device[tc.lane]);
+
+  // const mnt4753_Fq vv   = v.squared();                  // vv   = v^2
+  mfq_t vv = myfq_square(tc, v);
+
+  // const mnt4753_Fq vvv  = v * vv;                       // vvv  = v*vv
+  mfq_t vvv;
+  mont_mul_64_lane(tc, vvv, v, vv, mnt4_modulus_device, MNT4_INV, 12);
+
+  // const mnt4753_Fq R    = vv * X1Z2;                    // R    = vv*X1Z2
+  mfq_t R;
+  mont_mul_64_lane(tc, R, vv, X1Z2, mnt4_modulus_device, MNT4_INV, 12);
+
+  // const mnt4753_Fq A    = uu * Z1Z2 - (vvv + R + R);    // A    = uu*Z1Z2 - vvv - 2*R
+  mfq_t A;
+  mont_mul_64_lane(tc, A, uu, Z1Z2, mnt4_modulus_device, MNT4_INV, 12);
+  fq_sub_mod(tc, A, vvv, mnt4_modulus_device[tc.lane]);
+  fq_sub_mod(tc, A, R, mnt4_modulus_device[tc.lane]);
+  fq_sub_mod(tc, A, R, mnt4_modulus_device[tc.lane]);
+
+  // const mnt4753_Fq X3   = v * A;                        // X3   = v*A
+  mfq_t X3;
+  mont_mul_64_lane(tc, X3, v, A, mnt4_modulus_device, MNT4_INV, 12);
+
+  // const mnt4753_Fq Y3   = u * (R-A) - vvv * Y1Z2;       // Y3   = u*(R-A) - vvv*Y1Z2
+  mfq_t Y3 = R;
+  fq_sub_mod(tc, Y3, A, mnt4_modulus_device[tc.lane]);
+  mont_mul_64_lane(tc, Y3, u, Y3, mnt4_modulus_device, MNT4_INV, 12);
+  mfq_t second_term; // vvv * Y1Z2
+  mont_mul_64_lane(tc, second_term, vvv, Y1Z2, mnt4_modulus_device, MNT4_INV, 12);
+  fq_sub_mod(tc, Y3, second_term, mnt4_modulus_device[tc.lane]);
+  
+  // const mnt4753_Fq Z3   = vvv * Z1Z2;                   // Z3   = vvv*Z1Z2
+  mfq_t Z3;
+  mont_mul_64_lane(tc, Z3, vvv, Z1Z2, mnt4_modulus_device, MNT4_INV, 12);
+
+  x = X3; 
+  y = Y3;
+  z = Z3;
 }
 
 __device__
@@ -135,9 +238,9 @@ void m4g1::dbl(thread_context_t& tc) {
   // const mnt4753_Fq Z3   = sss;                                    // Z3  = sss
   mfq_t Z3 = sss;
 
-  x = X3;
-  y = Y3;
-  z = Z3;
+   x = X3;
+   y = Y3;
+   z = Z3;
   
 //  mfq_t XX = my
 // NOTE: does not handle O and pts of order 2,4
@@ -162,19 +265,49 @@ void m4g1::dbl(thread_context_t& tc) {
 
 }
 
+__device__ uint32_t fast_by2_ceil(uint32_t input) {
+  return (input >> 1) + (input & 0x01);
+}
+
 __global__
 void fq_g1mfq_add_kernel(g1mfq_ti* instances, uint32_t instance_count) {
   // Create an array of m4g1 objects.
   // Implement functions.
-  thread_context_t tc;
-  compute_context(tc, instance_count);
+  thread_context_t tc_out;
+  compute_context(tc_out, instance_count);
   if (tc.instance_number >= instance_count) return;
   //m4g1* my_instance = m4g1::get(&instances[tc.instance_number], tc);
+
+  // num_output_instances captures the number of valid instances at the end of the loop.
+  uint32_t num_output_instances = instance_count; 
+  for (uint32_t s = 1; s < instance_count; s *= 2) {
+     num_output_instances = fast_by2_ceil(num_output_instances);
+     thread_context_t tc;
+     compute_context(tc, num_output_instances);
+     if (tc.instance_number >= num_output_instances) return;
+     uint32_t index = tc.instance_number * 2;
+     m4g1 my_instance(instances[index * s].x[tc.lane],
+          instances[index* s].y[tc.lane],
+          instances[(index + 1)*s].z[tc.lane]);
+     m4g1 other(instances[(index + 1) * s].x[tc.lane],
+          instances[(index + 1) * s].y[tc.lane],
+          instances[(index + 1)*s].z[tc.lane]);
+     my_instance.plusEquals(other);
+  }
+  if (tc_out.instance_number != 0) return;
+  m4g1 my_instance(instances[0].x[tc.lane],
+          instances[0].y[tc.lane],
+          instances[0].z[tc.lane]);
+  my_instance.to_affine();
 }
 
 __global__
 void fq_g1mfq2_add_kernel(g1mfq2_ti* instances, uint32_t instance_count) {
-  // Create an array of m4g1 objects
+  thread_context_t tc;
+  compute_context(tc, instance_count);
+
+  if (tc.instance_number >= instance_count) return;
+  
 }
 
 void compute_g1fq_sum(g1mfq_ti* instances, uint32_t instance_count, FILE* debug_file) {

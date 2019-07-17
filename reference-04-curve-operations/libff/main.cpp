@@ -140,6 +140,10 @@ int main(int argc, char *argv[])
     fprint_fq(stdout, mnt4753_G1::coeff_b);
     printf("\n\n DONE.\n");
 
+    printf("\n\n one_fq:\n");
+    fprint_fq(stdout, mnt4753_Fq::one());
+    printf("\n\n DONE.\n");
+
     while (true) {
       size_t elts_read = fread((void *) &n, sizeof(size_t), 1, inputs);
       if (elts_read == 0) { break; }
