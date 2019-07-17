@@ -26,6 +26,7 @@ void test_fq_sub(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes
 void test_fq_mul_byconst(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file);
 void test_fq_mont_mul(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file);
 void test_fq_sub_newtest(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file);
+void test_fq_inverse(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file);
 
 struct fq_op { // Helper function to ease cleanup of container
     void operator () (std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file) ;
@@ -52,6 +53,12 @@ struct sub_newtest: fq_op {
 struct mul_by13_fq_op : fq_op {
     void operator () (std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file) {
         test_fq_mul_byconst(x, y, num_bytes, debug_file);
+    } 
+};
+
+struct inverse_fq_op : fq_op {
+    void operator () (std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file) {
+        test_fq_inverse(x, y, num_bytes, debug_file);
     } 
 };
 
@@ -203,6 +210,75 @@ void loadrun_fq_add(const char* input_file, const char* debug_filename) {
 // no modulus MPN add that uses libgmp.
 void mpn_mul_u64(uint8_t* a, uint64_t mul, int size_bytes) {
    mpn_mul_1((mp_limb_t *)a, (const mp_limb_t*) a, size_bytes / sizeof(mp_limb_t), mul);
+}
+
+// We test basic big int addition by a0 + a1 for a fq2 element.
+void test_fq_inverse(std::vector<uint8_t*> x, std::vector<uint8_t*> y, int num_bytes, FILE* debug_file) {
+  mnt4753_pp::init_public_params();
+  mnt6753_pp::init_public_params();
+
+  std::vector<Fq<mnt4753_pp>> x0;
+  std::vector<Fq<mnt4753_pp>> x1;
+  cgbn_error_report_t *report;
+  NEW_CUDA_CHECK(cgbn_error_report_alloc(&report));
+
+  int tpb = TPB;
+  // printf("\n Threads per block =%d", tpb);
+  int IPB = TPB/TPI;
+
+  int n = x.size();
+  single_mfq_ti* gpuInstances;
+  single_mfq_ti* localInstances;
+  fprintf(debug_file, "\n size of fq2_t:%d", sizeof(single_mfq_ti));
+  localInstances = (single_mfq_ti*) calloc(n, sizeof(single_mfq_ti));
+  NEW_CUDA_CHECK(cudaSetDevice(0));
+  NEW_CUDA_CHECK(cudaMalloc((void **)&gpuInstances, sizeof(single_mfq_ti)*n));
+  load_mnt4_modulus();
+  
+  for (int i = 0; i < n; i++) {
+      std::memcpy((void*)localInstances[i].x, (void*)x[i], num_bytes);
+      localInstances[i].carry = 0;
+      //std::memcpy((void*)localInstances[i].y, (void*)y[i], num_bytes);
+  }
+  
+  NEW_CUDA_CHECK(cudaMemcpy(gpuInstances, localInstances, sizeof(single_mfq_ti) * n, cudaMemcpyHostToDevice));
+
+  uint32_t num_blocks = (n + IPB-1)/IPB;
+  clock_t start, end;
+  double time_iter = 0.0;
+
+  const uint64_t multiplier = 0x0FFFFFFFFFFFFFFFull;
+  // const uint64_t multiplier = 0x0FFFull;
+
+  n = 1; // CHANGE CHANGE
+  start = clock();
+  fq_inverse_kernel<<<num_blocks, TPB>>>(gpuInstances, n, mnt4_modulus_device);
+  NEW_CUDA_CHECK(cudaDeviceSynchronize());
+  end = clock();
+  time_iter = ((double) end-start) * 1000.0 / CLOCKS_PER_SEC;
+  fprintf(debug_file, "\n num_elements = %d, compute ony latency = %8.7f ms, per element = %8.7f microseconds.\n", n,
+      time_iter, 1000.0*time_iter / (double)n); 
+  printf("\n num_elements = %d, compute ony latency = %8.7f ms, per element = %8.7f microseconds.\n", n,
+      time_iter, 1000.0*time_iter / (double)n); 
+  NEW_CUDA_CHECK(cudaMemcpy(localInstances, gpuInstances, sizeof(single_mfq_ti) * n, cudaMemcpyDeviceToHost));
+ 
+  uint64_t* result = (uint64_t*) calloc(2 * num_bytes/8, sizeof(uint64_t));
+  for (int i = 0; i < n; i++) {
+    Fq<mnt4753_pp> out;
+    x0.emplace_back(to_fq(x[i]));
+    x1.emplace_back(to_fq(y[i]));
+    fprintf(debug_file, "\n INPUT X:\n");
+    fprint_uint8_array(debug_file, (uint8_t*)x[i], num_bytes); 
+    fprintf(debug_file, "\n RESULT R\n");
+    fprint_uint8_array(debug_file, (uint8_t*)localInstances[i].x, num_bytes); 
+    uint64_t* gpu_limbs = (uint64_t*)localInstances[i].x;
+    mpn_mul_n(result, (uint64_t*)x[i], gpu_limbs, num_bytes/8); 
+    fprintf(debug_file, "\n TEST RESULT.");
+  }
+
+  // free memory
+  cudaFree(gpuInstances);
+  free(localInstances);
 }
 
 // We test basic big int addition by a0 + a1 for a fq2 element.
@@ -588,7 +664,8 @@ int main(int argc, char* argv[]) {
   //loadrun_fq_op<add_fq_op>(input_a, "debug_log");
   //loadrun_fq_op<sub_fq_op>(input_a, "debug_log");
   //loadrun_fq_op<mul_by13_fq_op>(input_a, "debug_log");
-  loadrun_fq_op<mont_mul_fq_op>(input_a, "debug_log");
+  //loadrun_fq_op<mont_mul_fq_op>(input_a, "debug_log");
+  loadrun_fq_op<inverse_fq_op>(input_a, "debug_log");
 
   //loadrun_fq_op<sub_newtest>(input_a, "debug_log");
 }
