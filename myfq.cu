@@ -103,6 +103,13 @@ __device__ void compute_context(thread_context_t& t, uint32_t instance_count) {
   t.sync_mask = (t.subwarp_number == 0) ? 0x0000FFFF: 0xFFFF0000;
 }
 
+// limb_0 is the least significant limb. limb 1 is the next least.
+__device__
+mfq_t get_const_twolimbs(thread_context_t& tc, uint64_t limb_1, uint64_t limb_0) {
+  mfq_t ret = (tc.lane == 1) ? limb_1 : 0;
+  return (tc.lane == 0) ? limb_0 : ret;
+}
+
 __device__
 mfq_t get_const_limb(thread_context_t& tc, uint64_t limb) {
   return (tc.lane == 0) ? limb : 0;
